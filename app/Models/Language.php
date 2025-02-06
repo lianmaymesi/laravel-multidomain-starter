@@ -7,6 +7,7 @@ namespace App\Models;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 final class Language extends Model
 {
@@ -32,5 +33,15 @@ final class Language extends Model
                 'source' => 'title',
             ],
         ];
+    }
+
+    /**
+     * Get all of the bibles for the Language
+     *
+     * @return HasMany<Bible, $this>
+     */
+    public function bibles(): HasMany
+    {
+        return $this->hasMany(Bible::class);
     }
 }

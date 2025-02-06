@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\Bible;
 use App\Models\Language;
 use Cviebrock\EloquentSluggable\Sluggable;
 
@@ -35,4 +36,11 @@ test('the sluggable method exists and returns an array', function () {
 
     expect($methodExists)->toBeTrue()
         ->and(is_array($sluggableOutput))->toBeTrue();
+});
+
+it('has many bibles', function () {
+    $language = Language::factory()->hasBibles(3)->create();
+
+    expect($language->bibles)->toHaveCount(3)
+        ->each->toBeInstanceOf(Bible::class);
 });
