@@ -17,9 +17,9 @@ return new class extends Migration
         Schema::create('bibles', function (Blueprint $table): void {
             $table->id();
             $table->foreignIdFor(Language::class)->constrained();
-            $table->string('title');
-            $table->string('version');
-            $table->string('version_code');
+            $table->string('title')->index();
+            $table->string('version')->index();
+            $table->string('version_code')->index();
             $table->string('status');
             $table->timestamps();
         });

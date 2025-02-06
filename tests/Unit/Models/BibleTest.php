@@ -5,6 +5,7 @@ declare(strict_types=1);
 use App\Enums\Status;
 use App\Models\Bible;
 use App\Models\Language;
+use App\Models\Verse;
 
 test('to array', function () {
     $bible = Bible::factory()->create()->refresh();
@@ -34,4 +35,11 @@ test('status attribute is cast to Status class', function () {
     expect($model->status)->toBeInstanceOf(Status::class);
 
     expect($model->status->value)->toBe('active');
+});
+
+it('has many verses', function () {
+    $bible = Bible::factory()->hasVerses(500)->create();
+
+    expect($bible->verses)->toHaveCount(500)
+        ->each->toBeInstanceOf(Verse::class);
 });

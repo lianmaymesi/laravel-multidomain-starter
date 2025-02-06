@@ -8,6 +8,7 @@ use App\Enums\Status;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 final class Bible extends Model
 {
@@ -30,6 +31,16 @@ final class Bible extends Model
     public function language(): BelongsTo
     {
         return $this->belongsTo(Language::class);
+    }
+
+    /**
+     * Get all of the verses for the Bible
+     *
+     * @return HasMany<Verse, $this>
+     */
+    public function verses(): HasMany
+    {
+        return $this->hasMany(Verse::class);
     }
 
     /**

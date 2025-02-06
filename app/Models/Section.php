@@ -6,6 +6,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 final class Section extends Model
 {
@@ -15,4 +16,14 @@ final class Section extends Model
     protected $fillable = [
         'title',
     ];
+
+    /**
+     * Get all of the verses for the Section
+     *
+     * @return HasMany<Verse, $this>
+     */
+    public function verses(): HasMany
+    {
+        return $this->hasMany(Verse::class);
+    }
 }

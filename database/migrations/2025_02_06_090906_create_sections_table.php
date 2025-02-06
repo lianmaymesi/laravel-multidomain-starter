@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('sections', function (Blueprint $table): void {
             $table->id();
-            $table->string('title');
+            $table->string('title')->index();
             $table->timestamps();
         });
     }

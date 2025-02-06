@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('languages', function (Blueprint $table): void {
             $table->id();
-            $table->string('title');
+            $table->string('title')->index();
             $table->string('slug')->unique();
-            $table->string('iso_code');
-            $table->string('original_text');
+            $table->string('iso_code')->index();
+            $table->string('original_text')->index();
             $table->timestamps();
         });
     }
