@@ -13,7 +13,7 @@
         "postcss": "^8.4.47",
         "prettier-plugin-organize-imports": "^4.1.0",
         "prettier-plugin-tailwindcss": "^0.6.11",
-        "vite": "^6.0"
+        "vite": "^6.2"
     },
     "dependencies": {
         "@tailwindcss/vite": "^4.0.0"
