@@ -2,7 +2,7 @@
 
 use Laravel\Fortify\Actions\GenerateNewRecoveryCodes;
 use Livewire\Attributes\Locked;
-use Livewire\Volt\Component;
+use Livewire\Component;
 
 new class extends Component {
     #[Locked]
@@ -19,8 +19,9 @@ new class extends Component {
     /**
      * Generate new recovery codes for the user.
      */
-    public function regenerateRecoveryCodes(GenerateNewRecoveryCodes $generateNewRecoveryCodes): void
-    {
+    public function regenerateRecoveryCodes(
+        GenerateNewRecoveryCodes $generateNewRecoveryCodes,
+    ): void {
         $generateNewRecoveryCodes(auth()->user());
 
         $this->loadRecoveryCodes();
@@ -33,11 +34,20 @@ new class extends Component {
     {
         $user = auth()->user();
 
-        if ($user->hasEnabledTwoFactorAuthentication() && $user->two_factor_recovery_codes) {
+        if (
+            $user->hasEnabledTwoFactorAuthentication() &&
+            $user->two_factor_recovery_codes
+        ) {
             try {
-                $this->recoveryCodes = json_decode(decrypt($user->two_factor_recovery_codes), true);
+                $this->recoveryCodes = json_decode(
+                    decrypt($user->two_factor_recovery_codes),
+                    true,
+                );
             } catch (Exception) {
-                $this->addError('recoveryCodes', 'Failed to load recovery codes');
+                $this->addError(
+                    "recoveryCodes",
+                    "Failed to load recovery codes",
+                );
 
                 $this->recoveryCodes = [];
             }
@@ -52,16 +62,20 @@ new class extends Component {
 >
     <div class="px-6 space-y-2">
         <div class="flex items-center gap-2">
-            <flux:icon.lock-closed variant="outline" class="size-4"/>
-            <flux:heading size="lg" level="3">{{ __('2FA Recovery Codes') }}</flux:heading>
+            <flux:icon.lock-closed variant="outline" class="size-4" />
+            <flux:heading size="lg" level="3">
+                {{ __("2FA Recovery Codes") }}
+            </flux:heading>
         </div>
         <flux:text variant="subtle">
-            {{ __('Recovery codes let you regain access if you lose your 2FA device. Store them in a secure password manager.') }}
+            {{ __("Recovery codes let you regain access if you lose your 2FA device. Store them in a secure password manager.") }}
         </flux:text>
     </div>
 
     <div class="px-6">
-        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div
+            class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+        >
             <flux:button
                 x-show="!showRecoveryCodes"
                 icon="eye"
@@ -71,7 +85,7 @@ new class extends Component {
                 aria-expanded="false"
                 aria-controls="recovery-codes-section"
             >
-                {{ __('View Recovery Codes') }}
+                {{ __("View Recovery Codes") }}
             </flux:button>
 
             <flux:button
@@ -83,7 +97,7 @@ new class extends Component {
                 aria-expanded="true"
                 aria-controls="recovery-codes-section"
             >
-                {{ __('Hide Recovery Codes') }}
+                {{ __("Hide Recovery Codes") }}
             </flux:button>
 
             @if (filled($recoveryCodes))
@@ -93,7 +107,7 @@ new class extends Component {
                     variant="filled"
                     wire:click="regenerateRecoveryCodes"
                 >
-                    {{ __('Regenerate Codes') }}
+                    {{ __("Regenerate Codes") }}
                 </flux:button>
             @endif
         </div>
@@ -106,8 +120,12 @@ new class extends Component {
             x-bind:aria-hidden="!showRecoveryCodes"
         >
             <div class="mt-3 space-y-3">
-                @error('recoveryCodes')
-                    <flux:callout variant="danger" icon="x-circle" heading="{{$message}}"/>
+                @error("recoveryCodes")
+                    <flux:callout
+                        variant="danger"
+                        icon="x-circle"
+                        heading="{{ $message }}"
+                    />
                 @enderror
 
                 @if (filled($recoveryCodes))
@@ -116,7 +134,7 @@ new class extends Component {
                         role="list"
                         aria-label="Recovery codes"
                     >
-                        @foreach($recoveryCodes as $code)
+                        @foreach ($recoveryCodes as $code)
                             <div
                                 role="listitem"
                                 class="select-text"
@@ -127,7 +145,7 @@ new class extends Component {
                         @endforeach
                     </div>
                     <flux:text variant="subtle" class="text-xs">
-                        {{ __('Each recovery code can be used once to access your account and will be removed after use. If you need more, click Regenerate Codes above.') }}
+                        {{ __("Each recovery code can be used once to access your account and will be removed after use. If you need more, click Regenerate Codes above.") }}
                     </flux:text>
                 @endif
             </div>

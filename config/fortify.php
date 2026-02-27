@@ -88,7 +88,7 @@ return [
 
     'prefix' => '',
 
-    'domain' => null,
+    'domain' => env('FORTIFY_DOMAIN', null),
 
     /*
     |--------------------------------------------------------------------------
@@ -147,8 +147,8 @@ return [
         Features::registration(),
         Features::resetPasswords(),
         Features::emailVerification(),
-        // Features::updateProfileInformation(),
-        // Features::updatePasswords(),
+        Features::updateProfileInformation(),
+        Features::updatePasswords(),
         Features::twoFactorAuthentication([
             'confirm' => true,
             'confirmPassword' => true,
