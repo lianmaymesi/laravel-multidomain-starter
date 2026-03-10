@@ -14,6 +14,8 @@ export default defineConfig({
                 "resources/js/auth.js",
                 "resources/css/landing.css",
                 "resources/js/landing.js",
+                "resources/css/account.css",
+                "resources/js/account.js",
             ],
             refresh: true,
         }),
