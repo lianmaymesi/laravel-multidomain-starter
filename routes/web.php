@@ -8,4 +8,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
 });
 
-require __DIR__.'/settings.php';
+Route::domain(config('justreadbible.domains.accounts'))->group(function () {
+    require __DIR__ . '/accounts.php';
+});
+
+Route::domain(config('justreadbible.domains.backoffice'))->group(function () {
+    require __DIR__ . '/backoffice.php';
+});
+
+Route::domain(config('justreadbible.domains.user'))->group(function () {
+    require __DIR__ . '/app.php';
+});

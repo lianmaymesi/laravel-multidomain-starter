@@ -1,15 +1,9 @@
 {
     "agents": [
-        "copilot"
+        "gemini"
     ],
+    "guidelines": true,
     "packages": [
         "laravel/fortify"
-    ],
-    "skills": [
-        "fluxui-development",
-        "livewire-development",
-        "pest-testing",
-        "tailwindcss-development",
-        "fortify-development"
     ]
 }
