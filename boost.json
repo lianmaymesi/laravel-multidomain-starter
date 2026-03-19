@@ -1,9 +1,14 @@
 {
     "agents": [
-        "gemini"
+        "copilot"
     ],
     "guidelines": true,
-    "packages": [
-        "laravel/fortify"
+    "herd_mcp": false,
+    "mcp": true,
+    "nightwatch_mcp": false,
+    "sail": false,
+    "skills": [
+        "pest-testing",
+        "tailwindcss-development"
     ]
 }
