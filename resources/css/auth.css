@@ -1,8 +1,8 @@
 @import "tailwindcss";
 @import "../../vendor/livewire/flux/dist/flux.css";
 
-@source "../views/components/app/**/*.blade.php";
-@source "../views/pages/app/**/*.blade.php";
+@source "../views/components/auth/**/*.blade.php";
+@source "../views/pages/auth/**/*.blade.php";
 @source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
 @source "../../vendor/livewire/flux-pro/stubs/**/*.blade.php";
 @source "../../vendor/livewire/flux/stubs/**/*.blade.php";
