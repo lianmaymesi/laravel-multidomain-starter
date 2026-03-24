@@ -13,6 +13,18 @@
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
         "Noto Color Emoji";
 
+    --color-blue-50: #edf4fc;
+    --color-blue-100: #d1e6f8;
+    --color-blue-200: #a8ceef;
+    --color-blue-300: #74afde;
+    --color-blue-400: #3d8dc8;
+    --color-blue-500: #1a6db2;
+    --color-blue-600: #045daf;
+    --color-blue-700: #034e94;
+    --color-blue-800: #023f78;
+    --color-blue-900: #012e58;
+    --color-blue-950: #011e3a;
+
     --color-accent: var(--color-blue-500);
     --color-accent-content: var(--color-blue-600);
     --color-accent-foreground: var(--color-white);
@@ -29,4 +41,12 @@
 [data-flux-label] {
     margin-bottom: 6px;
     font-size: 13px;
+}
+
+[data-flux-error] {
+    @apply mt-2 text-xs;
+}
+
+[data-flux-error] [data-flux-icon] {
+    @apply hidden;
 }

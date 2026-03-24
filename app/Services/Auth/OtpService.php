@@ -18,8 +18,8 @@ class OtpService
     {
         OtpCode::where('user_id', $user->id)
             ->where('type', $type->value)
-            ->where('used', false)
-            ->update(['used' => true]);
+            ->where('used_at', null)
+            ->update(['used_at' => now()]);
 
         $code = $this->makeCode();
 
@@ -28,7 +28,7 @@ class OtpService
             'type' => $type->value,
             'code' => $code,
             'expires_at' => now()->addMinutes($expiresInMinutes),
-            'used' => false,
+            'used_at' => null,
             'ip_address' => request()->ip(),
         ]);
     }
@@ -50,7 +50,7 @@ class OtpService
 
         $otp = OtpCode::where('user_id', $user->id)
             ->where('type', $type->value)
-            ->where('used', false)
+            ->where('used_at', null)
             ->latest()
             ->first();
 
@@ -62,7 +62,7 @@ class OtpService
         }
 
         // Mark as used
-        $otp->update(['used' => true]);
+        $otp->update(['used_at' => now()]);
 
         RateLimiter::clear($rateLimiterKey);
     }

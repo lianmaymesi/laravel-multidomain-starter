@@ -1,87 +1,119 @@
-<div class="flex min-h-screen">
-    <div class="flex-1 flex justify-center items-center">
-        <div class="w-80 max-w-80 space-y-6">
-            <div class="flex justify-center opacity-50">
-                <a href="/" class="group flex items-center gap-3">
-                    <img src="{{ Vite::asset('resources/assets/images/logo.svg') }}" alt=""
-                        class="h-16 text-zinc-800 dark:text-white" />
-                </a>
-            </div>
-
-            <flux:heading class="text-center" size="xl">Create an account</flux:heading>
-
-            <div class="space-y-4">
-                <flux:button class="w-full">
-                    <x-slot name="icon">
-                        <svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M23.06 12.25C23.06 11.47 22.99 10.72 22.86 10H12.5V14.26H18.42C18.16 15.63 17.38 16.79 16.21 17.57V20.34H19.78C21.86 18.42 23.06 15.6 23.06 12.25Z"
-                                fill="#4285F4" />
-                            <path
-                                d="M12.4997 23C15.4697 23 17.9597 22.02 19.7797 20.34L16.2097 17.57C15.2297 18.23 13.9797 18.63 12.4997 18.63C9.63969 18.63 7.20969 16.7 6.33969 14.1H2.67969V16.94C4.48969 20.53 8.19969 23 12.4997 23Z"
-                                fill="#34A853" />
-                            <path
-                                d="M6.34 14.0899C6.12 13.4299 5.99 12.7299 5.99 11.9999C5.99 11.2699 6.12 10.5699 6.34 9.90995V7.06995H2.68C1.93 8.54995 1.5 10.2199 1.5 11.9999C1.5 13.7799 1.93 15.4499 2.68 16.9299L5.53 14.7099L6.34 14.0899Z"
-                                fill="#FBBC05" />
-                            <path
-                                d="M12.4997 5.38C14.1197 5.38 15.5597 5.94 16.7097 7.02L19.8597 3.87C17.9497 2.09 15.4697 1 12.4997 1C8.19969 1 4.48969 3.47 2.67969 7.07L6.33969 9.91C7.20969 7.31 9.63969 5.38 12.4997 5.38Z"
-                                fill="#EA4335" />
-                        </svg>
-                    </x-slot>
-
-                    Continue with Google
-                </flux:button>
-            </div>
-
-            <flux:separator text="or" />
-
-            <form wire:submit="register" class="flex flex-col gap-4">
-                <flux:input label="Full Name" type="text" placeholder="Peter Nelson" wire:model="name" />
-                <flux:field>
-                    <flux:label>Phone Number</flux:label>
-                    <flux:input mask="99999-99999" placeholder="98765-43210" wire:model="phone">
-                        <x-slot name="icon" class="text-sm!">
-                            +91
-                        </x-slot>
-                    </flux:input>
-                    <flux:error name="phone" />
-                </flux:field>
-                <flux:input label="Email" type="email" placeholder="Enter your email address" wire:model="email" />
-                <flux:input label="Password" type="password" placeholder="Your password" wire:model="password" />
-                <flux:input label="Confirm password" type="password" placeholder="Your password"
-                    wire:model="password_confirmation" />
-                <flux:button type="submit" variant="primary" class="w-full mt-4">Log in</flux:button>
-            </form>
-
-            <flux:subheading class="text-center">
-                Already have an account? <flux:link href="{{ route('auth.login') }}">Sign in</flux:link>
-            </flux:subheading>
-        </div>
-    </div>
-
-    <div class="flex-1 p-4 max-lg:hidden">
-        <div class="text-white relative rounded-lg h-full w-full bg-zinc-900 flex flex-col items-start justify-end p-16"
-            style="background-image: url('/img/demo/auth_aurora_2x.png'); background-size: cover">
-            <div class="flex gap-2 mb-4">
-                <flux:icon.star variant="solid" />
-                <flux:icon.star variant="solid" />
-                <flux:icon.star variant="solid" />
-                <flux:icon.star variant="solid" />
-                <flux:icon.star variant="solid" />
-            </div>
-
-            <div class="mb-6 italic font-base text-3xl xl:text-4xl">
-                Flux has enabled me to design, build, and deliver apps faster than ever before.
-            </div>
-
-            <div class="flex gap-4">
-                <flux:avatar src="https://fluxui.dev/img/demo/caleb.png" size="xl" />
-
-                <div class="flex flex-col justify-center font-medium">
-                    <div class="text-lg">Caleb Porzio</div>
-                    <div class="text-zinc-300">Creator of Livewire</div>
+<div class="min-h-screen bg-zinc-950 px-4 py-4 sm:px-6 lg:px-8">
+    <div
+        class="mx-auto grid min-h-[calc(100vh-2rem)] max-w-7xl overflow-hidden rounded-[2rem] border border-white/10 bg-zinc-950 shadow-2xl shadow-black/30 lg:grid-cols-[minmax(0,1fr)_minmax(420px,0.92fr)]">
+        <section class="relative flex items-center overflow-hidden bg-zinc-950 px-6 py-8 sm:px-10 lg:px-12 lg:py-10">
+            <div class="absolute inset-0">
+                <div
+                    class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.18),_transparent_35%),radial-gradient(circle_at_20%_80%,_rgba(16,185,129,0.12),_transparent_28%)]">
                 </div>
             </div>
-        </div>
+
+            <div class="relative mx-auto w-full max-w-xl space-y-6">
+                <a href="/" class="inline-flex items-center gap-3 text-white transition hover:text-white/90">
+                    <span
+                        class="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm">
+                        <img src="{{ Vite::asset('resources/assets/images/logo.svg') }}" alt="{{ config('app.name') }}"
+                            class="h-10 w-auto" />
+                    </span>
+                    <span>
+                        <span class="block text-xs font-semibold uppercase tracking-[0.28em] text-white/45">Join</span>
+                        <span class="block text-lg font-semibold text-white">{{ config('app.name') }}</span>
+                    </span>
+                </a>
+
+                <div class="space-y-2">
+                    <flux:heading size="xl" class="!text-3xl font-semibold !tracking-tight text-white sm:!text-4xl">
+                        Create your account
+                    </flux:heading>
+                    <flux:text class="max-w-lg text-base leading-7 text-white/65">
+                        Enter your details below to get started with a clean, focused registration flow.
+                    </flux:text>
+                </div>
+
+                <form wire:submit="register"
+                    class="space-y-4 rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-2xl shadow-black/20 backdrop-blur-md">
+                    <flux:field>
+                        <flux:label class="text-white/80">Full Name</flux:label>
+                        <flux:input type="text" placeholder="Peter Nelson" wire:model.live="name" />
+                        <flux:error name="name" />
+                    </flux:field>
+
+                    <flux:field>
+                        <flux:label class="text-white/80">Phone Number</flux:label>
+                        <flux:input mask="99999-99999" placeholder="98765-43210" wire:model.live="phone" />
+                        <flux:error name="phone" />
+                    </flux:field>
+
+                    <flux:field>
+                        <flux:label class="text-white/80">Email Address</flux:label>
+                        <flux:input type="email" placeholder="Enter your email address" wire:model.live="email" />
+                        <flux:error name="email" />
+                    </flux:field>
+
+                    <flux:field>
+                        <flux:label class="text-white/80">Password</flux:label>
+                        <flux:input type="password" placeholder="Choose a strong password" wire:model.live="password"
+                            viewable />
+                        <flux:error name="password" />
+                    </flux:field>
+
+                    <flux:field>
+                        <flux:label class="text-white/80">Confirm Password</flux:label>
+                        <flux:input type="password" placeholder="Re-enter your password"
+                            wire:model.live="password_confirmation" viewable />
+                        <flux:error name="password_confirmation" />
+                    </flux:field>
+
+                    <flux:button type="submit" variant="primary" class="w-full !rounded-3xl !py-3.5">
+                        Create account
+                    </flux:button>
+                </form>
+
+                <flux:subheading class="text-center text-white/60">
+                    Already have an account?
+                    <flux:link href="{{ route('auth.login') }}" class="text-white" wire:navigate>
+                        Sign in
+                    </flux:link>
+                </flux:subheading>
+            </div>
+        </section>
+
+        <section class="relative overflow-hidden bg-zinc-900 px-6 py-8 text-white sm:px-10 lg:px-12 lg:py-10">
+            <div class="absolute inset-0">
+                <div
+                    class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.45),_transparent_38%),radial-gradient(circle_at_80%_20%,_rgba(16,185,129,0.28),_transparent_25%),linear-gradient(180deg,_rgba(9,9,11,0.05),_rgba(9,9,11,0.92))]">
+                </div>
+                <div class="absolute inset-0 bg-cover bg-center opacity-25"
+                    style="background-image: url('/img/demo/auth_aurora_2x.png');"></div>
+            </div>
+
+            <div class="relative flex h-full items-end">
+                <div class="mx-auto max-w-md space-y-8">
+                    <div class="rounded-[1.75rem] border border-white/10 bg-white/3 p-5 backdrop-blur-lg">
+                        <div class="flex gap-2 text-amber-300">
+                            <flux:icon.star variant="solid" class="size-5" />
+                            <flux:icon.star variant="solid" class="size-5" />
+                            <flux:icon.star variant="solid" class="size-5" />
+                            <flux:icon.star variant="solid" class="size-5" />
+                            <flux:icon.star variant="solid" class="size-5" />
+                        </div>
+
+                        <p class="mt-4 text-xl leading-8 text-white/90">
+                            “The registration experience now feels intentional, calm, and much easier to complete on the
+                            first try.”
+                        </p>
+
+                        <div class="mt-6 flex items-center gap-4">
+                            <flux:avatar src="https://fluxui.dev/img/demo/caleb.png" size="xl" />
+
+                            <div>
+                                <div class="font-semibold text-white">Caleb Porzio</div>
+                                <div class="text-sm text-white/65">Creator of Livewire</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 </div>

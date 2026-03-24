@@ -14,7 +14,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Crypt;
 
 #[Fillable(['name', 'email', 'password', 'country_code', 'phone', 'privilege', 'two_factor_secret', 'two_factor_recovery_codes'])]
 #[Hidden(['password', 'remember_token'])]
@@ -57,12 +56,10 @@ class User extends Authenticatable implements MustVerifyEmail
 
     /**
      * Show the user's phone number with country code.
-     *
-     * @return string
      */
-    public function fullPhone()
+    public function fullPhone(): string
     {
-        return $this->country_code.Crypt::decrypt($this->phone);
+        return $this->country_code.$this->phone;
     }
 
     public function emailVerificationExpired(): bool
