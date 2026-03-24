@@ -12,7 +12,7 @@
     @fluxAppearance
 </head>
 
-<body>
+<body class="dark:bg-linear-to-b min-h-screen bg-white antialiased dark:from-zinc-950 dark:to-zinc-900">
     {{ $slot }}
 
     @livewireScripts
