@@ -30,7 +30,7 @@ new #[Layout('layouts.auth')] class extends Component
     public function mount(): void
     {
         // If there's no pending reset session, bounce back
-        if (! session('pwd_reset_user')) {
+        if (!session('pwd_reset_user')) {
             $this->redirect(route('auth.forgot-password'), navigate: true);
         }
     }
@@ -53,6 +53,6 @@ new #[Layout('layouts.auth')] class extends Component
 
         Auth::login($user);
 
-        $this->redirect($user->redirectSubdomain(), navigate: false);
+        $this->redirect($user->redirect(), navigate: false);
     }
 };

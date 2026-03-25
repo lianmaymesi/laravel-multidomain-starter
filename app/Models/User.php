@@ -5,8 +5,6 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Notifications\VerifyEmail;
 use App\Trait\MustVerifyPhone;
-use betterapp\LaravelDbEncrypter\Traits\EncryptableDbAttribute;
-use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -20,7 +18,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use EncryptableDbAttribute, HasFactory, MustVerifyPhone, Notifiable;
+    use HasFactory, MustVerifyPhone, Notifiable;
 
     /**
      * Get the attributes that should be cast.
@@ -38,15 +36,6 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
-     * The attributes that should be encrypted/decrypted
-     *
-     * @var array
-     */
-    protected $encryptable = [
-        'phone',
-    ];
-
-    /**
      * Get all of the otps for the User
      */
     public function otps(): HasMany
@@ -59,7 +48,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function fullPhone(): string
     {
-        return $this->country_code.$this->phone;
+        return $this->country_code . $this->phone;
     }
 
     public function emailVerificationExpired(): bool
@@ -79,12 +68,12 @@ class User extends Authenticatable implements MustVerifyEmail
     public function hasTwoFactorEnabled(): bool
     {
         return $this->two_factor_enabled_at
-            && ! is_null($this->two_factor_confirmed_at);
+            && !is_null($this->two_factor_confirmed_at);
     }
 
     public function twoFactorRecoveryCodes(): array
     {
-        if (! $this->two_factor_recovery_codes) {
+        if (!$this->two_factor_recovery_codes) {
             return [];
         }
 
@@ -99,11 +88,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->privilege === 'staff';
     }
 
-    public function redirectSubdomain(): string
+    public function redirect(): string
     {
         return $this->isStaff()
-            ? config('justreadbible.sub_domains.backoffice')
-            : config('justreadbible.sub_domains.app');
+            ? route('backoffice.dashboard')
+            : route('app.dashboard');
     }
 
     public function sendEmailVerificationNotification(): void

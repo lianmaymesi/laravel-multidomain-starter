@@ -26,7 +26,7 @@ new #[Layout('layouts.auth')] class extends Component
 
         $this->ensureNotRateLimited();
 
-        if (! Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
+        if (!Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
             RateLimiter::hit($this->throttleKey(), 300);
 
             throw ValidationException::withMessages([
@@ -39,7 +39,7 @@ new #[Layout('layouts.auth')] class extends Component
         $user = Auth::user();
 
         // Phone not verified → send OTP, redirect to verify
-        if (! $user->hasVerifiedPhone()) {
+        if (!$user->hasVerifiedPhone()) {
             $otp = $otpService->generate($user, OtpType::PHONE_VERIFICATION);
             $smsService->sendOtp($user->fullPhone(), $otp->code);
 
@@ -58,12 +58,12 @@ new #[Layout('layouts.auth')] class extends Component
         }
 
         // Fully authenticated → redirect by role
-        $this->redirect($user->redirectSubdomain(), navigate: false);
+        $this->redirect($user->redirect(), navigate: false);
     }
 
     private function ensureNotRateLimited(): void
     {
-        if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
             return;
         }
 

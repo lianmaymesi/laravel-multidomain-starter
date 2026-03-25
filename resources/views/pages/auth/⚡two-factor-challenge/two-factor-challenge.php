@@ -22,7 +22,7 @@ new #[Layout('layouts.auth')] class extends Component
     public function mount(): void
     {
         // Must have a pending 2FA session (set in Login component)
-        if (! session('2fa_user_id')) {
+        if (!session('2fa_user_id')) {
             $this->redirect(route('auth.login'), navigate: true);
         }
     }
@@ -37,7 +37,7 @@ new #[Layout('layouts.auth')] class extends Component
             ? $twoFactor->verifyRecoveryCode($user, $this->code)
             : $twoFactor->verify($user, $this->code);
 
-        if (! $valid) {
+        if (!$valid) {
             throw ValidationException::withMessages([
                 'code' => $this->usingRecovery
                     ? 'Invalid recovery code.'
@@ -49,12 +49,12 @@ new #[Layout('layouts.auth')] class extends Component
 
         Auth::login($user);
 
-        $this->redirect($user->redirectSubdomain(), navigate: false);
+        $this->redirect($user->redirect(), navigate: false);
     }
 
     public function toggleRecovery(): void
     {
-        $this->usingRecovery = ! $this->usingRecovery;
+        $this->usingRecovery = !$this->usingRecovery;
         $this->code = '';
         $this->resetErrorBag();
     }

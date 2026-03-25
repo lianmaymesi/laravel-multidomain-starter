@@ -22,7 +22,7 @@ new #[Layout('layouts.auth')] class extends Component
         $user = Auth::user();
 
         // Generate or reuse existing secret
-        if (! $user->two_factor_secret) {
+        if (!$user->two_factor_secret) {
             $twoFactor->generateSecret($user);
         }
 
@@ -35,7 +35,7 @@ new #[Layout('layouts.auth')] class extends Component
 
         $user = Auth::user();
 
-        if (! $twoFactor->confirm($user, $this->code)) {
+        if (!$twoFactor->confirm($user, $this->code)) {
             $this->addError('code', 'Invalid code. Please scan the QR again and try.');
             return;
         }
@@ -46,6 +46,6 @@ new #[Layout('layouts.auth')] class extends Component
 
     public function skip(): void
     {
-        $this->redirect(Auth::user()->redirectSubdomain(), navigate: false);
+        $this->redirect(Auth::user()->redirect(), navigate: false);
     }
 };

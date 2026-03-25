@@ -20,7 +20,7 @@ new #[Layout('layouts.auth')] class extends Component
 
         // Already verified — skip this page
         if ($user->hasVerifiedEmail()) {
-            $this->redirect($user->redirectSubdomain(), navigate: false);
+            $this->redirect($user->redirect(), navigate: false);
             return;
         }
 
@@ -37,7 +37,7 @@ new #[Layout('layouts.auth')] class extends Component
 
         $user->markEmailAsVerified();
 
-        $this->redirect($user->redirectSubdomain(), navigate: false);
+        $this->redirect($user->redirect(), navigate: false);
     }
 
     public function resend(OtpService $otpService): void

@@ -17,11 +17,11 @@ class EnsurePhoneIsVerified
     {
         $user = $request->user();
 
-        if (! $user) {
+        if (!$user) {
             return redirect()->route('auth.login');
         }
 
-        if (! $user->hasVerifiedPhone()) {
+        if (!$user->hasVerifiedPhone()) {
             return redirect()->route('auth.verify-phone');
         }
 

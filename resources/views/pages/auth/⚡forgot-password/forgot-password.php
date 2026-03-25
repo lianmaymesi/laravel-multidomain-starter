@@ -4,15 +4,15 @@ use App\Enums\OtpType;
 use App\Models\User;
 use App\Services\Auth\OtpService;
 use App\Services\Auth\SmsService;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
-new class extends Component
+new #[Layout('layouts.auth')] class extends Component
 {
-    #[Validate(['required', 'digits:10'])]
+    #[Validate('required', message: 'Phone number is required')]
     public string $phone = '';
 
-    #[Validate(['required', 'string', 'max:3'])]
     public string $country_code = '+91';
 
     public bool $otpSent = false;

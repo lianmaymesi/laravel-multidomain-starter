@@ -11,7 +11,6 @@
     "require": {
         "php": "^8.3",
         "bacon/bacon-qr-code": "^3.0",
-        "betterapp/laravel-db-encrypter": "^1.0",
         "laravel/framework": "^13.0",
         "laravel/tinker": "^3.0",
         "livewire/flux-pro": "^2.13",

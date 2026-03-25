@@ -9,29 +9,28 @@
             </div>
 
             <div class="relative mx-auto w-full max-w-xl space-y-6">
-                <a href="/" class="inline-flex items-center gap-3 text-white transition hover:text-white/90">
-                    <span
-                        class="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm">
-                        <img src="{{ Vite::asset('resources/assets/images/logo.svg') }}" alt="{{ config('app.name') }}"
-                            class="h-10 w-auto" />
-                    </span>
-                    <span>
-                        <span class="block text-xs font-semibold uppercase tracking-[0.28em] text-white/45">Join</span>
-                        <span class="block text-lg font-semibold text-white">{{ config('app.name') }}</span>
-                    </span>
-                </a>
-
-                <div class="space-y-2">
-                    <flux:heading size="xl" class="!text-3xl font-semibold !tracking-tight text-white sm:!text-4xl">
-                        Create your account
-                    </flux:heading>
-                    <flux:text class="max-w-lg text-base leading-7 text-white/65">
-                        Enter your details below to get started with a clean, focused registration flow.
-                    </flux:text>
+                <div class="">
+                    <div class="inline-flex items-center gap-3 text-white transition hover:text-white/90">
+                        <span
+                            class="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm">
+                            <img src="{{ Vite::asset('resources/assets/images/logo.svg') }}"
+                                alt="{{ config('app.name') }}" class="h-10 w-auto" />
+                        </span>
+                        <div>
+                            <flux:heading size="xl"
+                                class="text-3xl! font-semibold tracking-tight! text-white sm:text-4xl!">
+                                Create your account
+                            </flux:heading>
+                            <flux:text class="max-w-lg hidden md:block text-sm leading-7 text-white/65">
+                                Create you account to access all the features of JRB
+                            </flux:text>
+                        </div>
+                    </div>
                 </div>
 
                 <form wire:submit="register"
-                    class="space-y-4 rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-2xl shadow-black/20 backdrop-blur-md">
+                    class="grid grid-cols-1 md:grid-cols-2 gap-4 rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-2xl shadow-black/20 backdrop-blur-md">
+
                     <flux:field>
                         <flux:label class="text-white/80">Full Name</flux:label>
                         <flux:input type="text" placeholder="Peter Nelson" wire:model.live="name" />
@@ -44,29 +43,37 @@
                         <flux:error name="phone" />
                     </flux:field>
 
-                    <flux:field>
-                        <flux:label class="text-white/80">Email Address</flux:label>
-                        <flux:input type="email" placeholder="Enter your email address" wire:model.live="email" />
-                        <flux:error name="email" />
-                    </flux:field>
+                    <div class="md:col-span-2">
+                        <flux:field>
+                            <flux:label class="text-white/80">Email Address</flux:label>
+                            <flux:input type="email" placeholder="Enter your email address" wire:model.live="email" />
+                            <flux:error name="email" />
+                        </flux:field>
+                    </div>
 
-                    <flux:field>
-                        <flux:label class="text-white/80">Password</flux:label>
-                        <flux:input type="password" placeholder="Choose a strong password" wire:model.live="password"
-                            viewable />
-                        <flux:error name="password" />
-                    </flux:field>
+                    <div class="md:col-span-2">
+                        <flux:field>
+                            <flux:label class="text-white/80">Password</flux:label>
+                            <flux:input type="password" placeholder="Choose a strong password"
+                                wire:model.live="password" viewable />
+                            <flux:error name="password" />
+                        </flux:field>
+                    </div>
 
-                    <flux:field>
-                        <flux:label class="text-white/80">Confirm Password</flux:label>
-                        <flux:input type="password" placeholder="Re-enter your password"
-                            wire:model.live="password_confirmation" viewable />
-                        <flux:error name="password_confirmation" />
-                    </flux:field>
+                    <div class="md:col-span-2">
+                        <flux:field>
+                            <flux:label class="text-white/80">Confirm Password</flux:label>
+                            <flux:input type="password" placeholder="Re-enter your password"
+                                wire:model.live="password_confirmation" viewable />
+                            <flux:error name="password_confirmation" />
+                        </flux:field>
+                    </div>
 
-                    <flux:button type="submit" variant="primary" class="w-full !rounded-3xl !py-3.5">
-                        Create account
-                    </flux:button>
+                    <div class="md:col-span-2">
+                        <flux:button type="submit" variant="primary" class="w-full rounded-3xl! py-3.5!">
+                            Create account
+                        </flux:button>
+                    </div>
                 </form>
 
                 <flux:subheading class="text-center text-white/60">
@@ -81,7 +88,7 @@
         <section class="relative overflow-hidden bg-zinc-900 px-6 py-8 text-white sm:px-10 lg:px-12 lg:py-10">
             <div class="absolute inset-0">
                 <div
-                    class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,_rgba(59,130,246,0.45),_transparent_38%),radial-gradient(circle_at_80%_20%,_rgba(16,185,129,0.28),_transparent_25%),linear-gradient(180deg,_rgba(9,9,11,0.05),_rgba(9,9,11,0.92))]">
+                    class="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.45),transparent_38%),radial-gradient(circle_at_80%_20%,rgba(16,185,129,0.28),transparent_25%),linear-gradient(180deg,rgba(9,9,11,0.05),rgba(9,9,11,0.92))]">
                 </div>
                 <div class="absolute inset-0 bg-cover bg-center opacity-25"
                     style="background-image: url('/img/demo/auth_aurora_2x.png');"></div>

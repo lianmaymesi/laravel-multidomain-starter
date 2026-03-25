@@ -54,7 +54,7 @@ class OtpService
             ->latest()
             ->first();
 
-        if (! $otp || ! $otp->isValid() || ! hash_equals($otp->code, $submittedCode)) {
+        if (!$otp || !$otp->isValid() || !hash_equals($otp->code, $submittedCode)) {
             RateLimiter::hit($rateLimiterKey, 300); // 5-minute decay
             throw ValidationException::withMessages([
                 'code' => 'The code is invalid or has expired.',

@@ -43,7 +43,7 @@ class OtpCode extends Model
 
     public function isValid(): bool
     {
-        return ! $this->used_at && ! $this->isExpired();
+        return !$this->used_at && !$this->isExpired();
     }
 
     /**

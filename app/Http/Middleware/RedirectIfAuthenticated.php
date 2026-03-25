@@ -22,7 +22,7 @@ class RedirectIfAuthenticated
             if (Auth::guard($guard)->check()) {
                 $user = Auth::guard($guard)->user();
 
-                return redirect($user->redirectSubdomain());
+                return redirect($user->redirect());
             }
         }
 
