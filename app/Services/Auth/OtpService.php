@@ -6,6 +6,7 @@ use App\Enums\OtpType;
 use App\Models\OtpCode;
 use App\Models\User;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class OtpService
@@ -54,7 +55,7 @@ class OtpService
             ->latest()
             ->first();
 
-        if (!$otp || !$otp->isValid() || !hash_equals($otp->code, $submittedCode)) {
+        if (! $otp || ! $otp->isValid() || ! hash_equals($otp->code, $submittedCode)) {
             RateLimiter::hit($rateLimiterKey, 300); // 5-minute decay
             throw ValidationException::withMessages([
                 'code' => 'The code is invalid or has expired.',
@@ -72,26 +73,41 @@ class OtpService
      */
     public function resendCooldown(User $user, OtpType $type): int
     {
-        $key = "otp_resend:{$type->value}:{$user->id}";
+        $key = $this->resendCooldownKey($user, $type);
 
         return RateLimiter::availableIn($key);
     }
 
     /**
-     * Gate a resend request (1 per 60 seconds, max 5 per hour).
+     * Gate an OTP resend request.
+     *
+     * Allows 1 request per cooldown window and at most the configured number
+     * of requests in the configured lockout window.
      */
-    public function gateResend(User $user, OtpType $type): void
+    public function gateResend(User|string $recipient, OtpType $type): void
     {
-        $key = "otp_resend:{$type->value}:{$user->id}";
+        $lockoutKey = $this->resendLockoutKey($recipient, $type);
+        $maxAttempts = $this->resendMaxAttempts();
 
-        if (RateLimiter::tooManyAttempts($key, 5)) {
-            $seconds = RateLimiter::availableIn($key);
+        if (RateLimiter::tooManyAttempts($lockoutKey, $maxAttempts)) {
+            $seconds = RateLimiter::availableIn($lockoutKey);
+            throw ValidationException::withMessages([
+                'code' => 'You have reached the maximum number of OTP requests. '
+                    .'Please try again in '.$this->secondsForHumans($seconds).'.',
+            ]);
+        }
+
+        $cooldownKey = $this->resendCooldownKey($recipient, $type);
+
+        if (RateLimiter::tooManyAttempts($cooldownKey, 1)) {
+            $seconds = RateLimiter::availableIn($cooldownKey);
             throw ValidationException::withMessages([
                 'code' => "You can request a new code in {$seconds} seconds.",
             ]);
         }
 
-        RateLimiter::hit($key, 3600); // 1-hour decay
+        RateLimiter::hit($lockoutKey, $this->resendLockoutSeconds());
+        RateLimiter::hit($cooldownKey, $this->resendCooldownSeconds());
     }
 
     /**
@@ -100,5 +116,62 @@ class OtpService
     private function makeCode(): string
     {
         return str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+    }
+
+    private function resendCooldownKey(User|string $recipient, OtpType $type): string
+    {
+        return "otp_resend_cooldown:{$type->value}:{$this->resendRecipientKey($recipient)}";
+    }
+
+    private function resendLockoutKey(User|string $recipient, OtpType $type): string
+    {
+        return "otp_resend_lockout:{$type->value}:{$this->resendRecipientKey($recipient)}";
+    }
+
+    private function resendRecipientKey(User|string $recipient): string
+    {
+        if ($recipient instanceof User) {
+            return 'user:'.$recipient->getKey();
+        }
+
+        return 'recipient:'.sha1(Str::lower(trim($recipient)));
+    }
+
+    private function resendCooldownSeconds(): int
+    {
+        return (int) config('justreadbible.otp.resend_cooldown', 60);
+    }
+
+    private function resendLockoutSeconds(): int
+    {
+        return (int) config('justreadbible.otp.resend_lockout_seconds', 86400);
+    }
+
+    private function resendMaxAttempts(): int
+    {
+        return (int) config('justreadbible.otp.resend_max_attempts', 3);
+    }
+
+    private function secondsForHumans(int $seconds): string
+    {
+        if ($seconds >= 86400) {
+            $hours = (int) ceil($seconds / 3600);
+
+            return $hours === 24 ? '24 hours' : "{$hours} hours";
+        }
+
+        if ($seconds >= 3600) {
+            $hours = (int) ceil($seconds / 3600);
+
+            return $hours === 1 ? '1 hour' : "{$hours} hours";
+        }
+
+        if ($seconds >= 60) {
+            $minutes = (int) ceil($seconds / 60);
+
+            return $minutes === 1 ? '1 minute' : "{$minutes} minutes";
+        }
+
+        return $seconds === 1 ? '1 second' : "{$seconds} seconds";
     }
 }

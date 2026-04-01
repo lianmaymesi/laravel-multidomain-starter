@@ -1,58 +1,102 @@
 <?php
 
 use App\Models\User;
-use App\Services\Auth\OtpService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\Rules\Password as PasswordRule;
 use Livewire\Attributes\Layout;
-use Livewire\Attributes\Validate;
+use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 new #[Layout('layouts.auth')] class extends Component
 {
-    #[Validate('required|digits:6')]
-    public string $code = '';
+    /** The signed token from the URL — written by Password::createToken() after OTP verification */
+    #[Locked]
+    public string $token = '';
 
-    #[Validate(['required', 'confirmed', Password::defaults()])]
-    public string $password = '';
+    /** Identifies the account: one of these will be populated from the URL */
+    #[Locked]
+    public string $email = '';
 
+    #[Locked]
+    public string $phone = '';
+
+    public string $password              = '';
     public string $password_confirmation = '';
 
-    protected function rules(): array
+    public function mount(string $token, ?string $email = null, ?string $phone = null): void
     {
-        return [
-            'code'     => ['required', 'digits:6'],
-            'password' => ['required', 'confirmed', Password::defaults()],
-        ];
-    }
-
-    public function mount(): void
-    {
-        // If there's no pending reset session, bounce back
-        if (!session('pwd_reset_user')) {
+        // Bounce if token is missing — mirrors Laravel's built-in pattern
+        if (blank($token)) {
             $this->redirect(route('auth.forgot-password'), navigate: true);
+            return;
         }
+
+        // Resolve the user from whichever identifier was passed
+        $user = $this->resolveUser($email, $phone);
+
+        // Validate the token against `password_reset_tokens` exactly as
+        // Laravel's own PasswordBroker does. Invalid / expired → bounce back.
+        if (! $user || ! Password::tokenExists($user, $token)) {
+            session()->flash('error', 'This password reset link is invalid or has expired.');
+            $this->redirect(route('auth.forgot-password'), navigate: true);
+            return;
+        }
+
+        $this->token = $token;
+        $this->email = $email ?? '';
+        $this->phone = $phone ?? '';
     }
 
-    public function reset(OtpService $otpService): void
+    public function resetPassword(): void
     {
-        $this->validate();
+        $this->validate([
+            'password' => ['required', 'confirmed', PasswordRule::defaults()],
+        ]);
 
-        $userId = session('pwd_reset_user');
-        $user   = User::findOrFail($userId);
+        $user = $this->resolveUser($this->email ?: null, $this->phone ?: null);
 
-        // Will throw ValidationException on bad code
-        $otpService->validate($user, OtpService::PASSWORD_RESET, $this->code);
+        if (! $user) {
+            $this->addError('password', 'Unable to locate the account. Please restart the reset flow.');
+            return;
+        }
 
+        // Double-check the token is still valid (guards against concurrent requests)
+        if (! Password::tokenExists($user, $this->token)) {
+            session()->flash('error', 'This reset link has already been used or has expired.');
+            $this->redirect(route('auth.forgot-password'), navigate: true);
+            return;
+        }
+
+        // Update the password
         $user->forceFill([
             'password' => Hash::make($this->password),
         ])->save();
 
-        session()->forget('pwd_reset_user');
+        // Delete the token from `password_reset_tokens` so it cannot be reused
+        Password::deleteToken($user);
 
         Auth::login($user);
 
         $this->redirect($user->redirect(), navigate: false);
+    }
+
+    /**
+     * Look up the user by email or phone, whichever was supplied.
+     * Phone numbers arrive without the country-code prefix in this flow,
+     * so we match on the raw phone column only; adjust if your schema differs.
+     */
+    private function resolveUser(?string $email, ?string $phone): ?User
+    {
+        if (filled($email)) {
+            return User::where('email', $email)->first();
+        }
+
+        if (filled($phone)) {
+            return User::where('phone', preg_replace('/\D/', '', $phone))->first();
+        }
+
+        return null;
     }
 };

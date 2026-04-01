@@ -7,6 +7,7 @@ use App\Services\Auth\SmsService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
@@ -63,7 +64,7 @@ new #[Layout('layouts.auth')] class extends Component
             'name' => $this->name,
             'email' => $this->email,
             'password' => Hash::make($this->password),
-            'phone' => $this->phone,
+            'phone' => Str::replace('-', '', $this->phone),
             'country_code' => $this->country_code,
         ]);
 

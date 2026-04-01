@@ -57,5 +57,7 @@ return [
         'expires_minutes' => env('OTP_EXPIRES_MINUTES', 10),
         'max_attempts' => 5,
         'resend_cooldown' => 60, // seconds
+        'resend_max_attempts' => 3,
+        'resend_lockout_seconds' => 60 * 60 * 24,
     ],
 ];
