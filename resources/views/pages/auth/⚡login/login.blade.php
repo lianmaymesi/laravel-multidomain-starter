@@ -66,7 +66,7 @@
                 <flux:subheading class="text-center text-white/60">
                     Don't have an account?
                     <flux:link href="{{ route('auth.register') }}" class="text-white" wire:navigate>
-                        Create one
+                        Create
                     </flux:link>
                 </flux:subheading>
             </div>

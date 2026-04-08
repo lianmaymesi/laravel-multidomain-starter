@@ -49,7 +49,7 @@ new #[Layout('layouts.auth')] class extends Component
         if ($this->activeTab === 'phone') {
             $this->validate([
                 'country_code' => ['required', 'string'],
-                'phone'        => ['required', 'string'],
+                'phone' => ['required', 'string'],
             ]);
 
             $user = User::where('phone', Str::replace('-', '', $this->phone))

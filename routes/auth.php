@@ -6,7 +6,7 @@ Route::middleware('guest')->group(function () {
     Route::livewire('login', 'pages::auth.login')->name('login');
     Route::livewire('register', 'pages::auth.register')->name('register');
     Route::livewire('forgot-password', 'pages::auth.forgot-password')->name('forgot-password');
-    Route::livewire('reset-password',  'pages::auth.reset-password')->name('reset-password');
+    Route::livewire('reset-password/{token}',  'pages::auth.reset-password')->name('reset-password');
     Route::livewire('two-factor-challenge', 'pages::auth.two-factor-challenge')->name('two-factor-challenge');
 });
 
