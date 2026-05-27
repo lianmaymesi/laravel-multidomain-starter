@@ -22,6 +22,10 @@ class RedirectIfAuthenticated
             if (Auth::guard($guard)->check()) {
                 $user = Auth::guard($guard)->user();
 
+                if (! $user->hasVerifiedPhone()) {
+                    return redirect()->route('auth.verify-phone');
+                }
+
                 return redirect($user->redirect());
             }
         }

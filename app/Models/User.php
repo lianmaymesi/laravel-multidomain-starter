@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 
 #[Fillable(['name', 'email', 'password', 'country_code', 'phone', 'privilege', 'two_factor_secret', 'two_factor_recovery_codes'])]
 #[Hidden(['password', 'remember_token'])]
@@ -48,7 +49,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function fullPhone(): string
     {
-        return $this->country_code . $this->phone;
+        return $this->country_code.$this->phone;
     }
 
     public function emailVerificationExpired(): bool
@@ -57,23 +58,28 @@ class User extends Authenticatable implements MustVerifyEmail
             return false;
         }
 
-        return now()->isAfter($this->created_at);
+        return now()->isAfter($this->emailVerificationDeadline());
     }
 
     public function emailVerificationDeadlineDaysLeft(): int
     {
-        return max(0, (int) now()->diffInDays($this->created_at, false));
+        return max(0, (int) now()->diffInDays($this->emailVerificationDeadline(), false));
+    }
+
+    private function emailVerificationDeadline(): Carbon
+    {
+        return $this->created_at->copy()->addDays(config('justreadbible.email_verification_grace_days'));
     }
 
     public function hasTwoFactorEnabled(): bool
     {
         return $this->two_factor_enabled_at
-            && !is_null($this->two_factor_confirmed_at);
+            && ! is_null($this->two_factor_confirmed_at);
     }
 
     public function twoFactorRecoveryCodes(): array
     {
-        if (!$this->two_factor_recovery_codes) {
+        if (! $this->two_factor_recovery_codes) {
             return [];
         }
 

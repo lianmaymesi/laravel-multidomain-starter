@@ -5,7 +5,7 @@
     {{-- Background gradients --}}
     <div class="fixed inset-0 pointer-events-none">
         <div
-            class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.18),_transparent_35%),radial-gradient(circle_at_20%_80%,_rgba(16,185,129,0.12),_transparent_28%)]">
+            class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.18),transparent_35%),radial-gradient(circle_at_20%_80%,rgba(16,185,129,0.12),transparent_28%)]">
         </div>
     </div>
 

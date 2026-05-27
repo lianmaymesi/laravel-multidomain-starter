@@ -20,12 +20,13 @@ it('redirects authenticated end users away from the auth subdomain to the app po
     $response = $this->actingAs($user)
         ->get(route('auth.login'));
 
-    $response->assertRedirect(route('app.dashboard'));
+    $response->assertRedirect(route('auth.verify-phone'));
 });
 
 it('redirects authenticated staff away from the auth subdomain to the backoffice portal', function () {
     $user = portalUser([
         'privilege' => 'staff',
+        'phone_verified_at' => now(),
     ]);
 
     $response = $this->actingAs($user)
@@ -45,6 +46,42 @@ it('redirects staff away from the app portal to the backoffice portal', function
         ->get(route('app.dashboard'));
 
     $response->assertRedirect(route('backoffice.dashboard'));
+});
+
+it('redirects phone verified end users away from the auth subdomain to the app portal', function () {
+    $user = portalUser([
+        'phone_verified_at' => now(),
+    ]);
+
+    $response = $this->actingAs($user)
+        ->get(route('auth.login'));
+
+    $response->assertRedirect(route('app.dashboard'));
+});
+
+it('allows recently registered phone verified users to access the app portal before verifying email', function () {
+    $user = portalUser([
+        'email_verified_at' => null,
+        'phone_verified_at' => now(),
+    ]);
+
+    $response = $this->actingAs($user)
+        ->get(route('app.dashboard'));
+
+    $response->assertSuccessful();
+});
+
+it('redirects phone verified users to email verification after the grace period expires', function () {
+    $user = portalUser([
+        'created_at' => now()->subDays(config('justreadbible.email_verification_grace_days') + 1),
+        'email_verified_at' => null,
+        'phone_verified_at' => now(),
+    ]);
+
+    $response = $this->actingAs($user)
+        ->get(route('app.dashboard'));
+
+    $response->assertRedirect(route('auth.verify-email'));
 });
 
 it('redirects end users away from the backoffice portal to the app portal', function () {
