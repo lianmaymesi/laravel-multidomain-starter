@@ -54,12 +54,11 @@
                         <flux:error name="password" />
                     </flux:field>
 
-                    <flux:checkbox label="Remember me for 30 days"
+                    <flux:checkbox label="Remember me for 30 days" wire:model="remember"
                         class="text-sm! text-white/55! font-normal! cursor-pointer" />
 
                     <flux:button type="submit" variant="primary" class="w-full rounded-3xl! py-3.5!">
-                        <span wire:loading.remove>Sign in</span>
-                        <span wire:loading>Signing in…</span>
+                        Sign In
                     </flux:button>
                 </form>
 

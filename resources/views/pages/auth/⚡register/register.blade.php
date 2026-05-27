@@ -33,20 +33,20 @@
 
                     <flux:field>
                         <flux:label class="text-white/80">Full Name</flux:label>
-                        <flux:input type="text" placeholder="Peter Nelson" wire:model.live="name" />
+                        <flux:input type="text" placeholder="Peter Nelson" wire:model="name" />
                         <flux:error name="name" />
                     </flux:field>
 
                     <flux:field>
                         <flux:label class="text-white/80">Phone Number</flux:label>
-                        <flux:input mask="99999-99999" placeholder="98765-43210" wire:model.live="phone" />
+                        <flux:input mask="99999-99999" placeholder="98765-43210" wire:model="phone" />
                         <flux:error name="phone" />
                     </flux:field>
 
                     <div class="md:col-span-2">
                         <flux:field>
                             <flux:label class="text-white/80">Email Address</flux:label>
-                            <flux:input type="email" placeholder="Enter your email address" wire:model.live="email" />
+                            <flux:input type="email" placeholder="Enter your email address" wire:model="email" />
                             <flux:error name="email" />
                         </flux:field>
                     </div>
@@ -54,8 +54,8 @@
                     <div class="md:col-span-2">
                         <flux:field>
                             <flux:label class="text-white/80">Password</flux:label>
-                            <flux:input type="password" placeholder="Choose a strong password"
-                                wire:model.live="password" viewable />
+                            <flux:input type="password" placeholder="Choose a strong password" wire:model="password"
+                                viewable />
                             <flux:error name="password" />
                         </flux:field>
                     </div>
@@ -64,7 +64,7 @@
                         <flux:field>
                             <flux:label class="text-white/80">Confirm Password</flux:label>
                             <flux:input type="password" placeholder="Re-enter your password"
-                                wire:model.live="password_confirmation" viewable />
+                                wire:model="password_confirmation" viewable />
                             <flux:error name="password_confirmation" />
                         </flux:field>
                     </div>
