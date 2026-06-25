@@ -28,7 +28,7 @@ class TwoFactorService
 
         $user->forceFill([
             'two_factor_secret' => encrypt($secret),
-            'two_factor_enabled_at' => false,
+            'two_factor_enabled_at' => null,
             'two_factor_confirmed_at' => null,
         ])->save();
 
