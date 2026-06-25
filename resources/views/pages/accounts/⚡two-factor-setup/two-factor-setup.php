@@ -6,9 +6,10 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
-new #[Layout('layouts.auth')] class extends Component
+new #[Layout('layouts.accounts')] class extends Component
 {
-    #[Validate(['required|digits:6'])]
+    #[Validate('required', message: 'Code is required')]
+    #[Validate('digits:6', message: 'Code must be 6 digits')]
     public string $code = '';
 
     public string $qrCodeSvg = '';
@@ -21,8 +22,7 @@ new #[Layout('layouts.auth')] class extends Component
     {
         $user = Auth::user();
 
-        // Generate or reuse existing secret
-        if (!$user->two_factor_secret) {
+        if (! $user->two_factor_secret) {
             $twoFactor->generateSecret($user);
         }
 
@@ -35,7 +35,7 @@ new #[Layout('layouts.auth')] class extends Component
 
         $user = Auth::user();
 
-        if (!$twoFactor->confirm($user, $this->code)) {
+        if (! $twoFactor->confirm($user, $this->code)) {
             $this->addError('code', 'Invalid code. Please scan the QR again and try.');
             return;
         }
