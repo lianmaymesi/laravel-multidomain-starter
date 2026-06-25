@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\OtpType;
 use App\Notifications\VerifyEmail;
 use App\Services\Auth\OtpService;
 use Illuminate\Support\Facades\Auth;
@@ -9,7 +10,8 @@ use Livewire\Component;
 
 new #[Layout('layouts.auth')] class extends Component
 {
-    #[Validate(['required|string|digits:6'])]
+    #[Validate('required', message: 'Code is required')]
+    #[Validate('digits:6', message: 'Code must be 6 digits')]
     public string $code = '';
 
     public int $daysLeft = 0;
@@ -33,7 +35,7 @@ new #[Layout('layouts.auth')] class extends Component
 
         $user = Auth::user();
 
-        $otpService->validate($user, OtpService::EMAIL_VERIFICATION, $this->code);
+        $otpService->validate($user, OtpType::EMAIL_VERIFICATION, $this->code);
 
         $user->markEmailAsVerified();
 
@@ -44,9 +46,9 @@ new #[Layout('layouts.auth')] class extends Component
     {
         $user = Auth::user();
 
-        $otpService->gateResend($user, OtpService::EMAIL_VERIFICATION);
+        $otpService->gateResend($user, OtpType::EMAIL_VERIFICATION);
 
-        $otp = $otpService->generate($user, OtpService::EMAIL_VERIFICATION);
+        $otp = $otpService->generate($user, OtpType::EMAIL_VERIFICATION);
 
         $user->notify(new VerifyEmail($otp->code));
 

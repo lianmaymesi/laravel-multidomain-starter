@@ -12,7 +12,6 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware(['auth', 'phone.verified'])->group(function () {
     Route::livewire('verify-email', 'pages::auth.verify-email')->name('verify-email');
-    Route::livewire('two-factor-setup', 'pages::auth.two-factor-setup')->name('two-factor-setup');
 });
 
 Route::middleware('auth')->group(function () {
