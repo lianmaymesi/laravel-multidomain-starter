@@ -14,7 +14,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 
-#[Fillable(['name', 'email', 'password', 'country_code', 'phone', 'privilege', 'two_factor_secret', 'two_factor_recovery_codes'])]
+#[Fillable(['name', 'email', 'password', 'country_code', 'phone', 'privilege', 'two_factor_secret', 'two_factor_recovery_codes', 'pending_email', 'pending_email_token'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -29,10 +29,11 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'two_factor_enabled_at' => 'datetime',
-            'two_factor_confirmed_at' => 'datetime',
+            'email_verified_at'          => 'datetime',
+            'password'                   => 'hashed',
+            'two_factor_enabled_at'      => 'datetime',
+            'two_factor_confirmed_at'    => 'datetime',
+            'pending_email_requested_at' => 'datetime',
         ];
     }
 
@@ -69,6 +70,20 @@ class User extends Authenticatable implements MustVerifyEmail
     private function emailVerificationDeadline(): Carbon
     {
         return $this->created_at->copy()->addDays(config('justreadbible.email_verification_grace_days'));
+    }
+
+    public function hasPendingEmailChange(): bool
+    {
+        return ! is_null($this->pending_email) && ! is_null($this->pending_email_token);
+    }
+
+    public function pendingEmailExpired(): bool
+    {
+        if (! $this->pending_email_requested_at) {
+            return true;
+        }
+
+        return $this->pending_email_requested_at->addHours(48)->isPast();
     }
 
     public function hasTwoFactorEnabled(): bool
