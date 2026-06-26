@@ -113,6 +113,18 @@ class TwoFactorService
     }
 
     /**
+     * Regenerate recovery codes for a user who already has 2FA enabled.
+     */
+    public function regenerateRecoveryCodes(User $user): void
+    {
+        $user->forceFill([
+            'two_factor_recovery_codes' => encrypt(
+                json_encode($this->generateRecoveryCodes())
+            ),
+        ])->save();
+    }
+
+    /**
      * Disable 2FA completely for a user.
      */
     public function disable(User $user): void

@@ -16,11 +16,20 @@ new #[Layout('layouts.accounts')] class extends Component
 
     public bool $confirmed = false;
 
+    public bool $justConfirmed = false;
+
+    public bool $showRecoveryCodes = false;
+
     public array $recoveryCodes = [];
 
     public function mount(TwoFactorService $twoFactor): void
     {
         $user = Auth::user();
+
+        if ($user->hasTwoFactorEnabled()) {
+            $this->confirmed = true;
+            return;
+        }
 
         if (! $user->two_factor_secret) {
             $twoFactor->generateSecret($user);
@@ -40,8 +49,53 @@ new #[Layout('layouts.accounts')] class extends Component
             return;
         }
 
-        $this->confirmed     = true;
-        $this->recoveryCodes = $user->fresh()->twoFactorRecoveryCodes();
+        $this->confirmed      = true;
+        $this->justConfirmed  = true;
+        $this->showRecoveryCodes = true;
+        $this->recoveryCodes  = $user->fresh()->twoFactorRecoveryCodes();
+    }
+
+    public function viewRecoveryCodes(): void
+    {
+        $this->recoveryCodes     = Auth::user()->twoFactorRecoveryCodes();
+        $this->showRecoveryCodes = true;
+    }
+
+    public function hideRecoveryCodes(): void
+    {
+        $this->showRecoveryCodes = false;
+        $this->recoveryCodes     = [];
+    }
+
+    public function regenerateRecoveryCodes(TwoFactorService $twoFactor): void
+    {
+        $twoFactor->regenerateRecoveryCodes(Auth::user());
+        $this->recoveryCodes     = Auth::user()->fresh()->twoFactorRecoveryCodes();
+        $this->showRecoveryCodes = true;
+    }
+
+    public function disable(TwoFactorService $twoFactor): void
+    {
+        $twoFactor->disable(Auth::user());
+        $twoFactor->generateSecret(Auth::user());
+
+        $this->confirmed         = false;
+        $this->justConfirmed     = false;
+        $this->showRecoveryCodes = false;
+        $this->recoveryCodes     = [];
+        $this->qrCodeSvg         = $twoFactor->qrCodeSvg(Auth::user()->fresh());
+    }
+
+    public function reconfigure(TwoFactorService $twoFactor): void
+    {
+        $twoFactor->disable(Auth::user());
+        $twoFactor->generateSecret(Auth::user());
+
+        $this->confirmed         = false;
+        $this->justConfirmed     = false;
+        $this->showRecoveryCodes = false;
+        $this->recoveryCodes     = [];
+        $this->qrCodeSvg         = $twoFactor->qrCodeSvg(Auth::user()->fresh());
     }
 
     public function skip(): void
