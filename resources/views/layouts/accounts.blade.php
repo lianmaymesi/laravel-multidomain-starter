@@ -46,6 +46,7 @@
                 ['label' => 'Profile', 'route' => 'account.index'],
                 ['label' => 'Security', 'route' => 'account.security'],
                 ['label' => '2FA', 'route' => 'account.two-factor-setup'],
+                ['label' => 'Export', 'route' => 'account.export'],
                 ['label' => 'Settings', 'route' => 'account.settings'],
                 ];
                 @endphp
@@ -110,6 +111,16 @@
                         <flux:icon.shield-check class="size-4 {{ $tfaActive ? 'text-white' : 'text-white/40' }}" />
                         Two-Factor Auth
                     </a>
+
+                    @if (Route::has('account.export'))
+                    @php $expActive = request()->routeIs('account.export'); @endphp
+                    <a href="{{ route('account.export') }}" wire:navigate
+                        class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors
+                                {{ $expActive ? 'bg-white/10 font-medium text-white' : 'text-white/50 hover:bg-white/5 hover:text-white/80' }}">
+                        <flux:icon.arrow-down-tray class="size-4 {{ $expActive ? 'text-white' : 'text-white/40' }}" />
+                        Export Data
+                    </a>
+                    @endif
 
                     @if (Route::has('account.settings'))
                     @php $setActive = request()->routeIs('account.settings'); @endphp

@@ -32,6 +32,13 @@ Route::domain(config('justreadbible.sub_domains.backoffice'))
         include __DIR__ . '/backoffice.php';
     });
 
+// Export download — token-authenticated, no session auth required
+Route::domain(config('justreadbible.sub_domains.account'))
+    ->name('account.')
+    ->group(function () {
+        Route::get('export/{token}', \App\Http\Controllers\AccountExportController::class)->name('export.download');
+    });
+
 Route::domain(config('justreadbible.sub_domains.account'))
     ->name('account.')
     ->middleware(['auth'])

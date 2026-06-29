@@ -265,7 +265,7 @@
 
         </div>
 
-        {{-- ── Phone card ──────────────────────────────────────────── --}}
+        {{-- ── Phone card ──────────────────────────────────────────────────────────── --}}
         <div class="rounded-[1.75rem] border border-white/[0.07] bg-white/3 px-6 py-5">
 
             @if ($editingPhone)
@@ -307,6 +307,112 @@
                     Change
                 </flux:button>
             </div>
+            @endif
+
+        </div>
+
+    </section>
+
+    {{-- ═══════════════════════════════════════════════════════════════
+    SECTION 3 · Delete account
+    ════════════════════════════════════════════════════════════════ --}}
+    <section class="space-y-5">
+
+        <div>
+            <flux:heading size="lg" class="text-white!">Delete account</flux:heading>
+            <flux:text class="text-white/40! text-sm!">Permanently remove your personal data. This cannot be undone.
+            </flux:text>
+        </div>
+
+        <div class="rounded-[1.75rem] border border-red-500/10 bg-red-500/[0.03] divide-y divide-white/5">
+
+            @if ($deletionRequest)
+
+            {{-- Pending deletion banner --}}
+            <div class="px-6 py-5 space-y-4">
+                <div class="flex items-start gap-3">
+                    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-500/15">
+                        <flux:icon.clock class="size-4 text-red-400" />
+                    </div>
+                    <div class="space-y-1">
+                        <p class="text-sm font-medium text-white/90">Account deletion scheduled</p>
+                        <p class="text-xs text-white/50">
+                            Your account will be permanently anonymized on
+                            <span class="text-white/80">{{ $deletionRequest->scheduled_at->format('F j, Y') }}</span>.
+                            @if ($deletionRequest->daysRemaining() > 0)
+                            <span class="text-red-400">{{ $deletionRequest->daysRemaining() }} {{ Str::plural('day',
+                                $deletionRequest->daysRemaining()) }} remaining.</span>
+                            @else
+                            Processing soon.
+                            @endif
+                        </p>
+                    </div>
+                </div>
+
+                @if ($deletionRequest->isCancellable())
+                <flux:button wire:click="cancelDeletion"
+                    wire:confirm="Cancel the account deletion? Your account will remain fully active." size="sm"
+                    variant="ghost" class="rounded-2xl! text-emerald-400! hover:text-emerald-300!">
+                    <flux:icon.x-circle class="size-4" />
+                    Cancel deletion
+                </flux:button>
+                @endif
+            </div>
+
+            @else
+
+            {{-- Delete request form --}}
+            <div class="px-6 py-5 space-y-4">
+                <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-start gap-3 max-w-3xl">
+                        <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-500/15">
+                            <flux:icon.trash class="size-4 text-red-400" />
+                        </div>
+                        <div class="space-y-1">
+                            <p class="text-sm font-medium text-white/90">Request account deletion</p>
+                            <p class="text-xs text-white/50">
+                                Your account enters a <span class="text-white/70">30-day grace period</span> before
+                                personal
+                                data is anonymized.<br> You can cancel any time during this period.
+                                <a href="{{ route('account.export') }}" wire:navigate
+                                    class="text-white/60 underline underline-offset-2">Export your data</a> first if
+                                needed.
+                            </p>
+                        </div>
+                    </div>
+
+                    @if (! $showDeleteConfirm)
+                    <flux:button wire:click="$set('showDeleteConfirm', true)" size="sm" variant="primary" color="red">
+                        Delete my account
+                    </flux:button>
+                    @endif
+                </div>
+                @if ($showDeleteConfirm)
+                <div class="space-y-3 rounded-2xl border border-red-500/15 bg-red-500/5 p-4">
+                    <p class="text-xs text-white/60">Enter your password to confirm. You'll have 30 days to cancel
+                        before any data is removed.</p>
+                    <div class="space-y-1.5">
+                        <flux:input wire:model="deletePassword" type="password" size="sm" placeholder="Your password"
+                            autocomplete="current-password" viewable
+                            x-on:keydown.escape="$wire.set('showDeleteConfirm', false)" />
+                        @error('deletePassword')
+                        <p class="text-xs text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <flux:button wire:click="requestDeletion" size="sm" variant="danger" class="rounded-2xl!">
+                            <span wire:loading.remove wire:target="requestDeletion">Confirm deletion</span>
+                            <span wire:loading wire:target="requestDeletion">Scheduling…</span>
+                        </flux:button>
+                        <flux:button wire:click="$set('showDeleteConfirm', false)" size="sm" variant="ghost"
+                            class="rounded-2xl!">
+                            Cancel
+                        </flux:button>
+                    </div>
+                </div>
+                @endif
+            </div>
+
             @endif
 
         </div>

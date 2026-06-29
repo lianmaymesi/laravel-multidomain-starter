@@ -11,8 +11,7 @@ new #[Layout('layouts.accounts')] class extends Component
     public string $current_password = '';
     public string $password = '';
     public string $password_confirmation = '';
-
-    public bool $success = false;
+    public bool $passwordSuccess = false;
 
     public function updatePassword(): void
     {
@@ -27,11 +26,11 @@ new #[Layout('layouts.accounts')] class extends Component
         ])->save();
 
         $this->reset('current_password', 'password', 'password_confirmation');
-        $this->success = true;
+        $this->passwordSuccess = true;
     }
 
     public function updatedCurrentPassword(): void
     {
-        $this->success = false;
+        $this->passwordSuccess = false;
     }
 };

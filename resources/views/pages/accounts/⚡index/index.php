@@ -1,8 +1,10 @@
 <?php
 
 use App\Enums\OtpType;
+use App\Models\AccountDeletionRequest;
 use App\Notifications\PendingEmailVerification;
 use App\Notifications\VerifyEmail;
+use App\Services\AccountDeletionService;
 use App\Services\Auth\OtpService;
 use App\Services\Auth\SmsService;
 use Illuminate\Support\Facades\Auth;
@@ -25,11 +27,17 @@ new #[Layout('layouts.accounts')] class extends Component
     public bool $editingPhone = false;
     public string $newPhone = '';
 
+    // ── Delete account ────────────────────────────────────────────────
+    public bool $showDeleteConfirm = false;
+    public string $deletePassword = '';
+    public ?AccountDeletionRequest $deletionRequest = null;
+
     // ─────────────────────────────────────────────────────────────────
 
     public function mount(): void
     {
-        $this->name = Auth::user()->name;
+        $this->name           = Auth::user()->name;
+        $this->deletionRequest = Auth::user()->activeDeletionRequest();
     }
 
     // ── Name ──────────────────────────────────────────────────────────
@@ -186,11 +194,38 @@ new #[Layout('layouts.accounts')] class extends Component
 
     // ─────────────────────────────────────────────────────────────────
 
+    // ── Delete account ────────────────────────────────────────────────
+
+    public function requestDeletion(): void
+    {
+        $this->validate([
+            'deletePassword' => ['required', 'current_password'],
+        ], [
+            'deletePassword.current_password' => 'The password you entered is incorrect.',
+        ]);
+
+        app(AccountDeletionService::class)->request(Auth::user());
+
+        $this->reset('deletePassword', 'showDeleteConfirm');
+        $this->deletionRequest = Auth::user()->fresh()->activeDeletionRequest();
+    }
+
+    public function cancelDeletion(): void
+    {
+        if ($this->deletionRequest?->isCancellable()) {
+            app(AccountDeletionService::class)->cancel($this->deletionRequest);
+            $this->deletionRequest = null;
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────────
+
     private function cancelAll(): void
     {
-        $this->editingName  = false;
-        $this->editingEmail = false;
-        $this->editingPhone = false;
+        $this->editingName       = false;
+        $this->editingEmail      = false;
+        $this->editingPhone      = false;
+        $this->showDeleteConfirm = false;
         $this->resetValidation();
     }
 };
