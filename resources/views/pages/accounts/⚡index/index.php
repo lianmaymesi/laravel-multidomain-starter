@@ -39,6 +39,7 @@ new #[Layout('layouts.accounts')] class extends Component
         $this->cancelAll();
         $this->name        = Auth::user()->name;
         $this->editingName = true;
+        $this->dispatch('focus-name-input');
     }
 
     public function cancelName(): void
@@ -64,6 +65,7 @@ new #[Layout('layouts.accounts')] class extends Component
         $this->cancelAll();
         $this->newEmail      = '';
         $this->editingEmail  = true;
+        $this->dispatch('focus-email-input');
     }
 
     public function cancelEmail(): void
@@ -151,6 +153,7 @@ new #[Layout('layouts.accounts')] class extends Component
         $this->cancelAll();
         $this->newPhone     = '';
         $this->editingPhone = true;
+        $this->dispatch('focus-phone-input');
     }
 
     public function cancelPhone(): void

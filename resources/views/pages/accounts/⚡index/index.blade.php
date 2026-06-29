@@ -99,7 +99,7 @@
                     <div class="flex items-center justify-between gap-4">
                         <span class="text-sm text-white/45 shrink-0">Full name</span>
                         <flux:input wire:model="name" size="sm" class="max-w-xs" wire:keydown.enter="saveName"
-                            wire:keydown.escape="cancelName" autofocus />
+                            wire:keydown.escape="cancelName" x-on:focus-name-input.window="$el.focus()" />
                     </div>
                     @error('name')
                     <p class="text-xs text-red-400 text-right">{{ $message }}</p>
@@ -182,7 +182,8 @@
                 <div class="mt-4 space-y-2 border-t border-white/5 pt-4">
                     <p class="text-xs text-white/40">Your current email stays active until the new one is verified.</p>
                     <flux:input wire:model="newEmail" type="email" size="sm" placeholder="new@example.com"
-                        wire:keydown.enter="requestEmailChange" wire:keydown.escape="cancelEmail" autofocus />
+                        wire:keydown.enter="requestEmailChange" wire:keydown.escape="cancelEmail"
+                        x-on:focus-email-input.window="$el.focus()" />
                     @error('newEmail')
                     <p class="text-xs text-red-400">{{ $message }}</p>
                     @enderror
@@ -271,7 +272,8 @@
             <div class="space-y-2">
                 <p class="text-xs text-white/40">Enter the new phone number. An OTP will be sent to verify it.</p>
                 <flux:input wire:model="newPhone" size="sm" mask="99999-99999" placeholder="98765-43210"
-                    wire:keydown.enter="savePhone" wire:keydown.escape="cancelPhone" autofocus />
+                    wire:keydown.enter="savePhone" wire:keydown.escape="cancelPhone"
+                    x-on:focus-phone-input.window="$el.focus()" />
                 @error('newPhone')
                 <p class="text-xs text-red-400">{{ $message }}</p>
                 @enderror
