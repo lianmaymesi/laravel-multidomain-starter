@@ -78,7 +78,7 @@
                     @php
                     $profileActive = request()->routeIs('account.index');
                     @endphp
-                    <a href="{{ route('account.index') }}"
+                    <a href="{{ route('account.index') }}" wire:navigate
                         class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors
                             {{ $profileActive ? 'bg-white/10 font-medium text-white' : 'text-white/50 hover:bg-white/5 hover:text-white/80' }}">
                         <flux:icon.user class="size-4 {{ $profileActive ? 'text-white' : 'text-white/40' }}" />
@@ -87,7 +87,7 @@
 
                     @if (Route::has('account.security'))
                     @php $secActive = request()->routeIs('account.security'); @endphp
-                    <a href="{{ route('account.security') }}"
+                    <a href="{{ route('account.security') }}" wire:navigate
                         class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors
                                 {{ $secActive ? 'bg-white/10 font-medium text-white' : 'text-white/50 hover:bg-white/5 hover:text-white/80' }}">
                         <flux:icon.lock-closed class="size-4 {{ $secActive ? 'text-white' : 'text-white/40' }}" />
@@ -104,7 +104,7 @@
                     @endif
 
                     @php $tfaActive = request()->routeIs('account.two-factor-setup'); @endphp
-                    <a href="{{ route('account.two-factor-setup') }}"
+                    <a href="{{ route('account.two-factor-setup') }}" wire:navigate
                         class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors
                             {{ $tfaActive ? 'bg-white/10 font-medium text-white' : 'text-white/50 hover:bg-white/5 hover:text-white/80' }}">
                         <flux:icon.shield-check class="size-4 {{ $tfaActive ? 'text-white' : 'text-white/40' }}" />
@@ -132,7 +132,7 @@
                 </nav>
 
                 <div class="mt-6 border-t border-white/[0.07] pt-5">
-                    <form method="POST" action="{{ url('/logout') }}">
+                    <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit"
                             class="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-white/35 transition-colors hover:bg-red-500/5 hover:text-red-400">

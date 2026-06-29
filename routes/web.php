@@ -1,6 +1,17 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+Route::post('/logout', function (Request $request) {
+    Auth::logout();
+
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect()->route('auth.login');
+})->middleware('auth')->name('logout');
 
 Route::domain(config('justreadbible.main_domain'))
     ->group(function () {
