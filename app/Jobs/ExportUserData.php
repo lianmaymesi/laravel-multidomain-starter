@@ -3,15 +3,14 @@
 namespace App\Jobs;
 
 use App\Models\AccountDataExport;
-use App\Models\User;
 use App\Notifications\AccountDataExportReady;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use ZipArchive;
 
 class ExportUserData implements ShouldQueue
@@ -21,12 +20,13 @@ class ExportUserData implements ShouldQueue
     public int $tries = 3;
     public int $timeout = 120;
 
-    public function __construct(public readonly User $user) {}
+    public function __construct(public readonly AccountDataExport $export) {}
 
     public function handle(): void
     {
-        $user    = $this->user->fresh();
-        $token   = Str::random(64);
+        $export  = $this->export->fresh();
+        $user    = $export->user;
+        $token   = $export->token;
         $tempDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . "jrb_export_{$user->id}_{$token}";
 
         mkdir($tempDir, 0755, true);
@@ -41,14 +41,13 @@ class ExportUserData implements ShouldQueue
             $storagePath = "exports/{$user->id}/{$token}.zip";
             Storage::disk('local')->put($storagePath, file_get_contents($zipTempPath));
 
-            $export = AccountDataExport::create([
-                'user_id'    => $user->id,
-                'token'      => $token,
+            $export->update([
+                'status'     => 'ready',
                 'path'       => $storagePath,
                 'expires_at' => now()->addDays(AccountDataExport::EXPORT_TTL_DAYS),
             ]);
 
-            $user->notify(new AccountDataExportReady($export));
+            $user->notify(new AccountDataExportReady($export->fresh()));
 
         } finally {
             $this->cleanDir($tempDir);
@@ -58,7 +57,7 @@ class ExportUserData implements ShouldQueue
         }
     }
 
-    private function writeProfileCsv(User $user, string $dir): void
+    private function writeProfileCsv($user, string $dir): void
     {
         $path = $dir . DIRECTORY_SEPARATOR . 'profile.csv';
         $file = fopen($path, 'w');
@@ -78,11 +77,11 @@ class ExportUserData implements ShouldQueue
         fclose($file);
     }
 
-    private function writeSessionsCsv(User $user, string $dir): void
+    private function writeSessionsCsv($user, string $dir): void
     {
         $path     = $dir . DIRECTORY_SEPARATOR . 'sessions.csv';
         $file     = fopen($path, 'w');
-        $sessions = \Illuminate\Support\Facades\DB::table('sessions')
+        $sessions = DB::table('sessions')
             ->where('user_id', $user->id)
             ->orderByDesc('last_activity')
             ->get();

@@ -12,10 +12,16 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('token', 64)->unique();
-            $table->string('path');
-            $table->timestamp('expires_at');
+            $table->enum('status', ['processing', 'ready'])->default('processing');
+            $table->string('path')->nullable();
+            $table->timestamp('expires_at')->nullable();
+            $table->timestamp('downloaded_at')->nullable();
+            $table->unsignedTinyInteger('download_count')->default(0);
+            $table->string('download_token', 32)->nullable();
+            $table->timestamp('download_token_expires_at')->nullable();
             $table->timestamps();
 
+            $table->index(['user_id', 'status']);
             $table->index('expires_at');
         });
     }

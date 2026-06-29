@@ -36,7 +36,30 @@ Route::domain(config('justreadbible.sub_domains.backoffice'))
 Route::domain(config('justreadbible.sub_domains.account'))
     ->name('account.')
     ->group(function () {
-        Route::get('export/{token}', \App\Http\Controllers\AccountExportController::class)->name('export.download');
+        Route::get('export/{token}', function (Request $request, string $token) {
+            $export = \App\Models\AccountDataExport::where('token', '=', $token)->firstOrFail();
+            $dt     = (string) $request->query('dt', '');
+
+            if (! $export->isReady()) {
+                abort(404, 'Export not available.');
+            }
+
+            if (! $export->hasValidDownloadToken($dt)) {
+                abort(403, 'Invalid or expired download link. Please re-authenticate from your account.');
+            }
+
+            $fullPath = \Illuminate\Support\Facades\Storage::disk('local')->path($export->path);
+
+            if (! file_exists($fullPath)) {
+                abort(404, 'Export file not found.');
+            }
+
+            $export->consumeDownloadToken();
+
+            return response()->download($fullPath, 'my-data-export.zip', [
+                'Content-Type' => 'application/zip',
+            ]);
+        })->name('export.download');
     });
 
 Route::domain(config('justreadbible.sub_domains.account'))
