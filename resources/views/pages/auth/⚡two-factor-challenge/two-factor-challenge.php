@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Services\AccountDeletionService;
 use App\Services\Auth\TwoFactorService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -48,6 +49,15 @@ new #[Layout('layouts.auth')] class extends Component
         session()->forget('2fa_user_id');
 
         Auth::login($user);
+
+        // Auto-cancel pending deletion — completing 2FA during grace period cancels it
+        $deletion = $user->activeDeletionRequest();
+        if ($deletion?->isCancellable()) {
+            app(AccountDeletionService::class)->cancel($deletion);
+            session()->flash('deletion_cancelled', true);
+            $this->redirect(route('account.index'), navigate: false);
+            return;
+        }
 
         $this->redirect($user->redirect(), navigate: false);
     }

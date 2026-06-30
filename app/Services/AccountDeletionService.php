@@ -25,6 +25,9 @@ class AccountDeletionService
             'status'       => 'pending',
         ]);
 
+        // Revoke all active sessions immediately on deletion request
+        DB::table('sessions')->where('user_id', $user->id)->delete();
+
         $user->notify(new AccountDeletionRequested($request));
 
         return $request;

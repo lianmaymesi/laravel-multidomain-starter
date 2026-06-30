@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\OtpType;
+use App\Services\AccountDeletionService;
 use App\Services\Auth\OtpService;
 use App\Services\Auth\SmsService;
 use Illuminate\Support\Facades\Auth;
@@ -54,6 +55,15 @@ new #[Layout('layouts.auth')] class extends Component
             Auth::logout(); // log out until 2FA passed
 
             $this->redirect(route('auth.two-factor-challenge'), navigate: true);
+            return;
+        }
+
+        // Auto-cancel pending deletion — logging in during the grace period cancels it
+        $deletion = $user->activeDeletionRequest();
+        if ($deletion?->isCancellable()) {
+            app(AccountDeletionService::class)->cancel($deletion);
+            session()->flash('deletion_cancelled', true);
+            $this->redirect(route('account.index'), navigate: false);
             return;
         }
 

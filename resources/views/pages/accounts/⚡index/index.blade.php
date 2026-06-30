@@ -2,6 +2,19 @@
 
 <div class="space-y-10">
 
+    {{-- Deletion cancelled notice --}}
+    @if (session('deletion_cancelled'))
+    <div class="rounded-[1.75rem] border border-emerald-500/20 bg-emerald-500/[0.07] p-5 flex items-start gap-3">
+        <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15">
+            <flux:icon.check-circle class="size-4 text-emerald-400" />
+        </div>
+        <div class="space-y-1">
+            <p class="text-sm font-medium text-emerald-300">Account deletion cancelled</p>
+            <p class="text-xs text-white/55">Welcome back! Your account is fully active and the deletion has been cancelled.</p>
+        </div>
+    </div>
+    @endif
+
     <section class="space-y-5">
 
         {{-- Account status strip --}}
@@ -337,7 +350,7 @@
                     <div class="space-y-1">
                         <p class="text-sm font-medium text-white/90">Account deletion scheduled</p>
                         <p class="text-xs text-white/50">
-                            Your account will be permanently anonymized on
+                            Your account will be permanently deleted on
                             <span class="text-white/80">{{ $deletionRequest->scheduled_at->format('F j, Y') }}</span>.
                             @if ($deletionRequest->daysRemaining() > 0)
                             <span class="text-red-400">{{ $deletionRequest->daysRemaining() }} {{ Str::plural('day',
@@ -350,10 +363,9 @@
                 </div>
 
                 @if ($deletionRequest->isCancellable())
-                <flux:button wire:click="cancelDeletion"
+                <flux:button wire:click="cancelDeletion" icon="x-circle"
                     wire:confirm="Cancel the account deletion? Your account will remain fully active." size="sm"
                     variant="ghost" class="rounded-2xl! text-emerald-400! hover:text-emerald-300!">
-                    <flux:icon.x-circle class="size-4" />
                     Cancel deletion
                 </flux:button>
                 @endif
@@ -371,9 +383,12 @@
                         <div class="space-y-1">
                             <p class="text-sm font-medium text-white/90">Request account deletion</p>
                             <p class="text-xs text-white/50">
-                                Your account enters a <span class="text-white/70">30-day grace period</span> before
-                                personal
-                                data is anonymized.<br> You can cancel any time during this period.
+                                You'll be signed out of all sessions immediately. Your account enters a
+                                <span class="text-white/70">{{ \App\Models\AccountDeletionRequest::GRACE_PERIOD_DAYS }}-day cooling period</span>
+                                before personal data is deleted.<br>
+                                To cancel, simply <span class="text-white/70">sign back in</span> during this period —
+                                logging in cancels the deletion automatically. After the cooling period your account
+                                will be permanently gone and you won't be able to sign in.<br>
                                 <a href="{{ route('account.export') }}" wire:navigate
                                     class="text-white/60 underline underline-offset-2">Export your data</a> first if
                                 needed.

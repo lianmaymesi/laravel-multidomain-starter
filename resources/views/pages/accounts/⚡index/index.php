@@ -207,7 +207,14 @@ new #[Layout('layouts.accounts')] class extends Component
         app(AccountDeletionService::class)->request(Auth::user());
 
         $this->reset('deletePassword', 'showDeleteConfirm');
-        $this->deletionRequest = Auth::user()->fresh()->activeDeletionRequest();
+
+        // Sessions already revoked in service; log out current session and redirect
+        Auth::logout();
+        session()->invalidate();
+        session()->regenerateToken();
+        session()->flash('deletion_requested', true);
+
+        $this->redirect(route('auth.login'), navigate: false);
     }
 
     public function cancelDeletion(): void

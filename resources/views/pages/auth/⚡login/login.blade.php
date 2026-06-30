@@ -30,6 +30,22 @@
                     </div>
                 </div>
 
+                {{-- Deletion requested notice --}}
+                @if (session('deletion_requested'))
+                <div class="rounded-[1.75rem] border border-amber-500/20 bg-amber-500/[0.07] p-5 space-y-2">
+                    <div class="flex items-center gap-2">
+                        <flux:icon.clock class="size-4 text-amber-400 shrink-0" />
+                        <p class="text-sm font-medium text-amber-300">Account deletion scheduled</p>
+                    </div>
+                    <p class="text-xs text-white/55 leading-relaxed">
+                        You've been signed out of all sessions. Your account will be permanently deleted in
+                        <span class="text-white/80">{{ \App\Models\AccountDeletionRequest::GRACE_PERIOD_DAYS }} days</span>.<br>
+                        To cancel, <span class="text-amber-300 font-medium">sign back in</span> any time during this period.
+                        After that, your account will be permanently gone.
+                    </p>
+                </div>
+                @endif
+
                 {{-- Form Card --}}
                 <form wire:submit="login"
                     class="space-y-4 rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-2xl shadow-black/20 backdrop-blur-md">
