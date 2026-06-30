@@ -1,150 +1,147 @@
 @php $title = 'Verify Phone'; @endphp
 
-<div class="min-h-screen bg-zinc-950 flex items-center justify-center px-4 py-8">
+<div class="flex min-h-screen flex-col bg-zinc-950"
+    x-data="{
+        countdown: {{ $resendCooldown }},
+        timer: null,
+        start() {
+            clearInterval(this.timer);
+            if (this.countdown <= 0) return;
+            this.timer = setInterval(() => {
+                this.countdown--;
+                if (this.countdown <= 0) clearInterval(this.timer);
+            }, 1000);
+        }
+    }"
+    x-init="start()">
 
-    {{-- Background gradients --}}
-    <div class="fixed inset-0 pointer-events-none">
-        <div
-            class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.18),transparent_35%),radial-gradient(circle_at_20%_80%,rgba(16,185,129,0.12),transparent_28%)]">
+    {{-- Top bar --}}
+    <div class="flex h-12 shrink-0 items-center border-b border-white/6 px-6">
+        <div class="flex items-center gap-3">
+            <img src="{{ Vite::asset('resources/assets/images/logo.svg') }}" alt="{{ config('app.name') }}"
+                class="h-7 w-auto" />
+            <span class="text-xs font-semibold tracking-tight text-white/50">{{ config('app.name') }}</span>
         </div>
     </div>
 
-    <div class="relative mx-auto w-full max-w-md space-y-6" x-data="{
-            countdown: {{ $resendCooldown }},
-            timer: null,
-            start() {
-                clearInterval(this.timer);
-                if (this.countdown <= 0) return;
-                this.timer = setInterval(() => {
-                    this.countdown--;
-                    if (this.countdown <= 0) clearInterval(this.timer);
-                }, 1000);
-            }
-        }" x-init="start()">
+    {{-- Content --}}
+    <div class="flex flex-1 items-center justify-center px-4 py-12">
+        <div class="w-full max-w-sm">
 
-        {{-- Header --}}
-        <div class="inline-flex items-center gap-3 text-white">
-            <span
-                class="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm">
-                <img src="{{ Vite::asset('resources/assets/images/logo.svg') }}" alt="{{ config('app.name') }}"
-                    class="h-10 w-auto" />
-            </span>
-            <div>
-                <flux:heading size="xl" class="!text-3xl font-semibold !tracking-tight text-white sm:!text-4xl">
-                    Verify your phone
-                </flux:heading>
-                <flux:text class="hidden md:block text-sm leading-7 text-white/65">
-                    Enter the 6-digit code we sent you
-                </flux:text>
+            {{-- Heading block --}}
+            <div class="mb-6 border-l-[3px] border-blue-500 pl-4">
+                <p class="mb-1 text-[10px] tracking-[0.25em] uppercase text-blue-400/55">Phone verification</p>
+                <h1 class="text-2xl font-bold text-white">Verify your phone</h1>
+                <p class="mt-1 text-sm text-white/40">Enter the 6-digit code we sent you</p>
             </div>
-        </div>
 
-        {{-- Main Card --}}
-        <div
-            class="rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-2xl shadow-black/20 backdrop-blur-md space-y-5">
+            <flux:card class="p-5! space-y-5">
 
-            {{-- Flash status --}}
-            @if (session('status'))
-            <div
-                class="rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-400 text-center">
-                {{ session('status') }}
-            </div>
-            @endif
-
-            {{-- Phone row: display or edit form --}}
-            @if ($editingPhone)
-            <form wire:submit="updatePhone" class="space-y-3">
-                <p class="text-sm text-white/50 text-center">Enter your updated phone number</p>
-
-                <div class="flex gap-2">
-                    <div class="w-24">
-                        <flux:input wire:model="newCountryCode" placeholder="+91" class="text-center" />
+                {{-- Flash status --}}
+                @if (session('status'))
+                    <div class="border border-emerald-500/20 bg-emerald-500/6 px-4 py-3 text-center text-sm text-emerald-400">
+                        {{ session('status') }}
                     </div>
-                    <div class="flex-1">
-                        <flux:input wire:model="newPhone" mask="99999-99999" placeholder="98765-43210" />
-                    </div>
-                </div>
-                <flux:error name="newCountryCode" />
-                <flux:error name="newPhone" />
-
-                <div class="flex gap-2 pt-1">
-                    <flux:button type="button" wire:click="cancelEdit" class="flex-1">Cancel</flux:button>
-                    <flux:button type="submit" variant="primary" class="flex-1 rounded-3xl!">
-                        <span wire:loading.remove wire:target="updatePhone">Update & Resend</span>
-                        <span wire:loading wire:target="updatePhone">Saving…</span>
-                    </flux:button>
-                </div>
-            </form>
-            @else
-            {{-- Phone display + edit button --}}
-            <div class="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.04] px-4 py-3">
-                <div>
-                    <p class="text-xs text-white/35 mb-0.5">Code sent to</p>
-                    <p class="text-sm font-medium text-white/85 tracking-wide">
-                        {{ auth()->user()?->country_code }}
-                        <span class="text-white/40">••••••</span>{{ substr(auth()->user()?->phone ?? '', -3) }}
-                    </p>
-                </div>
-
-                @if ($editAttemptsLeft > 0)
-                <button wire:click="startEdit" type="button"
-                    class="inline-flex items-center gap-1.5 rounded-lg border border-blue-400/20 bg-blue-400/5 px-3 py-1.5 text-xs font-medium text-blue-400 transition hover:bg-blue-400/10 hover:text-blue-300">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                    </svg>
-                    Edit
-                    <span class="text-blue-400/40">({{ $editAttemptsLeft }} left)</span>
-                </button>
-                @else
-                <span class="rounded-lg border border-white/[0.08] px-3 py-1.5 text-xs text-white/25">
-                    Edit limit reached
-                </span>
                 @endif
-            </div>
 
-            {{-- OTP input --}}
-            <form wire:submit="verify" class="flex flex-col items-center gap-5">
-                <flux:otp wire:model="code" length="6" label="Verification Code" label:sr-only :error:icon="false"
-                    error:class="text-center" class="mx-auto" />
+                {{-- Phone display or edit form --}}
+                @if ($editingPhone)
 
-                <flux:button variant="primary" type="submit" class="w-full rounded-3xl! py-3.5!">
-                    <span wire:loading.remove wire:target="verify">Verify Phone</span>
-                    <span wire:loading wire:target="verify">Verifying…</span>
-                </flux:button>
-            </form>
-
-            {{-- Resend section --}}
-            <div class="text-center border-t border-white/[0.06] pt-4">
-                <template x-if="countdown > 0">
-                    <div class="flex items-center justify-center gap-3">
-                        <p class="text-sm text-white/40">Resend code in</p>
-                        <div
-                            class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-white/10 bg-white/5 tabular-nums">
-                            <span class="text-sm font-mono font-semibold text-white/70" x-text="countdown"></span>
+                    <form wire:submit="updatePhone" class="space-y-3">
+                        <p class="text-sm text-white/50 text-center">Enter your updated phone number</p>
+                        <div class="flex gap-2">
+                            <div class="w-24">
+                                <flux:input wire:model="newCountryCode" placeholder="+91" class="text-center" />
+                            </div>
+                            <div class="flex-1">
+                                <flux:input wire:model="newPhone" mask="99999-99999" placeholder="98765-43210" />
+                            </div>
                         </div>
-                    </div>
-                </template>
+                        <flux:error name="newCountryCode" />
+                        <flux:error name="newPhone" />
+                        <div class="flex gap-2 pt-1">
+                            <flux:button type="button" wire:click="cancelEdit" class="flex-1">Cancel</flux:button>
+                            <flux:button type="submit" variant="primary" class="flex-1">
+                                <span wire:loading.remove wire:target="updatePhone">Update & Resend</span>
+                                <span wire:loading wire:target="updatePhone">Saving…</span>
+                            </flux:button>
+                        </div>
+                    </form>
 
-                <template x-if="countdown <= 0">
-                    @if ($resendAttemptsLeft > 0)
-                    <button wire:click="resend" wire:loading.attr="disabled" @click="countdown = 60; start()"
-                        class="text-sm font-medium text-blue-400 transition hover:text-blue-300 disabled:opacity-50">
-                        Resend code
-                        <span class="text-blue-400/40 ml-1">({{ $resendAttemptsLeft }} left)</span>
-                    </button>
-                    @else
-                    <p class="text-sm text-white/25">Resend limit reached. Contact support if needed.</p>
-                    @endif
-                </template>
-            </div>
-            @endif
+                @else
+
+                    {{-- Phone display --}}
+                    <div class="flex items-center justify-between border border-white/10 bg-white/4 px-4 py-3">
+                        <div>
+                            <p class="mb-0.5 text-xs text-white/35">Code sent to</p>
+                            <p class="text-sm font-medium tracking-wide text-white/85">
+                                {{ auth()->user()?->country_code }}
+                                <span class="text-white/40">••••••</span>{{ substr(auth()->user()?->phone ?? '', -3) }}
+                            </p>
+                        </div>
+
+                        @if ($editAttemptsLeft > 0)
+                            <button wire:click="startEdit" type="button"
+                                class="flex items-center gap-1.5 border border-blue-400/20 bg-blue-400/5 px-3 py-1.5 text-xs font-medium text-blue-400 transition hover:bg-blue-400/10 hover:text-blue-300">
+                                <flux:icon.pencil class="size-3.5" />
+                                Edit
+                                <span class="text-blue-400/40">({{ $editAttemptsLeft }})</span>
+                            </button>
+                        @else
+                            <span class="border border-white/8 px-3 py-1.5 text-xs text-white/25">
+                                Edit limit reached
+                            </span>
+                        @endif
+                    </div>
+
+                    {{-- OTP form --}}
+                    <form wire:submit="verify" class="flex flex-col items-center gap-5">
+                        <flux:otp wire:model="code" length="6" label="Verification Code" label:sr-only
+                            :error:icon="false" error:class="text-center" class="mx-auto" />
+
+                        <flux:button variant="primary" type="submit" class="w-full">
+                            <span wire:loading.remove wire:target="verify">Verify Phone</span>
+                            <span wire:loading wire:target="verify">Verifying…</span>
+                        </flux:button>
+                    </form>
+
+                    {{-- Resend section --}}
+                    <div class="border-t border-white/6 pt-4 text-center">
+                        <template x-if="countdown > 0">
+                            <div class="flex items-center justify-center gap-3">
+                                <p class="text-sm text-white/40">Resend in</p>
+                                <div class="inline-flex h-8 w-8 items-center justify-center border border-white/10 bg-white/5">
+                                    <span class="font-mono text-sm font-semibold text-white/70 tabular-nums" x-text="countdown"></span>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template x-if="countdown <= 0">
+                            @if ($resendAttemptsLeft > 0)
+                                <button wire:click="resend" wire:loading.attr="disabled"
+                                    @click="countdown = 60; start()"
+                                    class="text-sm font-medium text-blue-400 transition hover:text-blue-300 disabled:opacity-50">
+                                    Resend code
+                                    <span class="ml-1 text-blue-400/40">({{ $resendAttemptsLeft }} left)</span>
+                                </button>
+                            @else
+                                <p class="text-sm text-white/25">Resend limit reached. Contact support if needed.</p>
+                            @endif
+                        </template>
+                    </div>
+
+                @endif
+
+            </flux:card>
+
+            <p class="mt-5 text-center text-xs text-white/35">
+                Wrong account?
+                <flux:link href="{{ route('auth.login') }}" wire:navigate class="text-white/60! hover:text-white!">
+                    Sign out
+                </flux:link>
+            </p>
 
         </div>
-
-        <flux:subheading class="text-center text-white/60">
-            Wrong account?
-            <flux:link href="{{ route('auth.login') }}" class="text-white" wire:navigate>Sign out</flux:link>
-        </flux:subheading>
     </div>
+
 </div>

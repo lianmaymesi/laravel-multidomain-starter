@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
 
 <head>
     <meta charset="utf-8">
@@ -8,11 +8,9 @@
     <title>{{ $title ?? config('app.name') }}</title>
 
     @vite(['resources/css/auth.css', 'resources/js/auth.js'])
-
-    @fluxAppearance
 </head>
 
-<body class="dark:bg-linear-to-b min-h-screen bg-white antialiased dark:from-zinc-950 dark:to-zinc-900">
+<body class="min-h-screen bg-zinc-950 antialiased">
     {{ $slot }}
 
     @livewireScripts

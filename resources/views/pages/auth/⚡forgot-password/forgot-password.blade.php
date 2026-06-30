@@ -1,164 +1,154 @@
 @php $title = 'Forgot Password'; @endphp
 
-<div class="min-h-screen bg-zinc-950 flex items-center justify-center px-4 py-8">
+<div class="flex min-h-screen flex-col bg-zinc-950">
 
-    <div class="fixed inset-0 pointer-events-none">
-        <div
-            class="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.18),_transparent_35%),radial-gradient(circle_at_20%_80%,_rgba(16,185,129,0.12),_transparent_28%)]">
+    {{-- Top bar --}}
+    <div class="flex h-12 shrink-0 items-center border-b border-white/6 px-6">
+        <div class="flex items-center gap-3">
+            <img src="{{ Vite::asset('resources/assets/images/logo.svg') }}" alt="{{ config('app.name') }}"
+                class="h-7 w-auto" />
+            <span class="text-xs font-semibold tracking-tight text-white/50">{{ config('app.name') }}</span>
         </div>
     </div>
 
-    <div class="relative mx-auto w-full max-w-md space-y-6">
+    {{-- Content --}}
+    <div class="flex flex-1 items-center justify-center px-4 py-12">
+        <div class="w-full max-w-sm">
 
-        {{-- Header --}}
-        <div class="inline-flex items-center gap-3 text-white transition hover:text-white/90">
-            <span
-                class="flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm">
-                <img src="{{ Vite::asset('resources/assets/images/logo.svg') }}" alt="{{ config('app.name') }}"
-                    class="h-10 w-auto" />
-            </span>
-            <div>
-                <flux:heading size="xl" class="text-3xl! font-semibold tracking-tight! text-white sm:text-4xl!">
-                    Reset password
-                </flux:heading>
-                <flux:text class="hidden md:block text-sm leading-7 text-white/65">
+            {{-- Heading block --}}
+            <div class="mb-6 border-l-[3px] border-blue-500 pl-4">
+                <p class="mb-1 text-[10px] tracking-[0.25em] uppercase text-blue-400/55">Password recovery</p>
+                <h1 class="text-2xl font-bold text-white">Reset password</h1>
+                <p class="mt-1 text-sm text-white/40">
                     @if (! $otpSent)
-                    Verify your identity to continue
+                        Verify your identity to continue
                     @else
-                    Enter the code we sent to verify it's you
+                        Enter the code we sent you
                     @endif
-                </flux:text>
+                </p>
             </div>
-        </div>
 
-        {{-- Card --}}
-        <div
-            class="rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-2xl shadow-black/20 backdrop-blur-md space-y-5">
-
-            {{-- Flash --}}
+            {{-- Flash status --}}
             @if (session('status'))
-            <div
-                class="rounded-xl border border-emerald-500/20 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-400 text-center">
-                {{ session('status') }}
-            </div>
-            @endif
-
-            {{-- ── STEP 1: Choose method & send OTP ── --}}
-            @if (! $otpSent)
-
-            {{-- Tabs --}}
-            <div class="flex rounded-xl border border-white/10 bg-white/4 p-1 gap-1">
-                <button type="button" wire:click="switchTab('phone')"
-                    @class([ 'flex-1 rounded-lg py-2 text-sm font-medium transition-all duration-150'
-                    , 'bg-white/10 text-white shadow-sm'=> $activeTab === 'phone',
-                    'text-white/45 hover:text-white/70' => $activeTab !== 'phone',
-                    ])>
-                    Phone
-                </button>
-                <button type="button" wire:click="switchTab('email')"
-                    @class([ 'flex-1 rounded-lg py-2 text-sm font-medium transition-all duration-150'
-                    , 'bg-white/10 text-white shadow-sm'=> $activeTab === 'email',
-                    'text-white/45 hover:text-white/70' => $activeTab !== 'email',
-                    ])>
-                    Email
-                </button>
-            </div>
-
-            <form wire:submit="sendOtp" class="space-y-4">
-
-                {{-- Phone fields --}}
-                @if ($activeTab === 'phone')
-                <flux:input wire:model="phone" placeholder="98765-43210" mask="99999-99999" />
-                @endif
-
-                {{-- Email field --}}
-                @if ($activeTab === 'email')
-                <flux:input wire:model="email" type="email" placeholder="Enter your registered email"
-                    autocomplete="email" />
-                @endif
-
-                <flux:button type="submit" variant="primary" class="w-full rounded-3xl! py-3.5!">
-                    Send Code
-                </flux:button>
-
-            </form>
-
-            {{-- ── STEP 2: Verify OTP ── --}}
-            @else
-
-            {{-- Sent-to indicator with back/change button --}}
-            <div class="flex items-center justify-between rounded-xl border border-white/10 bg-white/4 px-4 py-3">
-                <div>
-                    <p class="text-xs text-white/35 mb-0.5">Code sent to</p>
-                    <p class="text-sm font-medium text-white/85">
-                        @if ($activeTab === 'phone')
-                        {{ $country_code }} <span class="text-white/40">••••••</span>{{ substr(preg_replace('/\D/', '',
-                        $phone), -3) }}
-                        @else
-                        {{ $maskedEmail }}
-                        @endif
-                    </p>
+                <div class="mb-4 border border-emerald-500/20 bg-emerald-500/6 px-4 py-3 text-center text-sm text-emerald-400">
+                    {{ session('status') }}
                 </div>
-                <button type="button" wire:click="goBack"
-                    class="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/50 transition hover:bg-white/10 hover:text-white/80">
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                    </svg>
-                    Change
-                </button>
-            </div>
-
-            {{-- OTP input --}}
-            <form wire:submit="verifyOtp" class="flex flex-col items-center gap-5">
-                <flux:otp wire:model="code" length="6" label="Verification Code" label:sr-only :error:icon="false"
-                    error:class="text-center" class="mx-auto" />
-
-                <flux:button variant="primary" type="submit" class="w-full rounded-3xl! py-3.5!">
-                    Verify & Continue
-                </flux:button>
-            </form>
-
-            {{-- Resend countdown --}}
-            <div class="text-center border-t border-white/6 pt-4" x-data="{
-                    countdown: @entangle('resendCooldown'),
-                    interval: null,
-                    start() {
-                        clearInterval(this.interval);
-                        this.interval = setInterval(() => {
-                            if (this.countdown > 0) {
-                                this.countdown--;
-                            } else {
-                                clearInterval(this.interval);
-                            }
-                        }, 1000);
-                    }
-                }" x-init="$watch('countdown', value => { if (value > 0) start() }); start()">
-                <template x-if="countdown > 0">
-                    <div class="flex items-center justify-center gap-3">
-                        <p class="text-sm text-white/40">Resend code in</p>
-                        <div
-                            class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-white/10 bg-white/5">
-                            <span class="text-sm font-mono font-semibold text-white/70" x-text="countdown"></span>
-                        </div>
-                    </div>
-                </template>
-
-                <template x-if="countdown <= 0">
-                    <button wire:click="resend" wire:loading.attr="disabled"
-                        class="text-sm font-medium text-blue-400 transition hover:text-blue-300 disabled:opacity-50">
-                        Resend code
-                    </button>
-                </template>
-            </div>
-
             @endif
+
+            <flux:card class="p-5! space-y-5">
+
+                {{-- ── Step 1: Choose method ── --}}
+                @if (! $otpSent)
+
+                    {{-- Sharp tab switcher --}}
+                    <div class="flex border border-white/10 bg-white/3">
+                        <button type="button" wire:click="switchTab('phone')"
+                            @class([
+                                'flex-1 py-2 text-sm font-medium transition-all',
+                                'bg-white/8 text-white' => $activeTab === 'phone',
+                                'text-white/40 hover:text-white/65' => $activeTab !== 'phone',
+                            ])>
+                            Phone
+                        </button>
+                        <button type="button" wire:click="switchTab('email')"
+                            @class([
+                                'flex-1 py-2 text-sm font-medium transition-all',
+                                'bg-white/8 text-white' => $activeTab === 'email',
+                                'text-white/40 hover:text-white/65' => $activeTab !== 'email',
+                            ])>
+                            Email
+                        </button>
+                    </div>
+
+                    <form wire:submit="sendOtp" class="space-y-4">
+                        @if ($activeTab === 'phone')
+                            <flux:field>
+                                <flux:label>Phone Number</flux:label>
+                                <flux:input wire:model="phone" placeholder="98765-43210" mask="99999-99999" />
+                                <flux:error name="phone" />
+                            </flux:field>
+                        @else
+                            <flux:field>
+                                <flux:label>Email Address</flux:label>
+                                <flux:input wire:model="email" type="email" placeholder="you@example.com"
+                                    autocomplete="email" />
+                                <flux:error name="email" />
+                            </flux:field>
+                        @endif
+                        <flux:button type="submit" variant="primary" class="w-full">Send Code</flux:button>
+                    </form>
+
+                {{-- ── Step 2: Verify OTP ── --}}
+                @else
+
+                    <div class="flex items-center justify-between border border-white/10 bg-white/3 px-4 py-3">
+                        <div>
+                            <p class="mb-0.5 text-xs text-white/35">Code sent to</p>
+                            <p class="text-sm font-medium text-white/85">
+                                @if ($activeTab === 'phone')
+                                    {{ $country_code }}
+                                    <span class="text-white/40">••••••</span>{{ substr(preg_replace('/\D/', '', $phone), -3) }}
+                                @else
+                                    {{ $maskedEmail }}
+                                @endif
+                            </p>
+                        </div>
+                        <button type="button" wire:click="goBack"
+                            class="flex items-center gap-1.5 border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-white/50 transition hover:bg-white/8 hover:text-white/80">
+                            <flux:icon.arrow-left class="size-3.5" />
+                            Change
+                        </button>
+                    </div>
+
+                    <form wire:submit="verifyOtp" class="flex flex-col items-center gap-5">
+                        <flux:otp wire:model="code" length="6" label="Verification Code" label:sr-only
+                            :error:icon="false" error:class="text-center" class="mx-auto" />
+                        <flux:button variant="primary" type="submit" class="w-full">Verify & Continue</flux:button>
+                    </form>
+
+                    <div class="border-t border-white/6 pt-4 text-center"
+                        x-data="{
+                            countdown: @entangle('resendCooldown'),
+                            interval: null,
+                            start() {
+                                clearInterval(this.interval);
+                                this.interval = setInterval(() => {
+                                    if (this.countdown > 0) { this.countdown--; }
+                                    else { clearInterval(this.interval); }
+                                }, 1000);
+                            }
+                        }"
+                        x-init="$watch('countdown', v => { if (v > 0) start() }); start()">
+
+                        <template x-if="countdown > 0">
+                            <div class="flex items-center justify-center gap-3">
+                                <p class="text-sm text-white/40">Resend in</p>
+                                <div class="inline-flex h-8 w-8 items-center justify-center border border-white/10 bg-white/5">
+                                    <span class="font-mono text-sm font-semibold text-white/70 tabular-nums" x-text="countdown"></span>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template x-if="countdown <= 0">
+                            <button wire:click="resend" wire:loading.attr="disabled"
+                                class="text-sm font-medium text-blue-400 transition hover:text-blue-300 disabled:opacity-50">
+                                Resend code
+                            </button>
+                        </template>
+                    </div>
+
+                @endif
+
+            </flux:card>
+
+            <p class="mt-5 text-center text-xs text-white/35">
+                Remembered it?
+                <flux:link href="{{ route('auth.login') }}" wire:navigate class="text-white/60! hover:text-white!">
+                    Sign in
+                </flux:link>
+            </p>
 
         </div>
-
-        <flux:subheading class="text-center text-white/60">
-            Remembered it?
-            <flux:link href="{{ route('auth.login') }}" class="text-white" wire:navigate>Sign in</flux:link>
-        </flux:subheading>
-
     </div>
+
 </div>
