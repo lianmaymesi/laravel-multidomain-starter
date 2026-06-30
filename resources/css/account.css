@@ -130,6 +130,16 @@
     opacity: 0.6;
 }
 
+/* ─── Hide body scrollbar (scroll still works) ───────────────────────────── */
+html,
+body {
+    scrollbar-width: none;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    display: none;
+}
+
 [data-flux-error] {
     @apply mt-1.5 text-xs;
 }
