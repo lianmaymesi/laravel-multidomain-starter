@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./theme.css";
 @import "../../vendor/livewire/flux/dist/flux.css";
 
 @source "../views/components/auth/**/*.blade.php";
@@ -7,65 +8,6 @@
 @source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
 @source "../../vendor/livewire/flux-pro/stubs/**/*.blade.php";
 @source "../../vendor/livewire/flux/stubs/**/*.blade.php";
-
-@theme {
-    --font-sans:
-        "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
-        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-        "Noto Color Emoji";
-
-    /* Flux base → slate */
-    --color-zinc-50: var(--color-slate-50);
-    --color-zinc-100: var(--color-slate-100);
-    --color-zinc-200: var(--color-slate-200);
-    --color-zinc-300: var(--color-slate-300);
-    --color-zinc-400: var(--color-slate-400);
-    --color-zinc-500: var(--color-slate-500);
-    --color-zinc-600: var(--color-slate-600);
-    --color-zinc-700: var(--color-slate-700);
-    --color-zinc-800: var(--color-slate-800);
-    --color-zinc-900: var(--color-slate-900);
-    --color-zinc-950: var(--color-slate-950);
-
-    /* Brand blue */
-    --color-blue-50: #eef0ff;
-    --color-blue-100: #dfe3ff;
-    --color-blue-200: #c3cbff;
-    --color-blue-300: #96a8ff;
-    --color-blue-400: #637bf8;
-    --color-blue-500: #3b54ee;
-    --color-blue-600: #1f40cc;
-    --color-blue-700: #1630a8;
-    --color-blue-800: #102284;
-    --color-blue-900: #081462;
-    --color-blue-950: #05093d;
-
-    /* Brand red */
-    --color-red-50: #fff0f0;
-    --color-red-100: #ffe0e0;
-    --color-red-200: #ffc2c2;
-    --color-red-300: #ff9090;
-    --color-red-400: #ff5555;
-    --color-red-500: #ff2222;
-    --color-red-600: #cc2020;
-    --color-red-700: #a81818;
-    --color-red-800: #880f0f;
-    --color-red-900: #6e0a0a;
-    --color-red-950: #3d0303;
-
-    /* Flux accent = brand blue */
-    --color-accent: var(--color-blue-500);
-    --color-accent-content: var(--color-blue-600);
-    --color-accent-foreground: var(--color-white);
-}
-
-@layer theme {
-    .dark {
-        --color-accent: var(--color-blue-400);
-        --color-accent-content: var(--color-blue-300);
-        --color-accent-foreground: var(--color-white);
-    }
-}
 
 /* ─── Edge design: zero all border radii ─────────────────────────────────── */
 [data-flux-card] { border-radius: 0; }

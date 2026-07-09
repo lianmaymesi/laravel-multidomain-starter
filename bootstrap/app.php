@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Middleware\EnsureEmailVerificationNotExpired;
-use App\Http\Middleware\EnsureIsStaff;
-use App\Http\Middleware\EnsurePhoneIsVerified;
+use App\Http\Middleware\Demo\EnsureEmailVerificationNotExpired;
+use App\Http\Middleware\Demo\EnsureIsStaff;
+use App\Http\Middleware\Demo\EnsurePhoneIsVerified;
 use App\Http\Middleware\EnsurePortalAccess;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use Illuminate\Foundation\Application;
@@ -17,11 +17,15 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
+            // Core — the reusable multidomain/portal mechanism
             'guest' => RedirectIfAuthenticated::class,
+            'portal' => EnsurePortalAccess::class,
+
+            // Demo/example — this app's own auth flow (phone OTP, email grace
+            // period, staff role). Replace or remove for your own app.
             'phone.verified' => EnsurePhoneIsVerified::class,
             'email.grace' => EnsureEmailVerificationNotExpired::class,
             'staff' => EnsureIsStaff::class,
-            'portal' => EnsurePortalAccess::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

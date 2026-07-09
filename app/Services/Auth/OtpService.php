@@ -139,17 +139,17 @@ class OtpService
 
     private function resendCooldownSeconds(): int
     {
-        return (int) config('justreadbible.otp.resend_cooldown', 60);
+        return (int) config('verification.otp.resend_cooldown', 60);
     }
 
     private function resendLockoutSeconds(): int
     {
-        return (int) config('justreadbible.otp.resend_lockout_seconds', 86400);
+        return (int) config('verification.otp.resend_lockout_seconds', 86400);
     }
 
     private function resendMaxAttempts(): int
     {
-        return (int) config('justreadbible.otp.resend_max_attempts', 3);
+        return (int) config('verification.otp.resend_max_attempts', 3);
     }
 
     private function secondsForHumans(int $seconds): string

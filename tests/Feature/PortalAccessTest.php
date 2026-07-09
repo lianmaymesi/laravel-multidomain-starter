@@ -73,7 +73,7 @@ it('allows recently registered phone verified users to access the app portal bef
 
 it('redirects phone verified users to email verification after the grace period expires', function () {
     $user = portalUser([
-        'created_at' => now()->subDays(config('justreadbible.email_verification_grace_days') + 1),
+        'created_at' => now()->subDays(config('verification.email_verification_grace_days') + 1),
         'email_verified_at' => null,
         'phone_verified_at' => now(),
     ]);

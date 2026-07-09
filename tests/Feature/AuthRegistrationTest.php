@@ -42,5 +42,5 @@ it('registers a user and redirects them to phone verification', function () {
 });
 
 it('normalizes wildcard session domains into browser-valid parent domains', function () {
-    expect(config('session.domain'))->toBe('.justreadbible.test');
+    expect(config('session.domain'))->toBe('.example.test');
 });

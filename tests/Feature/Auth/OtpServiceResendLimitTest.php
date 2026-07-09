@@ -16,7 +16,7 @@ it('blocks forgot password otp requests after three attempts for twenty four hou
         $otpService->gateResend($recipient, $type);
 
         if ($attempt < 3) {
-            $this->travel(config('justreadbible.otp.resend_cooldown') + 1)->seconds();
+            $this->travel(config('verification.otp.resend_cooldown') + 1)->seconds();
         }
     }
 
@@ -40,11 +40,11 @@ it('allows new forgot password otp requests again after the twenty four hour loc
         $otpService->gateResend($recipient, $type);
 
         if ($attempt < 3) {
-            $this->travel(config('justreadbible.otp.resend_cooldown') + 1)->seconds();
+            $this->travel(config('verification.otp.resend_cooldown') + 1)->seconds();
         }
     }
 
-    $this->travel(config('justreadbible.otp.resend_lockout_seconds') + 1)->seconds();
+    $this->travel(config('verification.otp.resend_lockout_seconds') + 1)->seconds();
 
     $otpService->gateResend($recipient, $type);
 

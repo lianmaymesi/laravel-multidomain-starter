@@ -71,7 +71,7 @@ new #[Layout('layouts.auth')] class extends Component
         // Always show success to prevent user enumeration
         if (!$user) {
             $this->otpSent = true;
-            $this->resendCooldown = (int) config('justreadbible.otp.resend_cooldown', 60);
+            $this->resendCooldown = (int) config('verification.otp.resend_cooldown', 60);
             session()->flash('status', 'If that account exists, a code has been sent.');
             return;
         }
@@ -85,7 +85,7 @@ new #[Layout('layouts.auth')] class extends Component
         }
 
         $this->otpSent = true;
-        $this->resendCooldown = (int) config('justreadbible.otp.resend_cooldown', 60);
+        $this->resendCooldown = (int) config('verification.otp.resend_cooldown', 60);
 
         session()->flash('status', 'A reset code has been sent.');
     }
@@ -141,7 +141,7 @@ new #[Layout('layouts.auth')] class extends Component
 
         if (!$user) {
             // Silently ignore — don't leak whether the account exists
-            $this->resendCooldown = (int) config('justreadbible.otp.resend_cooldown', 60);
+            $this->resendCooldown = (int) config('verification.otp.resend_cooldown', 60);
             return;
         }
 
@@ -153,7 +153,7 @@ new #[Layout('layouts.auth')] class extends Component
             $user->notify(new ForgotPassword($otp->code));
         }
 
-        $this->resendCooldown = (int) config('justreadbible.otp.resend_cooldown', 60);
+        $this->resendCooldown = (int) config('verification.otp.resend_cooldown', 60);
 
         session()->flash('status', 'A new code has been sent.');
     }

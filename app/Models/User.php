@@ -32,11 +32,11 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function casts(): array
     {
         return [
-            'email_verified_at'          => 'datetime',
-            'phone_verified_at'          => 'datetime',
-            'password'                   => 'hashed',
-            'two_factor_enabled_at'      => 'datetime',
-            'two_factor_confirmed_at'    => 'datetime',
+            'email_verified_at' => 'datetime',
+            'phone_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'two_factor_enabled_at' => 'datetime',
+            'two_factor_confirmed_at' => 'datetime',
             'pending_email_requested_at' => 'datetime',
         ];
     }
@@ -66,19 +66,19 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function anonymizeMap(): array
     {
         return [
-            'name'                       => 'Deleted User',
-            'email'                      => fn($user) => "deleted_{$user->id}@deleted.invalid",
-            'phone'                      => null,
-            'country_code'               => null,
-            'two_factor_secret'          => null,
-            'two_factor_recovery_codes'  => null,
-            'two_factor_enabled_at'      => null,
-            'two_factor_confirmed_at'    => null,
-            'pending_email'              => null,
-            'pending_email_token'        => null,
+            'name' => 'Deleted User',
+            'email' => fn ($user) => "deleted_{$user->id}@deleted.invalid",
+            'phone' => null,
+            'country_code' => null,
+            'two_factor_secret' => null,
+            'two_factor_recovery_codes' => null,
+            'two_factor_enabled_at' => null,
+            'two_factor_confirmed_at' => null,
+            'pending_email' => null,
+            'pending_email_token' => null,
             'pending_email_requested_at' => null,
-            'remember_token'             => null,
-            'password'                   => fn() => Str::random(40),
+            'remember_token' => null,
+            'password' => fn () => Str::random(40),
         ];
     }
 
@@ -106,7 +106,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     private function emailVerificationDeadline(): Carbon
     {
-        return $this->created_at->copy()->addDays(config('justreadbible.email_verification_grace_days'));
+        return $this->created_at->copy()->addDays(config('verification.email_verification_grace_days'));
     }
 
     public function hasPendingEmailChange(): bool

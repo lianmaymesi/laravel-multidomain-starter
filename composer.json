@@ -1,11 +1,13 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "vendor/laravel-multidomain-starter",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
+    "description": "A Laravel starter kit for multi-subdomain apps: dedicated auth, account, app, and backoffice portals with an optional single-domain mode.",
     "keywords": [
         "laravel",
-        "framework"
+        "starter-kit",
+        "multidomain",
+        "subdomain"
     ],
     "license": "MIT",
     "require": {

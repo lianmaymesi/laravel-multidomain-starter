@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
+use App\Models\AccountDataExport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 Route::post('/logout', function (Request $request) {
     Auth::logout();
@@ -13,32 +15,32 @@ Route::post('/logout', function (Request $request) {
     return redirect()->route('auth.login');
 })->middleware('auth')->name('logout');
 
-Route::domain(config('justreadbible.main_domain'))
+Route::domain(config('multidomain.main_domain'))
     ->group(function () {
-        include __DIR__ . '/landing.php';
+        include __DIR__.'/landing.php';
     });
 
-Route::domain(config('justreadbible.sub_domains.app'))
+Route::domain(config('multidomain.sub_domains.app'))
     ->name('app.')
     ->middleware(['auth', 'phone.verified', 'email.grace', 'portal:user'])
     ->group(function () {
-        include __DIR__ . '/app.php';
+        include __DIR__.'/app.php';
     });
 
-Route::domain(config('justreadbible.sub_domains.backoffice'))
+Route::domain(config('multidomain.sub_domains.backoffice'))
     ->name('backoffice.')
     ->middleware(['auth', 'phone.verified', 'email.grace', 'portal:staff'])
     ->group(function () {
-        include __DIR__ . '/backoffice.php';
+        include __DIR__.'/backoffice.php';
     });
 
 // Export download — token-authenticated, no session auth required
-Route::domain(config('justreadbible.sub_domains.account'))
+Route::domain(config('multidomain.sub_domains.account'))
     ->name('account.')
     ->group(function () {
         Route::get('export/{token}', function (Request $request, string $token) {
-            $export = \App\Models\AccountDataExport::where('token', '=', $token)->firstOrFail();
-            $dt     = (string) $request->query('dt', '');
+            $export = AccountDataExport::where('token', '=', $token)->firstOrFail();
+            $dt = (string) $request->query('dt', '');
 
             if (! $export->isReady()) {
                 abort(404, 'Export not available.');
@@ -48,7 +50,7 @@ Route::domain(config('justreadbible.sub_domains.account'))
                 abort(403, 'Invalid or expired download link. Please re-authenticate from your account.');
             }
 
-            $fullPath = \Illuminate\Support\Facades\Storage::disk('local')->path($export->path);
+            $fullPath = Storage::disk('local')->path($export->path);
 
             if (! file_exists($fullPath)) {
                 abort(404, 'Export file not found.');
@@ -62,15 +64,15 @@ Route::domain(config('justreadbible.sub_domains.account'))
         })->name('export.download');
     });
 
-Route::domain(config('justreadbible.sub_domains.account'))
+Route::domain(config('multidomain.sub_domains.account'))
     ->name('account.')
     ->middleware(['auth'])
     ->group(function () {
-        include __DIR__ . '/account.php';
+        include __DIR__.'/account.php';
     });
 
-Route::domain(config('justreadbible.sub_domains.auth'))
+Route::domain(config('multidomain.sub_domains.auth'))
     ->name('auth.')
     ->group(function () {
-        include __DIR__ . '/auth.php';
+        include __DIR__.'/auth.php';
     });
