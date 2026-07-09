@@ -23,6 +23,3 @@ Homestead.json
 Homestead.yaml
 Thumbs.db
 /tall-auth-kit
-/docs/node_modules
-/docs/.vitepress/cache
-/docs/.vitepress/dist

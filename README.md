@@ -2,7 +2,7 @@
 
 A Laravel 13 + Livewire 4 starter kit for apps split across multiple subdomains — dedicated `auth`, `account`, `app`, `backoffice`, and `landing` portals — with an optional single-domain mode for apps that don't need the split.
 
-Full docs (setup, single-vs-multi domain, SSO, the `make:subdomain` command): **[docs site](https://<your-org>.github.io/laravel-multidomain-starter/)**
+Full docs (setup, single-vs-multi domain, SSO, the `make:subdomain` command): **[docs site](https://lianmaymesi.github.io/laravel-multidomain-starter-docs/)**
 
 ## Quick start
 
