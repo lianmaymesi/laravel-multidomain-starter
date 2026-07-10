@@ -1,6 +1,6 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "vendor/laravel-multidomain-starter",
+    "name": "lianmaymesi/laravel-multidomain-starter",
     "type": "project",
     "description": "A Laravel starter kit for multi-subdomain apps: dedicated auth, account, app, and backoffice portals with an optional single-domain mode.",
     "keywords": [

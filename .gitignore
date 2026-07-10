@@ -23,3 +23,12 @@ Homestead.json
 Homestead.yaml
 Thumbs.db
 /tall-auth-kit
+
+# AI agent tooling (local only)
+/.agents
+/.claude
+/.codex
+/.mcp.json
+/boost.json
+/AGENTS.md
+/CLAUDE.md
