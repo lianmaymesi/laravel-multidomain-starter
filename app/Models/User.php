@@ -16,13 +16,14 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
+use Spatie\Permission\Traits\HasRoles;
 
 #[Fillable(['name', 'email', 'password', 'country_code', 'phone', 'privilege', 'two_factor_secret', 'two_factor_recovery_codes', 'pending_email', 'pending_email_token'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use Anonymizable, HasFactory, MustVerifyPhone, Notifiable;
+    use Anonymizable, HasFactory, HasRoles, MustVerifyPhone, Notifiable;
 
     /**
      * Get the attributes that should be cast.

@@ -1,91 +1,95 @@
 @php $title = 'Dashboard'; @endphp
 
-<div class="mx-auto max-w-7xl w-full px-4 py-10 sm:px-6 lg:px-8 space-y-8">
+<div class="space-y-8">
 
     {{-- Header --}}
-    <div class="flex items-center justify-between">
-        <div>
-            <div class="flex items-center gap-2">
-                <flux:heading size="xl">Backoffice</flux:heading>
-                <flux:badge color="zinc" size="sm">Staff</flux:badge>
-            </div>
-            <flux:text class="mt-1 text-white/50">Operational overview{{ auth()->check() ? ' for ' . auth()->user()->name : '' }}.</flux:text>
-        </div>
-        @auth
-        <flux:avatar size="lg" name="{{ auth()->user()->name }}" />
-        @endauth
+    <div>
+        <flux:heading size="xl">Dashboard</flux:heading>
+        <flux:text class="mt-1 text-white/50">Overview of your application.</flux:text>
     </div>
 
     {{-- Stat cards --}}
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        @foreach ($stats as $stat)
-        <flux:card class="space-y-3">
-            <div class="flex items-center justify-between">
-                <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/15">
-                    <flux:icon :icon="$stat['icon']" class="size-4.5 text-blue-400" />
-                </div>
-                <flux:badge :color="$stat['positive'] ? 'emerald' : 'amber'" size="sm">{{ $stat['delta'] }}</flux:badge>
+
+        <flux:card as="a" href="{{ route('backoffice.users.index') }}" class="space-y-3">
+            <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/15">
+                <flux:icon.users class="size-4.5 text-blue-400" />
             </div>
             <div>
-                <flux:heading size="lg">{{ $stat['value'] }}</flux:heading>
-                <flux:text class="text-white/50 text-sm">{{ $stat['label'] }}</flux:text>
-            </div>
-        </flux:card>
-        @endforeach
-    </div>
-
-    <div class="grid grid-cols-1 gap-4 lg:grid-cols-3">
-
-        {{-- Ticket volume chart --}}
-        <flux:card class="lg:col-span-2 space-y-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <flux:heading size="lg">Ticket Volume</flux:heading>
-                    <flux:text class="text-white/50 text-sm">Support tickets opened over the last 7 days</flux:text>
-                </div>
-                <flux:badge color="amber" size="sm">67 open</flux:badge>
-            </div>
-
-            @php $max = max(array_column($ticketVolume, 'value')); @endphp
-            <div class="flex h-48 items-end gap-3">
-                @foreach ($ticketVolume as $day)
-                <div class="flex flex-1 flex-col items-center gap-2">
-                    <div class="flex h-40 w-full items-end overflow-hidden rounded-lg bg-white/5">
-                        <div class="w-full rounded-lg bg-linear-to-t from-blue-600 to-blue-400"
-                            style="height: {{ (int) round(($day['value'] / $max) * 100) }}%"></div>
-                    </div>
-                    <flux:text class="text-xs text-white/40">{{ $day['label'] }}</flux:text>
-                </div>
-                @endforeach
+                <flux:heading size="lg">{{ $totalUsers }}</flux:heading>
+                <flux:text class="text-sm text-white/50">Total Users</flux:text>
             </div>
         </flux:card>
 
-        {{-- Audit log --}}
-        <flux:card class="space-y-5">
-            <flux:heading size="lg">Audit Log</flux:heading>
+        <flux:card as="a" href="{{ route('backoffice.users.index') }}" class="space-y-3">
+            <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/15">
+                <flux:icon.user-group class="size-4.5 text-blue-400" />
+            </div>
+            <div>
+                <flux:heading size="lg">{{ $staffUsers }}</flux:heading>
+                <flux:text class="text-sm text-white/50">Staff Members</flux:text>
+            </div>
+        </flux:card>
 
-            <div class="space-y-4">
-                @foreach ($auditLog as $item)
-                @php
-                    $chip = match ($item['color']) {
-                        'emerald' => ['bg-emerald-500/15', 'text-emerald-400'],
-                        'amber' => ['bg-amber-500/15', 'text-amber-400'],
-                        default => ['bg-blue-500/15', 'text-blue-400'],
-                    };
-                @endphp
-                <div class="flex items-start gap-3">
-                    <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg {{ $chip[0] }}">
-                        <flux:icon :icon="$item['icon']" class="size-4 {{ $chip[1] }}" />
-                    </div>
-                    <div class="min-w-0">
-                        <flux:text class="text-sm text-white/80">{{ $item['title'] }}</flux:text>
-                        <flux:text class="block text-xs text-white/40">{{ $item['meta'] }}</flux:text>
-                    </div>
-                </div>
-                @endforeach
+        <flux:card as="a" href="{{ route('backoffice.roles.index') }}" class="space-y-3">
+            <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/15">
+                <flux:icon.shield-check class="size-4.5 text-blue-400" />
+            </div>
+            <div>
+                <flux:heading size="lg">{{ $totalRoles }}</flux:heading>
+                <flux:text class="text-sm text-white/50">Roles</flux:text>
+            </div>
+        </flux:card>
+
+        <flux:card as="a" href="{{ route('backoffice.permissions.index') }}" class="space-y-3">
+            <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-500/15">
+                <flux:icon.key class="size-4.5 text-blue-400" />
+            </div>
+            <div>
+                <flux:heading size="lg">{{ $totalPermissions }}</flux:heading>
+                <flux:text class="text-sm text-white/50">Permissions</flux:text>
             </div>
         </flux:card>
 
     </div>
+
+    {{-- Recent users --}}
+    <flux:card class="space-y-5">
+        <div class="flex items-center justify-between">
+            <flux:heading size="lg">Recent Users</flux:heading>
+            <flux:button :href="route('backoffice.users.index')" variant="ghost" size="sm">View all</flux:button>
+        </div>
+
+        <flux:table>
+            <flux:table.columns>
+                <flux:table.column>Name</flux:table.column>
+                <flux:table.column>Email</flux:table.column>
+                <flux:table.column>Role</flux:table.column>
+                <flux:table.column>Joined</flux:table.column>
+            </flux:table.columns>
+
+            <flux:table.rows>
+                @forelse ($recentUsers as $user)
+                <flux:table.row>
+                    <flux:table.cell class="flex items-center gap-3">
+                        <flux:avatar size="xs" name="{{ $user->name }}" />
+                        {{ $user->name }}
+                    </flux:table.cell>
+                    <flux:table.cell class="text-white/50">{{ $user->email }}</flux:table.cell>
+                    <flux:table.cell>
+                        <flux:badge size="sm" :color="$user->privilege === 'staff' ? 'blue' : 'zinc'">
+                            {{ ucfirst($user->privilege) }}
+                        </flux:badge>
+                    </flux:table.cell>
+                    <flux:table.cell class="text-white/50">{{ $user->created_at?->diffForHumans() }}</flux:table.cell>
+                </flux:table.row>
+                @empty
+                <flux:table.row>
+                    <flux:table.cell colspan="4" class="text-center text-white/40">No users yet.</flux:table.cell>
+                </flux:table.row>
+                @endforelse
+            </flux:table.rows>
+        </flux:table>
+    </flux:card>
 
 </div>
