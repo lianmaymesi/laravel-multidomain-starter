@@ -107,6 +107,18 @@ it('redirects end users away from the backoffice portal to the app portal', func
     $response->assertRedirect(route('app.dashboard'));
 });
 
+it('allows staff to access the backoffice dashboard', function () {
+    $staffUser = portalUser([
+        'privilege' => 'staff',
+        'phone_verified_at' => now(),
+        'email_verified_at' => now(),
+    ]);
+
+    $this->actingAs($staffUser)
+        ->get(route('backoffice.dashboard'))
+        ->assertSuccessful();
+});
+
 it('allows both end users and staff to access the account portal', function () {
     $endUser = portalUser();
 

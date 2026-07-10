@@ -8,6 +8,8 @@
     <title>{{ $title ?? config('app.name') }}</title>
 
     @vite(['resources/css/auth.css', 'resources/js/auth.js'])
+
+    @fluxAppearance
 </head>
 
 <body class="min-h-screen bg-zinc-950 antialiased">

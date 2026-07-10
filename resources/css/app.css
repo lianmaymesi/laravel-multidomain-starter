@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "./theme.css";
 @import "../../vendor/livewire/flux/dist/flux.css";
+@import "./partials/edge-design.css";
 
 @source "../views/components/app/**/*.blade.php";
 @source "../views/pages/app/**/*.blade.php";
@@ -8,16 +9,3 @@
 @source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
 @source "../../vendor/livewire/flux-pro/stubs/**/*.blade.php";
 @source "../../vendor/livewire/flux/stubs/**/*.blade.php";
-
-[data-flux-label] {
-    margin-bottom: 6px;
-    font-size: 13px;
-}
-
-[data-flux-error] {
-    @apply mt-2 text-xs;
-}
-
-[data-flux-error] [data-flux-icon] {
-    @apply hidden;
-}
