@@ -16,7 +16,7 @@ new #[Layout('layouts.auth')] class extends Component
     public string $activeTab = 'phone';
 
     /** Phone fields */
-    public string $country_code = '+91';
+    public string $country_code = '';
     public string $phone = '';
 
     /** Email field */
@@ -36,9 +36,11 @@ new #[Layout('layouts.auth')] class extends Component
 
     public function mount(): void
     {
-        if (! config('verification.phone_verification_enabled')) {
+        if (! config('multidomain.phone_verification_enabled')) {
             $this->activeTab = 'email';
         }
+
+        $this->country_code = config('multidomain.phone_default_country_code');
     }
 
     public function switchTab(string $tab): void
@@ -78,7 +80,7 @@ new #[Layout('layouts.auth')] class extends Component
         // Always show success to prevent user enumeration
         if (!$user) {
             $this->otpSent = true;
-            $this->resendCooldown = (int) config('verification.otp.resend_cooldown', 60);
+            $this->resendCooldown = (int) config('multidomain.otp.resend_cooldown', 60);
             session()->flash('status', 'If that account exists, a code has been sent.');
             return;
         }
@@ -92,7 +94,7 @@ new #[Layout('layouts.auth')] class extends Component
         }
 
         $this->otpSent = true;
-        $this->resendCooldown = (int) config('verification.otp.resend_cooldown', 60);
+        $this->resendCooldown = (int) config('multidomain.otp.resend_cooldown', 60);
 
         session()->flash('status', 'A reset code has been sent.');
     }
@@ -148,7 +150,7 @@ new #[Layout('layouts.auth')] class extends Component
 
         if (!$user) {
             // Silently ignore — don't leak whether the account exists
-            $this->resendCooldown = (int) config('verification.otp.resend_cooldown', 60);
+            $this->resendCooldown = (int) config('multidomain.otp.resend_cooldown', 60);
             return;
         }
 
@@ -160,7 +162,7 @@ new #[Layout('layouts.auth')] class extends Component
             $user->notify(new ForgotPassword($otp->code));
         }
 
-        $this->resendCooldown = (int) config('verification.otp.resend_cooldown', 60);
+        $this->resendCooldown = (int) config('multidomain.otp.resend_cooldown', 60);
 
         session()->flash('status', 'A new code has been sent.');
     }

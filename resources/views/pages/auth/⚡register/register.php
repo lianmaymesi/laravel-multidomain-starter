@@ -33,7 +33,12 @@ new #[Layout('layouts.auth')] class extends Component
 
     public string $phone = '';
 
-    public string $country_code = '+91';
+    public string $country_code = '';
+
+    public function mount(): void
+    {
+        $this->country_code = config('multidomain.phone_default_country_code');
+    }
 
     public function rules(): array
     {
@@ -41,8 +46,12 @@ new #[Layout('layouts.auth')] class extends Component
             'password' => ['required', 'confirmed', Password::defaults()],
         ];
 
-        if (config('verification.phone_verification_enabled')) {
+        if (config('multidomain.phone_verification_enabled')) {
             $rules['phone'] = ['required', 'string'];
+
+            if (config('multidomain.phone_country_mode') === 'multi') {
+                $rules['country_code'] = ['required', 'string'];
+            }
         }
 
         return $rules;
@@ -66,7 +75,7 @@ new #[Layout('layouts.auth')] class extends Component
     {
         $this->validate();
 
-        $phoneEnabled = config('verification.phone_verification_enabled');
+        $phoneEnabled = config('multidomain.phone_verification_enabled');
 
         $user = User::create([
             'name' => $this->name,

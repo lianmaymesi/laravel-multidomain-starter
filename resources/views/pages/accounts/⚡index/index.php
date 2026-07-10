@@ -158,7 +158,7 @@ new #[Layout('layouts.accounts')] class extends Component
 
     public function editPhone(): void
     {
-        if (! config('verification.phone_verification_enabled')) {
+        if (! config('multidomain.phone_verification_enabled')) {
             return;
         }
 
@@ -177,7 +177,7 @@ new #[Layout('layouts.accounts')] class extends Component
 
     public function savePhone(OtpService $otpService, SmsService $smsService): void
     {
-        if (! config('verification.phone_verification_enabled')) {
+        if (! config('multidomain.phone_verification_enabled')) {
             return;
         }
 

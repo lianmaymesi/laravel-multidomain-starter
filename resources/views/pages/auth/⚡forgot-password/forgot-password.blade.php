@@ -41,7 +41,7 @@
                 @if (! $otpSent)
 
                     {{-- Sharp tab switcher --}}
-                    @if (config('verification.phone_verification_enabled'))
+                    @if (config('multidomain.phone_verification_enabled'))
                     <div class="flex border border-white/10 bg-white/3">
                         <button type="button" wire:click="switchTab('phone')"
                             @class([
@@ -64,11 +64,26 @@
 
                     <form wire:submit="sendOtp" class="space-y-4">
                         @if ($activeTab === 'phone')
-                            <flux:field>
-                                <flux:label>Phone Number</flux:label>
-                                <flux:input wire:model="phone" placeholder="98765-43210" mask="99999-99999" />
-                                <flux:error name="phone" />
-                            </flux:field>
+                            <div class="flex gap-2">
+                                @if (config('multidomain.phone_country_mode') === 'multi')
+                                <div class="w-24 shrink-0">
+                                    <flux:field>
+                                        <flux:label>Code</flux:label>
+                                        <flux:input wire:model="country_code" placeholder="+91" class="text-center" />
+                                    </flux:field>
+                                </div>
+                                @endif
+                                <div class="flex-1">
+                                    <flux:field>
+                                        <flux:label>Phone Number</flux:label>
+                                        <flux:input wire:model="phone" placeholder="98765-43210" mask="99999-99999" />
+                                    </flux:field>
+                                </div>
+                            </div>
+                            @if (config('multidomain.phone_country_mode') === 'multi')
+                            <flux:error name="country_code" />
+                            @endif
+                            <flux:error name="phone" />
                         @else
                             <flux:field>
                                 <flux:label>Email Address</flux:label>

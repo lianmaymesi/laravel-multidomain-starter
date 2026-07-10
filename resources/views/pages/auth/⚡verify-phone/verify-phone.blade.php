@@ -50,14 +50,18 @@
                     <form wire:submit="updatePhone" class="space-y-3">
                         <p class="text-sm text-white/50 text-center">Enter your updated phone number</p>
                         <div class="flex gap-2">
+                            @if (config('multidomain.phone_country_mode') === 'multi')
                             <div class="w-24">
                                 <flux:input wire:model="newCountryCode" placeholder="+91" class="text-center" />
                             </div>
+                            @endif
                             <div class="flex-1">
                                 <flux:input wire:model="newPhone" mask="99999-99999" placeholder="98765-43210" />
                             </div>
                         </div>
+                        @if (config('multidomain.phone_country_mode') === 'multi')
                         <flux:error name="newCountryCode" />
+                        @endif
                         <flux:error name="newPhone" />
                         <div class="flex gap-2 pt-1">
                             <flux:button type="button" wire:click="cancelEdit" class="flex-1">Cancel</flux:button>

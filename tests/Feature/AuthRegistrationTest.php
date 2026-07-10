@@ -9,7 +9,7 @@ use Livewire\Livewire;
 uses(RefreshDatabase::class);
 
 it('registers a user and redirects them to phone verification', function () {
-    config(['verification.phone_verification_enabled' => true]);
+    config(['multidomain.phone_verification_enabled' => true]);
 
     $smsService = Mockery::mock(SmsService::class);
     $smsService->shouldReceive('sendOtp')

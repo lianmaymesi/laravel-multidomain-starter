@@ -106,7 +106,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     private function emailVerificationDeadline(): Carbon
     {
-        return $this->created_at->copy()->addDays(config('verification.email_verification_grace_days'));
+        return $this->created_at->copy()->addDays(config('multidomain.email_verification_grace_days'));
     }
 
     public function hasPendingEmailChange(): bool

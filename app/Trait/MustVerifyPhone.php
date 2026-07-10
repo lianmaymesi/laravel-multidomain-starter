@@ -11,7 +11,7 @@ trait MustVerifyPhone
      */
     public function hasVerifiedPhone()
     {
-        if (! config('verification.phone_verification_enabled')) {
+        if (! config('multidomain.phone_verification_enabled')) {
             return true;
         }
 

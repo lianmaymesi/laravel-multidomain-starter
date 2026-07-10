@@ -64,18 +64,35 @@
                 {{-- Form (no card — directly on bg) --}}
                 <form wire:submit="register" class="grid grid-cols-1 gap-4 sm:grid-cols-2">
 
-                    <flux:field class="{{ config('verification.phone_verification_enabled') ? '' : 'sm:col-span-2' }}">
-                        <flux:label>Full Name</flux:label>
-                        <flux:input type="text" placeholder="Peter Nelson" wire:model="name" />
-                        <flux:error name="name" />
-                    </flux:field>
+                    <div class="sm:col-span-2">
+                        <flux:field>
+                            <flux:label>Full Name</flux:label>
+                            <flux:input type="text" placeholder="Peter Nelson" wire:model="name" />
+                            <flux:error name="name" />
+                        </flux:field>
+                    </div>
 
-                    @if (config('verification.phone_verification_enabled'))
-                    <flux:field>
-                        <flux:label>Phone Number</flux:label>
-                        <flux:input mask="99999-99999" placeholder="98765-43210" wire:model="phone" />
+                    @if (config('multidomain.phone_verification_enabled'))
+                    <div class="sm:col-span-2">
+                        <div class="flex gap-2">
+                            @if (config('multidomain.phone_country_mode') === 'multi')
+                            <div class="w-24 shrink-0">
+                                <flux:field>
+                                    <flux:label>Code</flux:label>
+                                    <flux:input placeholder="+91" wire:model="country_code" class="text-center" />
+                                </flux:field>
+                            </div>
+                            @endif
+                            <div class="flex-1">
+                                <flux:field>
+                                    <flux:label>Phone Number</flux:label>
+                                    <flux:input mask="99999-99999" placeholder="98765-43210" wire:model="phone" />
+                                </flux:field>
+                            </div>
+                        </div>
+                        <flux:error name="country_code" />
                         <flux:error name="phone" />
-                    </flux:field>
+                    </div>
                     @endif
 
                     <div class="sm:col-span-2">

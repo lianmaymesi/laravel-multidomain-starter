@@ -37,7 +37,7 @@ new #[Layout('layouts.auth')] class extends Component
 
     public function mount(OtpService $otpService): void
     {
-        if (! config('verification.phone_verification_enabled')) {
+        if (! config('multidomain.phone_verification_enabled')) {
             $this->redirect(Auth::user()->redirect(), navigate: false);
 
             return;
@@ -98,7 +98,9 @@ new #[Layout('layouts.auth')] class extends Component
         }
 
         $user = Auth::user();
-        $this->newCountryCode = $user->country_code ?? '';
+        $this->newCountryCode = config('multidomain.phone_country_mode') === 'multi'
+            ? ($user->country_code ?? config('multidomain.phone_default_country_code'))
+            : config('multidomain.phone_default_country_code');
         // Don't pre-fill the actual phone for security — let user type it fresh
         $this->newPhone = '';
         $this->editingPhone = true;
@@ -117,15 +119,17 @@ new #[Layout('layouts.auth')] class extends Component
             return;
         }
 
+        $isMultiCountry = config('multidomain.phone_country_mode') === 'multi';
+
         $this->validate([
-            'newCountryCode' => ['required', 'string', 'regex:/^\+\d{1,4}$/'],
+            'newCountryCode' => $isMultiCountry ? ['required', 'string'] : ['nullable', 'string'],
             'newPhone'       => ['required', 'string', 'regex:/^\d{10}$/'],
         ]);
 
         $user = Auth::user();
 
         // Update phone on the user record
-        $user->country_code = $this->newCountryCode;
+        $user->country_code = $isMultiCountry ? $this->newCountryCode : config('multidomain.phone_default_country_code');
         $user->phone        = $this->newPhone;
         $user->save();
 

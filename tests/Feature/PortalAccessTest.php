@@ -24,7 +24,7 @@ it('redirects authenticated end users away from the auth subdomain to the app po
 });
 
 it('redirects unverified-phone end users to phone verification when the feature is enabled', function () {
-    config(['verification.phone_verification_enabled' => true]);
+    config(['multidomain.phone_verification_enabled' => true]);
 
     $user = portalUser();
 
@@ -84,7 +84,7 @@ it('allows recently registered phone verified users to access the app portal bef
 
 it('redirects phone verified users to email verification after the grace period expires', function () {
     $user = portalUser([
-        'created_at' => now()->subDays(config('verification.email_verification_grace_days') + 1),
+        'created_at' => now()->subDays(config('multidomain.email_verification_grace_days') + 1),
         'email_verified_at' => null,
         'phone_verified_at' => now(),
     ]);
