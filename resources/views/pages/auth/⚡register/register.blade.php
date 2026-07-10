@@ -21,11 +21,11 @@
 
             {{-- Tagline --}}
             <div>
-                <p class="mb-3 text-[10px] tracking-[0.35em] uppercase text-blue-300/40">Join us today</p>
+                <p class="mb-3 text-[10px] tracking-[0.35em] uppercase text-blue-300/40">Start building today</p>
                 <h2 class="text-5xl font-extrabold leading-[1.05] tracking-tighter text-white">
-                    Start your<br>
-                    <span class="text-blue-300">journey</span><br>
-                    in faith.
+                    Spin up<br>
+                    <span class="text-blue-300">your next</span><br>
+                    subdomain.
                 </h2>
                 <div class="mt-8 h-[3px] w-10 bg-blue-400"></div>
             </div>

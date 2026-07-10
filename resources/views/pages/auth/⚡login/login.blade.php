@@ -23,11 +23,11 @@
 
             {{-- Tagline --}}
             <div>
-                <p class="mb-3 text-[10px] tracking-[0.35em] uppercase text-blue-300/40">Holy Scripture</p>
+                <p class="mb-3 text-[10px] tracking-[0.35em] uppercase text-blue-300/40">Laravel Multidomain Starter</p>
                 <h2 class="text-5xl font-extrabold leading-[1.05] tracking-tighter text-white">
-                    Read the<br>
-                    <span class="text-blue-300">Word</span>,<br>
-                    every day.
+                    Ship apps<br>
+                    <span class="text-blue-300">across</span><br>
+                    every domain.
                 </h2>
                 <div class="mt-8 h-[3px] w-10 bg-blue-400"></div>
             </div>
