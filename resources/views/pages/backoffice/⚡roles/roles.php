@@ -27,6 +27,15 @@ new #[Layout('layouts.backoffice')] class extends Component
         return Role::withCount(['users', 'permissions'])->orderBy('name')->get();
     }
 
+    /**
+     * Roles named after a portal subdomain drive post-login redirects
+     * (see User::redirect()) and must never be deletable.
+     */
+    public function isProtected(string $roleName): bool
+    {
+        return array_key_exists($roleName, config('multidomain.sub_domains', []));
+    }
+
     public function permissions(): Collection
     {
         return Permission::orderBy('name')->get();
@@ -74,13 +83,25 @@ new #[Layout('layouts.backoffice')] class extends Component
 
     public function confirmDelete(int $roleId): void
     {
+        $role = Role::findOrFail($roleId);
+
+        if ($this->isProtected($role->name)) {
+            session()->flash('error', "\"{$role->name}\" is a portal role and can't be deleted.");
+
+            return;
+        }
+
         $this->deletingId = $roleId;
         $this->confirmingDelete = true;
     }
 
     public function delete(): void
     {
-        Role::findOrFail($this->deletingId)->delete();
+        $role = Role::findOrFail($this->deletingId);
+
+        abort_if($this->isProtected($role->name), 403, "\"{$role->name}\" is a portal role and can't be deleted.");
+
+        $role->delete();
         $this->deletingId = null;
         $this->confirmingDelete = false;
 

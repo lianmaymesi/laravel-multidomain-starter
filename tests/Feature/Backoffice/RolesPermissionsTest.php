@@ -60,6 +60,17 @@ it('deletes a role', function () {
     expect(Role::find($role->id))->toBeNull();
 });
 
+it('refuses to delete a role tied to a portal subdomain', function () {
+    $role = Role::create(['name' => 'app', 'guard_name' => 'web']);
+
+    Livewire::actingAs(staffUser())
+        ->test('pages::backoffice.roles')
+        ->call('confirmDelete', $role->id)
+        ->assertSet('confirmingDelete', false);
+
+    expect(Role::find($role->id))->not->toBeNull();
+});
+
 it('creates a permission', function () {
     Livewire::actingAs(staffUser())
         ->test('pages::backoffice.permissions')

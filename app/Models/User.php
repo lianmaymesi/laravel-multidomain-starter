@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -147,8 +148,27 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->privilege === 'staff';
     }
 
+    /**
+     * Send the user to their portal dashboard after login. A role sharing
+     * its name with a configured subdomain (e.g. "blog", created via
+     * `make:subdomain`) wins over the legacy app/backoffice privilege split.
+     *
+     * "app" and "backoffice" are excluded here on purpose: those two portals
+     * are still gated by the isStaff()/portal:staff|user middleware below,
+     * not by role. Letting a role of that name win here could send a
+     * 'user'-privilege account to a route the middleware then bounces them
+     * out of, bouncing back here — an infinite redirect loop.
+     */
     public function redirect(): string
     {
+        $portal = collect($this->getRoleNames())
+            ->reject(fn (string $role) => in_array($role, ['app', 'backoffice'], true))
+            ->first(fn (string $role) => array_key_exists($role, config('multidomain.sub_domains', [])) && Route::has("{$role}.dashboard"));
+
+        if ($portal) {
+            return route("{$portal}.dashboard");
+        }
+
         return $this->isStaff()
             ? route('backoffice.dashboard')
             : route('app.dashboard');

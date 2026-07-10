@@ -1,6 +1,10 @@
 <?php
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
+use Spatie\Permission\Models\Role;
+
+uses(RefreshDatabase::class);
 
 afterEach(function () {
     File::delete([
@@ -10,6 +14,7 @@ afterEach(function () {
         base_path('routes/blog.php'),
     ]);
     File::deleteDirectory(resource_path('views/pages/blog'));
+    Role::where('name', 'blog')->delete();
 });
 
 it('scaffolds a new subdomain portal', function () {
@@ -25,7 +30,8 @@ it('scaffolds a new subdomain portal', function () {
         ->and(resource_path('views/pages/blog/⚡dashboard/dashboard.php'))->toBeFile()
         ->and(resource_path('views/pages/blog/⚡dashboard/dashboard.blade.php'))->toBeFile();
 
-    expect(File::get(base_path('routes/blog.php')))->toContain('pages::blog.dashboard');
+    expect(File::get(base_path('routes/blog.php')))->toContain('pages::blog.dashboard')
+        ->and(Role::where('name', 'blog')->where('guard_name', 'web')->exists())->toBeTrue();
 });
 
 it('rejects an invalid subdomain name', function () {

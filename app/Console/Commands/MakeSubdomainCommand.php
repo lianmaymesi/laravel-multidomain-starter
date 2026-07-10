@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Spatie\Permission\Models\Role;
 
 use function Laravel\Prompts\select;
 
@@ -46,20 +47,22 @@ class MakeSubdomainCommand extends Command
             default: 'auth',
         );
 
-        $role = $access === 'auth'
+        $accessLevel = $access === 'auth'
             ? select(
                 label: 'Access level',
                 options: [
-                    'user' => 'Normal user',
-                    'staff' => 'Staff (role-based access, for future use)',
+                    'own-role' => "This portal's own \"{$name}\" role (recommended — only users granted that role get in)",
+                    'user' => 'Normal user (global, same gate as the "app" portal)',
+                    'staff' => 'Staff (global, same gate as the "backoffice" portal)',
                 ],
-                default: 'user',
+                default: 'own-role',
             )
             : null;
 
-        $middleware = match (true) {
-            $role === 'staff' => "['auth', 'portal:staff']",
-            $role === 'user' => "['auth', 'portal:user']",
+        $middleware = match ($accessLevel) {
+            'staff' => "['auth', 'portal:staff']",
+            'user' => "['auth', 'portal:user']",
+            'own-role' => "['auth', 'portal:{$name}']",
             default => null,
         };
 
@@ -84,13 +87,17 @@ class MakeSubdomainCommand extends Command
             $this->line('<info>✔</info> Created '.str_replace(base_path().DIRECTORY_SEPARATOR, '', $path));
         }
 
+        $role = Role::firstOrCreate(['name' => $name, 'guard_name' => 'web']);
+        $this->line("<info>✔</info> Role \"{$role->name}\" ready — protected from deletion in the backoffice roles screen.");
+
         $this->newLine();
         $this->line('Next steps (manual):');
         $this->line("1. Add 'name' => 'name.'.env('APP_MAIN_DOMAIN') to config/multidomain.php sub_domains array (replace name with {$name})");
         $this->line('2. Add this block to routes/web.php:');
         $this->line("   Route::domain(config('multidomain.sub_domains.{$name}'))->name('{$name}.')->group(fn () => include __DIR__.'/{$name}.php');");
-        $this->line("3. Add \"resources/css/{$name}.css\" and \"resources/js/{$name}.js\" to vite.config.js input array");
-        $this->line("4. Add {$name}.<APP_MAIN_DOMAIN> to your local hosts/Herd config");
+        $this->line("3. Add {$name}.<APP_MAIN_DOMAIN> to your local hosts/Herd config");
+        $this->line("4. Assign the \"{$name}\" role to any user who should access this portal and be redirected here after login.");
+        $this->line('   (vite.config.js picks up the new css/js entries automatically — no edit needed.)');
 
         return self::SUCCESS;
     }

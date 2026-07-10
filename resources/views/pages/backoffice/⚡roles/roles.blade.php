@@ -17,6 +17,12 @@
     </div>
     @endif
 
+    @if (session('error'))
+    <div class="border border-red-500/20 bg-red-500/6 px-4 py-3 text-sm text-red-400">
+        {{ session('error') }}
+    </div>
+    @endif
+
     <flux:card>
         <flux:table>
             <flux:table.columns>
@@ -29,7 +35,12 @@
             <flux:table.rows>
                 @forelse ($this->roles() as $role)
                 <flux:table.row wire:key="role-{{ $role->id }}">
-                    <flux:table.cell class="font-medium text-white">{{ $role->name }}</flux:table.cell>
+                    <flux:table.cell class="font-medium text-white">
+                        {{ $role->name }}
+                        @if ($this->isProtected($role->name))
+                        <flux:badge size="sm" color="zinc" class="ml-2">Portal</flux:badge>
+                        @endif
+                    </flux:table.cell>
                     <flux:table.cell class="text-white/50">{{ $role->permissions_count }}</flux:table.cell>
                     <flux:table.cell class="text-white/50">{{ $role->users_count }}</flux:table.cell>
                     <flux:table.cell align="end">
@@ -37,10 +48,12 @@
                             <flux:button size="xs" variant="ghost" icon="pencil-square" wire:click="edit({{ $role->id }})">
                                 Edit
                             </flux:button>
+                            @unless ($this->isProtected($role->name))
                             <flux:button size="xs" variant="ghost" icon="trash" wire:click="confirmDelete({{ $role->id }})"
                                 class="text-red-400! hover:text-red-300!">
                                 Delete
                             </flux:button>
+                            @endunless
                         </div>
                     </flux:table.cell>
                 </flux:table.row>
