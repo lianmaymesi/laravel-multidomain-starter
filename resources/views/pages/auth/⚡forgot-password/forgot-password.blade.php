@@ -41,6 +41,7 @@
                 @if (! $otpSent)
 
                     {{-- Sharp tab switcher --}}
+                    @if (config('verification.phone_verification_enabled'))
                     <div class="flex border border-white/10 bg-white/3">
                         <button type="button" wire:click="switchTab('phone')"
                             @class([
@@ -59,6 +60,7 @@
                             Email
                         </button>
                     </div>
+                    @endif
 
                     <form wire:submit="sendOtp" class="space-y-4">
                         @if ($activeTab === 'phone')

@@ -20,6 +20,17 @@ it('redirects authenticated end users away from the auth subdomain to the app po
     $response = $this->actingAs($user)
         ->get(route('auth.login'));
 
+    $response->assertRedirect(route('app.dashboard'));
+});
+
+it('redirects unverified-phone end users to phone verification when the feature is enabled', function () {
+    config(['verification.phone_verification_enabled' => true]);
+
+    $user = portalUser();
+
+    $response = $this->actingAs($user)
+        ->get(route('auth.login'));
+
     $response->assertRedirect(route('auth.verify-phone'));
 });
 

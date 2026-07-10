@@ -4,7 +4,7 @@ use App\Enums\OtpType;
 use App\Models\User;
 use App\Notifications\ForgotPassword;
 use App\Services\Auth\OtpService;
-use App\Services\Auth\SmsService;
+use App\Contracts\SmsService;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Layout;
@@ -33,6 +33,13 @@ new #[Layout('layouts.auth')] class extends Component
 
     /** Masked email shown on step 2 (e.g. j***@example.com) */
     public string $maskedEmail = '';
+
+    public function mount(): void
+    {
+        if (! config('verification.phone_verification_enabled')) {
+            $this->activeTab = 'email';
+        }
+    }
 
     public function switchTab(string $tab): void
     {

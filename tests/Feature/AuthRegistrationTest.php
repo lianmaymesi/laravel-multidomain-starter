@@ -1,14 +1,16 @@
 <?php
 
+use App\Contracts\SmsService;
 use App\Enums\OtpType;
 use App\Models\User;
-use App\Services\Auth\SmsService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
 
 it('registers a user and redirects them to phone verification', function () {
+    config(['verification.phone_verification_enabled' => true]);
+
     $smsService = Mockery::mock(SmsService::class);
     $smsService->shouldReceive('sendOtp')
         ->once()
@@ -39,6 +41,32 @@ it('registers a user and redirects them to phone verification', function () {
         'type' => OtpType::PHONE_VERIFICATION->value,
         'used_at' => null,
     ]);
+});
+
+it('registers a user without a phone number when phone verification is disabled', function () {
+    config(['verification.phone_verification_enabled' => false]);
+
+    $smsService = Mockery::mock(SmsService::class);
+    $smsService->shouldNotReceive('sendOtp');
+
+    $this->app->instance(SmsService::class, $smsService);
+
+    Livewire::test('pages::auth.register')
+        ->set('name', 'Taylor Otwell')
+        ->set('email', 'taylor@example.com')
+        ->set('password', 'Jrb!2026-Register-Flow-Q9v#72')
+        ->set('password_confirmation', 'Jrb!2026-Register-Flow-Q9v#72')
+        ->call('register')
+        ->assertRedirect(route('app.dashboard'));
+
+    $user = User::where('email', 'taylor@example.com')->first();
+
+    expect($user)->not->toBeNull()
+        ->and($user->phone)->toBeNull()
+        ->and($user->country_code)->toBeNull()
+        ->and($user->hasVerifiedPhone())->toBeTrue();
+
+    $this->assertAuthenticatedAs($user);
 });
 
 it('normalizes wildcard session domains into browser-valid parent domains', function () {

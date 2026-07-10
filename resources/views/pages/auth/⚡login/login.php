@@ -3,7 +3,7 @@
 use App\Enums\OtpType;
 use App\Services\AccountDeletionService;
 use App\Services\Auth\OtpService;
-use App\Services\Auth\SmsService;
+use App\Contracts\SmsService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;

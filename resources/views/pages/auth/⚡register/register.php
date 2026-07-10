@@ -3,7 +3,7 @@
 use App\Enums\OtpType;
 use App\Models\User;
 use App\Services\Auth\OtpService;
-use App\Services\Auth\SmsService;
+use App\Contracts\SmsService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -31,16 +31,21 @@ new #[Layout('layouts.auth')] class extends Component
     #[Validate('required', message: 'Confirmed Password is required')]
     public string $password_confirmation = '';
 
-    #[Validate('required', message: 'Phone number is required')]
     public string $phone = '';
 
     public string $country_code = '+91';
 
     public function rules(): array
     {
-        return [
+        $rules = [
             'password' => ['required', 'confirmed', Password::defaults()],
         ];
+
+        if (config('verification.phone_verification_enabled')) {
+            $rules['phone'] = ['required', 'string'];
+        }
+
+        return $rules;
     }
 
     protected function messages()
@@ -53,6 +58,7 @@ new #[Layout('layouts.auth')] class extends Component
             'password.numbers' => 'The Password must contain at least one number.',
             'password.symbols' => 'The Password must contain at least one special character.',
             'password.uncompromised' => 'Please chose a stronger password.',
+            'phone.required' => 'Phone number is required',
         ];
     }
 
@@ -60,17 +66,25 @@ new #[Layout('layouts.auth')] class extends Component
     {
         $this->validate();
 
+        $phoneEnabled = config('verification.phone_verification_enabled');
+
         $user = User::create([
             'name' => $this->name,
             'email' => $this->email,
             'password' => Hash::make($this->password),
-            'phone' => Str::replace('-', '', $this->phone),
-            'country_code' => $this->country_code,
+            'phone' => $phoneEnabled ? Str::replace('-', '', $this->phone) : null,
+            'country_code' => $phoneEnabled ? $this->country_code : null,
         ]);
 
         event(new Registered($user));
 
         Auth::login($user);
+
+        if (! $phoneEnabled) {
+            $this->redirect($user->redirect(), navigate: true);
+
+            return;
+        }
 
         // Generate phone OTP and send SMS immediately
         $otp = $otpService->generate($user, OtpType::PHONE_VERIFICATION);

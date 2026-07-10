@@ -2,38 +2,38 @@
 
 namespace App\Services\Auth;
 
+use App\Contracts\SmsService;
 use Illuminate\Support\Facades\Log;
 use Twilio\Rest\Client as TwilioClient;
 
-class SmsService
+/**
+ * Default SmsService implementation, backed by Twilio.
+ *
+ * To use a different provider, implement App\Contracts\SmsService and
+ * rebind it in App\Providers\AppServiceProvider::register().
+ */
+class TwilioSmsService implements SmsService
 {
-    protected TwilioClient $client;
-
-    public function __construct()
-    {
-        $this->client = new TwilioClient(
-            config('services.twilio.sid'),
-            config('services.twilio.token')
-        );
-    }
-
-    /**
-     * Send an OTP SMS to a phone number.
-     *
-     * @param  string  $to  E.164 format e.g. +919876543210
-     * @param  string  $code  6-digit OTP
-     */
     public function sendOtp(string $to, string $code): bool
     {
+        $sid = config('services.twilio.sid');
+        $token = config('services.twilio.token');
+
+        if (! $sid || ! $token) {
+            Log::warning('TwilioSmsService: Twilio is not configured, skipping OTP SMS.', ['to' => $to]);
+
+            return false;
+        }
+
         try {
-            $this->client->messages->create($to, [
+            (new TwilioClient($sid, $token))->messages->create($to, [
                 'from' => config('services.twilio.from'),
                 'body' => $this->otpMessage($code),
             ]);
 
             return true;
         } catch (\Exception $e) {
-            Log::error('SmsService: failed to send OTP', [
+            Log::error('TwilioSmsService: failed to send OTP', [
                 'to' => $to,
                 'error' => $e->getMessage(),
             ]);

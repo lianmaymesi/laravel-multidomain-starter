@@ -17,6 +17,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Phone Verification
+    |--------------------------------------------------------------------------
+    |
+    | When disabled (the default), phone number collection is removed from
+    | registration, the phone field becomes nullable, and every phone
+    | verification gate (middleware, guest redirects, account settings)
+    | is skipped — the app behaves as if phone/OTP never existed.
+    |
+    */
+
+    'phone_verification_enabled' => (bool) env('PHONE_VERIFICATION_ENABLED', false),
+
+    /*
+    |--------------------------------------------------------------------------
     | OTP Settings
     |--------------------------------------------------------------------------
     |

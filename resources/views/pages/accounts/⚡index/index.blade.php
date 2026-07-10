@@ -18,7 +18,7 @@
     <section class="space-y-5">
 
         {{-- Account status strip --}}
-        <div class="grid gap-3 grid-cols-3">
+        <div class="grid gap-3 {{ config('verification.phone_verification_enabled') ? 'grid-cols-3' : 'grid-cols-2' }}">
 
             <div class="flex items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/3 px-4 py-3">
                 @if (auth()->user()->hasVerifiedEmail())
@@ -40,6 +40,7 @@
                 @endif
             </div>
 
+            @if (config('verification.phone_verification_enabled'))
             <div class="flex items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/3 px-4 py-3">
                 @if (auth()->user()->hasVerifiedPhone())
                 <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15">
@@ -59,6 +60,7 @@
                 </div>
                 @endif
             </div>
+            @endif
 
             <div class="flex items-center gap-3 rounded-2xl border border-white/[0.07] bg-white/3 px-4 py-3">
                 @if (auth()->user()->hasTwoFactorEnabled())
@@ -149,7 +151,12 @@
 
         <div>
             <flux:heading size="lg" class="text-white!">Contact info</flux:heading>
-            <flux:text class="text-white/40! text-sm!">Manage your email and phone. Changes require re-verification.
+            <flux:text class="text-white/40! text-sm!">
+                @if (config('verification.phone_verification_enabled'))
+                Manage your email and phone. Changes require re-verification.
+                @else
+                Manage your email. Changes require re-verification.
+                @endif
             </flux:text>
         </div>
 
@@ -279,6 +286,7 @@
         </div>
 
         {{-- ── Phone card ──────────────────────────────────────────────────────────── --}}
+        @if (config('verification.phone_verification_enabled'))
         <div class="rounded-[1.75rem] border border-white/[0.07] bg-white/3 px-6 py-5">
 
             @if ($editingPhone)
@@ -323,6 +331,7 @@
             @endif
 
         </div>
+        @endif
 
     </section>
 

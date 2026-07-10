@@ -6,7 +6,7 @@ use App\Notifications\PendingEmailVerification;
 use App\Notifications\VerifyEmail;
 use App\Services\AccountDeletionService;
 use App\Services\Auth\OtpService;
-use App\Services\Auth\SmsService;
+use App\Contracts\SmsService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -158,6 +158,10 @@ new #[Layout('layouts.accounts')] class extends Component
 
     public function editPhone(): void
     {
+        if (! config('verification.phone_verification_enabled')) {
+            return;
+        }
+
         $this->cancelAll();
         $this->newPhone     = '';
         $this->editingPhone = true;
@@ -173,6 +177,10 @@ new #[Layout('layouts.accounts')] class extends Component
 
     public function savePhone(OtpService $otpService, SmsService $smsService): void
     {
+        if (! config('verification.phone_verification_enabled')) {
+            return;
+        }
+
         $this->validate([
             'newPhone' => ['required', 'string', 'regex:/^\d{10}$/'],
         ]);

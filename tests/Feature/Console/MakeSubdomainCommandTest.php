@@ -14,6 +14,8 @@ afterEach(function () {
 
 it('scaffolds a new subdomain portal', function () {
     $this->artisan('make:subdomain', ['name' => 'blog'])
+        ->expectsQuestion('Who should be able to access this portal?', 'auth')
+        ->expectsQuestion('Access level', 'user')
         ->assertSuccessful();
 
     expect(resource_path('css/blog.css'))->toBeFile()

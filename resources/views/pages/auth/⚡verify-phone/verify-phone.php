@@ -2,7 +2,7 @@
 
 use App\Enums\OtpType;
 use App\Services\Auth\OtpService;
-use App\Services\Auth\SmsService;
+use App\Contracts\SmsService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
@@ -37,6 +37,12 @@ new #[Layout('layouts.auth')] class extends Component
 
     public function mount(OtpService $otpService): void
     {
+        if (! config('verification.phone_verification_enabled')) {
+            $this->redirect(Auth::user()->redirect(), navigate: false);
+
+            return;
+        }
+
         $this->resendCooldown = $otpService->resendCooldown(
             Auth::user(),
             OtpType::PHONE_VERIFICATION
