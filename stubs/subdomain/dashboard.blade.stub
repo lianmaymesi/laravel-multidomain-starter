@@ -1,4 +1,17 @@
+@php $title = 'Dashboard'; @endphp
 
-<div>
-    {{-- {{ name }} portal dashboard --}}
+<div class="flex min-h-screen items-center justify-center px-6 py-16">
+    <div class="mx-auto max-w-3xl text-center">
+        <flux:icon.chat-bubble-bottom-center-text class="mx-auto size-8 text-blue-400/60" />
+
+        <blockquote class="mt-6 text-3xl font-medium text-balance sm:text-4xl">
+            &ldquo;{{ $quote }}&rdquo;
+        </blockquote>
+
+        <flux:text class="mt-5 block text-white/40">
+            &mdash; {{ $author }}
+        </flux:text>
+
+        <flux:badge class="mt-8" color="zinc" size="sm">{{ name }} portal</flux:badge>
+    </div>
 </div>

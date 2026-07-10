@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
 
 <head>
     <meta charset="utf-8">
@@ -8,12 +8,15 @@
     <title>{{ $title ?? config('app.name') }}</title>
 
     @vite(['resources/css/landing.css', 'resources/js/landing.js'])
+
+    @fluxAppearance
 </head>
 
-<body>
+<body class="min-h-screen bg-zinc-950 text-white antialiased">
     {{ $slot }}
 
     @livewireScripts
+    @fluxScripts
 </body>
 
 </html>

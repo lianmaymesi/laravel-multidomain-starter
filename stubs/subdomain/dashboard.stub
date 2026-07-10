@@ -4,5 +4,23 @@ use Livewire\Component;
 
 new class extends Component
 {
-    //
+    public string $quote = '';
+
+    public string $author = '';
+
+    public function mount(): void
+    {
+        $quotes = [
+            ['quote' => 'Simplicity is the soul of efficiency.', 'author' => 'Austin Freeman'],
+            ['quote' => 'Make it work, make it right, make it fast.', 'author' => 'Kent Beck'],
+            ['quote' => 'The best way to predict the future is to invent it.', 'author' => 'Alan Kay'],
+            ['quote' => 'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.', 'author' => 'Martin Fowler'],
+            ['quote' => 'First, solve the problem. Then, write the code.', 'author' => 'John Johnson'],
+        ];
+
+        $picked = $quotes[array_rand($quotes)];
+
+        $this->quote  = $picked['quote'];
+        $this->author = $picked['author'];
+    }
 };
