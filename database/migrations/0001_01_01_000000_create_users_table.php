@@ -15,12 +15,15 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->string('country_code');
-            $table->string('phone');
+            $table->string('pending_email')->nullable();
+            $table->string('pending_email_token', 64)->nullable();
+            $table->timestamp('pending_email_requested_at')->nullable();
+            $table->string('country_code')->nullable();
+            $table->string('phone')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('phone_verified_at')->nullable();
             $table->string('password');
-            $table->string('two_factor_secret')->nullable();
+            $table->text('two_factor_secret')->nullable();
             $table->text('two_factor_recovery_codes')->nullable();
             $table->timestamp('two_factor_enabled_at')->nullable();
             $table->timestamp('two_factor_confirmed_at')->nullable();
