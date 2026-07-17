@@ -28,11 +28,11 @@
                         <flux:avatar size="sm" name="{{ auth()->user()->name }}" />
                     </button>
 
-                    <flux:menu>
-                        <flux:menu.item icon="user-circle" href="{{ route('account.index') }}">
+                    <flux:menu class="min-w-56 dark:border-white/10! dark:bg-zinc-900! shadow-lg shadow-black/40">
+                        <flux:menu.item icon="user-circle" href="{{ route('account.index') }}" class="dark:data-active:bg-white/8!">
                             Account
                         </flux:menu.item>
-                        <flux:menu.separator />
+                        <flux:menu.separator class="dark:bg-white/10!" />
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" variant="danger">

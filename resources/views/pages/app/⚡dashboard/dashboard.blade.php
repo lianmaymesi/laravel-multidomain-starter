@@ -1,6 +1,6 @@
 @php $title = 'Dashboard'; @endphp
 
-<div class="mx-auto max-w-7xl w-full px-4 py-10 sm:px-6 lg:px-8 space-y-8">
+<div class="space-y-8">
 
     {{-- Header --}}
     <div class="flex items-center justify-between">
@@ -8,9 +8,6 @@
             <flux:heading size="xl">Dashboard</flux:heading>
             <flux:text class="mt-1 text-white/50">Welcome back{{ auth()->check() ? ', ' . auth()->user()->name : '' }} — here's what's happening today.</flux:text>
         </div>
-        @auth
-        <flux:avatar size="lg" name="{{ auth()->user()->name }}" />
-        @endauth
     </div>
 
     {{-- Stat cards --}}
