@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\File;
 use Spatie\Permission\Models\Role;
 
 use function Laravel\Prompts\select;
+use function Termwind\render;
 
 class MakeSubdomainCommand extends Command
 {
@@ -19,24 +20,34 @@ class MakeSubdomainCommand extends Command
         $name = $this->argument('name');
 
         if (! preg_match('/^[a-z][a-z0-9-]*$/', $name)) {
-            $this->error('Subdomain name must be lowercase alphanumeric with hyphens, starting with a letter.');
-
-            return self::FAILURE;
+            return $this->failWith(
+                'Invalid subdomain name',
+                'Must be lowercase alphanumeric with hyphens, starting with a letter.',
+            );
         }
 
         if (array_key_exists($name, config('multidomain.sub_domains', []))) {
-            $this->error("A subdomain named \"{$name}\" already exists in config/multidomain.php.");
-
-            return self::FAILURE;
+            return $this->failWith(
+                'Subdomain already exists',
+                "\"{$name}\" is already registered in config/multidomain.php.",
+            );
         }
 
         if (config('multidomain.single_domain')) {
-            $this->error('Cannot scaffold a new subdomain while APP_SINGLE_DOMAIN is true.');
-            $this->line('Every portal shares one host in single-domain mode, so a freshly generated "/" route would collide with the existing ones.');
-            $this->line('Set APP_SINGLE_DOMAIN=false in .env, then run this command again.');
-
-            return self::FAILURE;
+            return $this->failWith(
+                'Single-domain mode is active',
+                'Every portal shares one host in single-domain mode, so a freshly generated "/" route would collide with the existing ones.',
+                'Set APP_SINGLE_DOMAIN=false in .env, then run this command again.',
+            );
         }
+
+        render(<<<HTML
+            <div class="mx-1 my-1">
+                <span class="px-1 bg-blue-600 text-white font-bold">SCAFFOLD</span>
+                <span class="ml-1 text-blue-400 font-bold">{$name}</span>
+                <span class="ml-1 text-gray">— new subdomain portal</span>
+            </div>
+            HTML);
 
         $access = select(
             label: 'Who should be able to access this portal?',
@@ -83,23 +94,58 @@ class MakeSubdomainCommand extends Command
         $created[] = $this->putFromStub("{$stubs}/dashboard.stub", "{$pageDir}/dashboard.php", $replacements);
         $created[] = $this->putFromStub("{$stubs}/dashboard.blade.stub", "{$pageDir}/dashboard.blade.php", $replacements);
 
-        foreach ($created as $path) {
-            $this->line('<info>✔</info> Created '.str_replace(base_path().DIRECTORY_SEPARATOR, '', $path));
-        }
-
         $role = Role::firstOrCreate(['name' => $name, 'guard_name' => 'web']);
-        $this->line("<info>✔</info> Role \"{$role->name}\" ready — protected from deletion in the backoffice roles screen.");
 
-        $this->newLine();
-        $this->line('Next steps (manual):');
-        $this->line("1. Add 'name' => 'name.'.env('APP_MAIN_DOMAIN') to config/multidomain.php sub_domains array (replace name with {$name})");
-        $this->line('2. Add this block to routes/web.php:');
-        $this->line("   Route::domain(config('multidomain.sub_domains.{$name}'))->name('{$name}.')->group(fn () => include __DIR__.'/{$name}.php');");
-        $this->line("3. Add {$name}.<APP_MAIN_DOMAIN> to your local hosts/Herd config");
-        $this->line("4. Assign the \"{$name}\" role to any user who should access this portal and be redirected here after login.");
-        $this->line('   (vite.config.js picks up the new css/js entries automatically — no edit needed.)');
+        $fileRows = collect($created)
+            ->map(fn (string $path) => str_replace(base_path().DIRECTORY_SEPARATOR, '', $path))
+            ->map(fn (string $relative) => '<div><span class="text-green-500 font-bold">✔</span> <span class="text-gray-300">'.e($relative).'</span></div>')
+            ->implode('');
+
+        render(<<<HTML
+            <div class="mx-1 my-1">
+                <div class="text-green-500 font-bold mb-1">Files created</div>
+                <div class="ml-2">{$fileRows}</div>
+                <div class="mt-1">
+                    <span class="text-green-500 font-bold">✔</span>
+                    <span class="text-gray-300">Role "{$role->name}" ready — protected from deletion in the backoffice roles screen.</span>
+                </div>
+            </div>
+            HTML);
+
+        $steps = [
+            "Add 'name' =&gt; 'name.'.env('APP_MAIN_DOMAIN') to config/multidomain.php sub_domains array (replace name with {$name})",
+            "Add this block to routes/web.php:<div class=\"ml-2 text-cyan-300\">Route::domain(config('multidomain.sub_domains.{$name}'))->name('{$name}.')->group(fn () =&gt; include __DIR__.'/{$name}.php');</div>",
+            "Add {$name}.&lt;APP_MAIN_DOMAIN&gt; to your local hosts/Herd config",
+            "Assign the \"{$name}\" role to any user who should access this portal and be redirected here after login.",
+        ];
+
+        $stepRows = collect($steps)->map(fn (string $step) => "<li class=\"text-gray-300\">{$step}</li>")->implode('');
+
+        render(<<<HTML
+            <div class="mx-1 my-1">
+                <div class="px-1 bg-amber-600 text-white font-bold">MANUAL STEPS</div>
+                <ol class="ml-2 mt-1">{$stepRows}</ol>
+                <div class="mt-1 text-gray">vite.config.js picks up the new css/js entries automatically — no edit needed.</div>
+            </div>
+            HTML);
 
         return self::SUCCESS;
+    }
+
+    private function failWith(string $title, string ...$lines): int
+    {
+        $body = collect($lines)
+            ->map(fn (string $line) => '<div class="text-red-100">'.e($line).'</div>')
+            ->implode('');
+
+        render(<<<HTML
+            <div class="mx-1 my-1">
+                <div class="px-1 bg-red-600 text-white font-bold">✘ {$title}</div>
+                <div class="mt-1">{$body}</div>
+            </div>
+            HTML);
+
+        return self::FAILURE;
     }
 
     /** @param array<string, string> $replacements */
