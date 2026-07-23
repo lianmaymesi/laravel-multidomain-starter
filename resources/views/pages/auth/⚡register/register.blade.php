@@ -72,6 +72,21 @@
                         </flux:field>
                     </div>
 
+                    @if (count(config('multidomain.registerable_portals', [])) > 0)
+                    <div class="sm:col-span-2">
+                        <flux:field>
+                            <flux:label>Select the user type</flux:label>
+                            <flux:select wire:model="userType" placeholder="Standard account">
+                                <flux:select.option value="">Standard account</flux:select.option>
+                                @foreach (config('multidomain.registerable_portals', []) as $key => $label)
+                                <flux:select.option value="{{ $key }}">{{ $label }}</flux:select.option>
+                                @endforeach
+                            </flux:select>
+                            <flux:error name="userType" />
+                        </flux:field>
+                    </div>
+                    @endif
+
                     @if (config('multidomain.phone_verification_enabled'))
                     <div class="sm:col-span-2">
                         <div class="flex gap-2">

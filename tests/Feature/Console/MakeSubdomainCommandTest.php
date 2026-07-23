@@ -21,6 +21,7 @@ it('scaffolds a new subdomain portal', function () {
     $this->artisan('make:subdomain', ['name' => 'blog'])
         ->expectsQuestion('Who should be able to access this portal?', 'auth')
         ->expectsQuestion('Access level', 'user')
+        ->expectsConfirmation('Should visitors be able to sign up for "blog" themselves, from the public register page?', 'no')
         ->assertSuccessful();
 
     expect(resource_path('css/blog.css'))->toBeFile()
@@ -32,6 +33,22 @@ it('scaffolds a new subdomain portal', function () {
 
     expect(File::get(base_path('routes/blog.php')))->toContain('pages::blog.dashboard')
         ->and(Role::where('name', 'blog')->where('guard_name', 'web')->exists())->toBeTrue();
+
+    // The registration guard is always baked into the dashboard stub —
+    // visibility is decided at runtime by the (unpopulated) config array.
+    expect(File::get(resource_path('views/pages/blog/⚡dashboard/dashboard.blade.php')))
+        ->toContain("array_key_exists('blog', config('multidomain.registerable_portals'");
+});
+
+it('opts a subdomain into public self-registration', function () {
+    $this->artisan('make:subdomain', ['name' => 'blog'])
+        ->expectsQuestion('Who should be able to access this portal?', 'auth')
+        ->expectsQuestion('Access level', 'user')
+        ->expectsConfirmation('Should visitors be able to sign up for "blog" themselves, from the public register page?', 'yes')
+        ->expectsQuestion('What should this portal be called on the sign-up form?', "Blog & Vlog Writer's Club")
+        ->assertSuccessful();
+
+    expect(resource_path('views/pages/blog/⚡dashboard/dashboard.blade.php'))->toBeFile();
 });
 
 it('rejects an invalid subdomain name', function () {

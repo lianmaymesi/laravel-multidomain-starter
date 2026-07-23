@@ -8,6 +8,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
@@ -35,6 +36,8 @@ new #[Layout('layouts.auth')] class extends Component
 
     public string $country_code = '';
 
+    public string $userType = '';
+
     public function mount(): void
     {
         $this->country_code = config('multidomain.phone_default_country_code');
@@ -44,6 +47,7 @@ new #[Layout('layouts.auth')] class extends Component
     {
         $rules = [
             'password' => ['required', 'confirmed', Password::defaults()],
+            'userType' => ['nullable', Rule::in(array_keys(config('multidomain.registerable_portals', [])))],
         ];
 
         if (config('multidomain.phone_verification_enabled')) {
@@ -84,6 +88,10 @@ new #[Layout('layouts.auth')] class extends Component
             'phone' => $phoneEnabled ? Str::replace('-', '', $this->phone) : null,
             'country_code' => $phoneEnabled ? $this->country_code : null,
         ]);
+
+        if ($this->userType !== '') {
+            $user->assignRole($this->userType);
+        }
 
         event(new Registered($user));
 

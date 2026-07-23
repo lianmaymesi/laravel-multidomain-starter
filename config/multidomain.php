@@ -49,6 +49,23 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Registerable Portals
+    |--------------------------------------------------------------------------
+    |
+    | Portal roles a visitor can opt into from the public register page, shown
+    | as a "Select the user type" dropdown. Key is the role name (matching a
+    | subdomain scaffolded via `make:subdomain`), value is the label shown to
+    | the visitor. Empty by default — the dropdown stays hidden and
+    | registration behaves as before, with no role assigned.
+    |
+    */
+
+    'registerable_portals' => [
+        // 'blog' => 'Blog Writer',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Email Verification Grace Period
     |--------------------------------------------------------------------------
     |

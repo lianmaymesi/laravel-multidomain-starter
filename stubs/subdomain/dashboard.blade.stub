@@ -13,5 +13,15 @@
         </flux:text>
 
         <flux:badge class="mt-8" color="zinc" size="sm">{{ name }} portal</flux:badge>
+
+        @guest
+        @if (array_key_exists('{{ name }}', config('multidomain.registerable_portals', [])))
+        <div class="mt-6">
+            <flux:button href="{{ route('auth.register') }}" wire:navigate variant="primary">
+                Register
+            </flux:button>
+        </div>
+        @endif
+        @endguest
     </div>
 </div>

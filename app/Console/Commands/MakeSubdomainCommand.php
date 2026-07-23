@@ -4,9 +4,12 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 
+use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\select;
+use function Laravel\Prompts\text;
 use function Termwind\render;
 
 class MakeSubdomainCommand extends Command
@@ -77,6 +80,21 @@ class MakeSubdomainCommand extends Command
             default => null,
         };
 
+        $openRegistration = confirm(
+            label: "Should visitors be able to sign up for \"{$name}\" themselves, from the public register page?",
+            default: false,
+            hint: 'Adds it to the "Select the user type" dropdown on sign-up, and a Register button on this portal\'s homepage.',
+        );
+
+        $registerLabel = $openRegistration
+            ? text(
+                label: 'What should this portal be called on the sign-up form?',
+                placeholder: 'e.g. Blog Writer',
+                default: Str::headline($name),
+                required: true,
+            )
+            : null;
+
         $stubs = base_path('stubs/subdomain');
         $replacements = [
             '{{ name }}' => $name,
@@ -118,6 +136,10 @@ class MakeSubdomainCommand extends Command
             "Add {$name}.&lt;APP_MAIN_DOMAIN&gt; to your local hosts/Herd config",
             "Assign the \"{$name}\" role to any user who should access this portal and be redirected here after login.",
         ];
+
+        if ($openRegistration) {
+            $steps[] = "Add '{$name}' =&gt; '".e($registerLabel)."' to config/multidomain.php registerable_portals array — turns on the \"".e($registerLabel)."\" option in the sign-up form's user-type dropdown, and the Register button on this portal's homepage.";
+        }
 
         $stepRows = collect($steps)->map(fn (string $step) => "<li class=\"text-gray-300\">{$step}</li>")->implode('');
 
