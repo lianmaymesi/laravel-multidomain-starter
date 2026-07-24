@@ -62,3 +62,12 @@ it('rejects a subdomain name that already exists', function () {
     $this->artisan('make:subdomain', ['name' => 'app'])
         ->assertFailed();
 });
+
+it('rejects scaffolding while single-domain mode is active', function () {
+    config(['multidomain.single_domain' => true]);
+
+    $this->artisan('make:subdomain', ['name' => 'blog'])
+        ->assertFailed();
+
+    expect(resource_path('css/blog.css'))->not->toBeFile();
+});
