@@ -74,7 +74,7 @@
             {{-- Verify later --}}
             @if ($daysLeft > 0)
                 <p class="mt-5 text-center text-xs text-white/30">
-                    <a href="{{ auth()->user()?->redirectSubdomain() }}"
+                    <a href="{{ auth()->user()?->redirect() }}"
                         class="underline underline-offset-2 transition-colors hover:text-white/50">
                         Verify later ({{ $daysLeft }} {{ Str::plural('day', $daysLeft) }} remaining)
                     </a>

@@ -3,10 +3,22 @@
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
 use Spatie\Permission\Models\Role;
+use Symfony\Component\Console\Output\NullOutput;
+
+use function Termwind\renderUsing;
 
 uses(RefreshDatabase::class);
 
+beforeEach(function () {
+    // The command renders its summary via Termwind\render(), which writes
+    // straight to a real ConsoleOutput by default — bypassing Laravel's
+    // command-output buffering and printing to the terminal during `test`.
+    renderUsing(new NullOutput);
+});
+
 afterEach(function () {
+    renderUsing(null);
+
     File::delete([
         resource_path('css/blog.css'),
         resource_path('js/blog.js'),

@@ -23,8 +23,8 @@ class OtpCode extends Model
     protected function casts(): array
     {
         return [
-            'expired_at' => 'datetime',
-            'user_at' => 'datetime',
+            'expires_at' => 'datetime',
+            'used_at' => 'datetime',
         ];
     }
 
@@ -43,7 +43,7 @@ class OtpCode extends Model
 
     public function isValid(): bool
     {
-        return !$this->used_at && !$this->isExpired();
+        return ! $this->used_at && ! $this->isExpired();
     }
 
     /**
@@ -53,7 +53,7 @@ class OtpCode extends Model
     public function prunable(): Builder
     {
         return static::query()->where(function ($q) {
-            $q->where('used', true)
+            $q->whereNotNull('used_at')
                 ->orWhere('expires_at', '<', now()->subDay());
         });
     }

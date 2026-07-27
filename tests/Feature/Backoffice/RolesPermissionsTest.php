@@ -104,3 +104,39 @@ it('assigns a role to a user', function () {
 
     expect($targetUser->fresh()->hasRole('editor'))->toBeTrue();
 });
+
+it('renames a permission', function () {
+    $permission = Permission::create(['name' => 'view-reports', 'guard_name' => 'web']);
+
+    Livewire::actingAs(staffUser())
+        ->test('pages::backoffice.permissions')
+        ->call('edit', $permission->id)
+        ->set('name', 'view-financial-reports')
+        ->call('save');
+
+    expect($permission->fresh()->name)->toBe('view-financial-reports');
+});
+
+it('rejects a permission name that already exists', function () {
+    Permission::create(['name' => 'view-reports', 'guard_name' => 'web']);
+
+    Livewire::actingAs(staffUser())
+        ->test('pages::backoffice.permissions')
+        ->call('create')
+        ->set('name', 'view-reports')
+        ->call('save')
+        ->assertHasErrors('name');
+});
+
+it('filters the users list by name or email', function () {
+    User::factory()->create(['name' => 'Ada Lovelace', 'email' => 'ada@example.com']);
+    User::factory()->create(['name' => 'Grace Hopper', 'email' => 'grace@example.com']);
+
+    $results = Livewire::actingAs(staffUser())
+        ->test('pages::backoffice.users')
+        ->set('search', 'Ada')
+        ->instance()
+        ->users();
+
+    expect($results->pluck('name')->all())->toBe(['Ada Lovelace']);
+});

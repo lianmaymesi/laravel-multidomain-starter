@@ -139,7 +139,7 @@ new #[Layout('layouts.auth')] class extends Component
 
         $this->editAttemptsLeft--;
         $this->resendCooldown = 60;
-        $this->code = '';
+        $this->code = 0;
         $this->editingPhone = false;
         $this->reset(['newCountryCode', 'newPhone']);
 
