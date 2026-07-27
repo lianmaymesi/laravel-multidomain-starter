@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Logo">
+    <circle cx="50" cy="50" r="34" fill="none" stroke="#637bf8" stroke-opacity="0.18" stroke-width="1.5" stroke-dasharray="2 4" />
+    <line x1="50" y1="50" x2="74.04" y2="25.96" stroke="#637bf8" stroke-opacity="0.55" stroke-width="3" stroke-linecap="round" />
+    <line x1="50" y1="50" x2="25.96" y2="25.96" stroke="#637bf8" stroke-opacity="0.55" stroke-width="3" stroke-linecap="round" />
+    <line x1="50" y1="50" x2="25.96" y2="74.04" stroke="#637bf8" stroke-opacity="0.55" stroke-width="3" stroke-linecap="round" />
+    <line x1="50" y1="50" x2="74.04" y2="74.04" stroke="#637bf8" stroke-opacity="0.55" stroke-width="3" stroke-linecap="round" />
+    <circle cx="74.04" cy="25.96" r="8" fill="#96a8ff" />
+    <circle cx="25.96" cy="25.96" r="8" fill="#637bf8" />
+    <circle cx="25.96" cy="74.04" r="8" fill="#96a8ff" />
+    <circle cx="74.04" cy="74.04" r="8" fill="#637bf8" />
+    <circle cx="50" cy="50" r="13" fill="#3b54ee" />
+</svg>

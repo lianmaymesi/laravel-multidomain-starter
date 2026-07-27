@@ -1,0 +1,10 @@
+@import "tailwindcss";
+@import "./theme.css";
+@import "../../vendor/livewire/flux/dist/flux.css";
+@import "./partials/edge-design.css";
+
+@source "../views/components/app/**/*.blade.php";
+@source "../views/pages/app/**/*.blade.php";
+@source "../views/layouts/app.blade.php";
+@source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
+@source "../../vendor/livewire/flux/stubs/**/*.blade.php";

@@ -1,0 +1,104 @@
+/* ─── Edge design: zero all border radii ─────────────────────────────────── */
+[data-flux-card] { border-radius: 0; }
+[data-flux-button] { border-radius: 0; }
+[data-flux-input] { border-radius: 0; }
+[data-flux-input] input,
+[data-flux-input] textarea { border-radius: 0; }
+[data-flux-badge] { border-radius: 0; }
+[data-flux-menu] { border-radius: 0; }
+[data-flux-dropdown-position] { border-radius: 0; }
+[data-flux-navlist-item] { border-radius: 0; }
+[data-flux-avatar],
+[data-flux-avatar]::after,
+[data-flux-avatar] img { border-radius: 0; }
+[data-flux-checkbox],
+[data-flux-checkbox-indicator] { border-radius: 0; }
+
+/* Tailwind rounded classes used in content areas */
+.rounded-\[1\.75rem\],
+.rounded-\[2rem\],
+.rounded-3xl,
+.rounded-2xl,
+.rounded-xl,
+.rounded-lg,
+.rounded-md,
+.rounded-sm,
+.rounded-full { border-radius: 0; }
+
+/* ─── Avatar: match brand accent instead of Flux's default gray ──────────── */
+[data-flux-avatar] {
+    background-color: color-mix(in srgb, var(--color-blue-500) 15%, transparent);
+    color: var(--color-blue-400);
+}
+
+/* ─── Dark card: solid structured surface ────────────────────────────────── */
+.dark [data-flux-card] {
+    background-color: rgb(15 23 42 / 0.55);
+    border-color: rgba(255, 255, 255, 0.08);
+    border-radius: 0;
+}
+
+/* ─── Primary button: hard offset shadow, no blur ────────────────────────── */
+[data-flux-button][data-variant="primary"] {
+    box-shadow: 3px 3px 0 rgb(31 64 204 / 0.85);
+    transition: box-shadow 100ms, translate 100ms;
+}
+[data-flux-button][data-variant="primary"]:hover:not(:disabled) {
+    box-shadow: 4px 4px 0 rgb(31 64 204 / 0.9);
+    translate: -1px -1px;
+}
+[data-flux-button][data-variant="primary"]:active:not(:disabled) {
+    box-shadow: 1px 1px 0 rgb(31 64 204 / 0.7);
+    translate: 0 0;
+}
+
+/* ─── Danger button: hard red offset shadow ──────────────────────────────── */
+[data-flux-button][data-variant="danger"] {
+    box-shadow: 3px 3px 0 rgb(168 24 24 / 0.8);
+    transition: box-shadow 100ms, translate 100ms;
+}
+[data-flux-button][data-variant="danger"]:hover:not(:disabled) {
+    box-shadow: 4px 4px 0 rgb(168 24 24 / 0.9);
+    translate: -1px -1px;
+}
+
+/* ─── Field labels: technical uppercase ──────────────────────────────────── */
+[data-flux-label] {
+    font-size: 10.5px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 7px;
+    opacity: 0.6;
+}
+
+/* Inline labels (checkbox/radio/switch) sit beside their control in the same
+   grid row — the margin-bottom above inflates that row and knocks the label
+   off-center from the control, so it's reset here. */
+[data-flux-checkbox] ~ [data-flux-label],
+[data-flux-radio] ~ [data-flux-label],
+[data-flux-switch] ~ [data-flux-label] {
+    margin-bottom: 0;
+}
+[data-flux-field]:has(> [data-flux-checkbox]),
+[data-flux-field]:has(> [data-flux-radio]),
+[data-flux-field]:has(> [data-flux-switch]) {
+    align-items: center;
+}
+
+/* ─── Hide body scrollbar (scroll still works) ───────────────────────────── */
+html,
+body {
+    scrollbar-width: none;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    display: none;
+}
+
+[data-flux-error] {
+    @apply mt-1.5 text-xs;
+}
+[data-flux-error] [data-flux-icon] {
+    @apply hidden;
+}
