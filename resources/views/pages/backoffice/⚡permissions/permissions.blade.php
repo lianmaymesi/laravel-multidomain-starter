@@ -6,7 +6,7 @@
     <div class="flex items-center justify-between">
         <div>
             <flux:heading size="xl">Permissions</flux:heading>
-            <flux:text class="mt-1 text-white/50">Manage the individual permissions roles can be granted.</flux:text>
+            <flux:text class="mt-1 text-zinc-500 dark:text-white/50">Manage the individual permissions roles can be granted.</flux:text>
         </div>
         <flux:button variant="primary" icon="plus" wire:click="create">New Permission</flux:button>
     </div>
@@ -28,8 +28,8 @@
             <flux:table.rows>
                 @forelse ($this->permissions() as $permission)
                 <flux:table.row wire:key="permission-{{ $permission->id }}">
-                    <flux:table.cell class="font-medium text-white">{{ $permission->name }}</flux:table.cell>
-                    <flux:table.cell class="text-white/50">{{ $permission->roles_count }}</flux:table.cell>
+                    <flux:table.cell class="font-medium text-zinc-900 dark:text-white">{{ $permission->name }}</flux:table.cell>
+                    <flux:table.cell class="text-zinc-500 dark:text-white/50">{{ $permission->roles_count }}</flux:table.cell>
                     <flux:table.cell align="end">
                         <div class="flex justify-end gap-2">
                             <flux:button size="xs" variant="ghost" icon="pencil-square" wire:click="edit({{ $permission->id }})">
@@ -44,7 +44,7 @@
                 </flux:table.row>
                 @empty
                 <flux:table.row>
-                    <flux:table.cell colspan="3" class="text-center text-white/40">No permissions yet.</flux:table.cell>
+                    <flux:table.cell colspan="3" class="text-center text-zinc-500 dark:text-white/40">No permissions yet.</flux:table.cell>
                 </flux:table.row>
                 @endforelse
             </flux:table.rows>
@@ -76,7 +76,7 @@
         <div class="space-y-6">
             <div>
                 <flux:heading size="lg">Delete permission?</flux:heading>
-                <flux:text class="mt-2 text-white/50">This cannot be undone. Roles granting this permission will lose it.</flux:text>
+                <flux:text class="mt-2 text-zinc-500 dark:text-white/50">This cannot be undone. Roles granting this permission will lose it.</flux:text>
             </div>
             <div class="flex justify-end gap-2">
                 <flux:button variant="ghost" wire:click="$set('confirmingDelete', false)">Cancel</flux:button>

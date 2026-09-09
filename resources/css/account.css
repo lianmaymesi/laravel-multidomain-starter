@@ -6,5 +6,6 @@
 @source "../views/components/accounts/**/*.blade.php";
 @source "../views/pages/accounts/**/*.blade.php";
 @source "../views/layouts/accounts.blade.php";
+@source "../views/components/**/*.blade.php";
 @source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
 @source "../../vendor/livewire/flux/stubs/**/*.blade.php";

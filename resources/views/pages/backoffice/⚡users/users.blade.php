@@ -6,7 +6,7 @@
     <div class="flex items-center justify-between">
         <div>
             <flux:heading size="xl">Users</flux:heading>
-            <flux:text class="mt-1 text-white/50">Manage user accounts and assign roles.</flux:text>
+            <flux:text class="mt-1 text-zinc-500 dark:text-white/50">Manage user accounts and assign roles.</flux:text>
         </div>
         <flux:input wire:model.live.debounce.300ms="search" placeholder="Search users…" icon="magnifying-glass" class="max-w-xs" />
     </div>
@@ -30,11 +30,11 @@
             <flux:table.rows>
                 @forelse ($this->users() as $user)
                 <flux:table.row wire:key="user-{{ $user->id }}">
-                    <flux:table.cell class="flex items-center gap-3 font-medium text-white">
+                    <flux:table.cell class="flex items-center gap-3 font-medium text-zinc-900 dark:text-white">
                         <flux:avatar size="xs" name="{{ $user->name }}" />
                         {{ $user->name }}
                     </flux:table.cell>
-                    <flux:table.cell class="text-white/50">{{ $user->email }}</flux:table.cell>
+                    <flux:table.cell class="text-zinc-500 dark:text-white/50">{{ $user->email }}</flux:table.cell>
                     <flux:table.cell>
                         <flux:badge size="sm" :color="$user->privilege === 'staff' ? 'blue' : 'zinc'">
                             {{ ucfirst($user->privilege) }}
@@ -45,7 +45,7 @@
                             @forelse ($user->roles as $role)
                             <flux:badge size="sm" color="zinc">{{ $role->name }}</flux:badge>
                             @empty
-                            <span class="text-white/30">—</span>
+                            <span class="text-zinc-400 dark:text-white/30">—</span>
                             @endforelse
                         </div>
                     </flux:table.cell>
@@ -57,7 +57,7 @@
                 </flux:table.row>
                 @empty
                 <flux:table.row>
-                    <flux:table.cell colspan="5" class="text-center text-white/40">No users found.</flux:table.cell>
+                    <flux:table.cell colspan="5" class="text-center text-zinc-500 dark:text-white/40">No users found.</flux:table.cell>
                 </flux:table.row>
                 @endforelse
             </flux:table.rows>
@@ -71,11 +71,11 @@
                 <flux:heading size="lg">Roles for {{ $editingName }}</flux:heading>
             </div>
 
-            <div class="max-h-64 space-y-2 overflow-y-auto rounded-lg border border-white/10 p-3">
+            <div class="max-h-64 space-y-2 overflow-y-auto rounded-lg border border-zinc-200 dark:border-white/10 p-3">
                 @forelse ($this->roles() as $role)
                 <flux:checkbox wire:model="selectedRoles" value="{{ $role->id }}" label="{{ $role->name }}" />
                 @empty
-                <flux:text class="text-sm text-white/40">No roles yet — create one first.</flux:text>
+                <flux:text class="text-sm text-zinc-500 dark:text-white/40">No roles yet — create one first.</flux:text>
                 @endforelse
             </div>
 
