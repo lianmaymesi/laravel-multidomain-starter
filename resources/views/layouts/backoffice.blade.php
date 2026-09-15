@@ -57,6 +57,7 @@
                 ['label' => 'Roles', 'route' => 'backoffice.roles.index'],
                 ['label' => 'Permissions', 'route' => 'backoffice.permissions.index'],
                 ['label' => 'Users', 'route' => 'backoffice.users.index'],
+                ['label' => 'Maintenance', 'route' => 'backoffice.maintenance.index'],
                 ];
                 @endphp
                 @foreach ($mobileItems as $item)
@@ -123,6 +124,19 @@
                         <flux:icon.users
                             class="size-4 shrink-0 {{ $usersActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
                         Users
+                    </a>
+
+                    <div class="mt-4 mb-1 px-4 text-[10px] font-medium tracking-[0.12em] uppercase text-zinc-300 dark:text-white/20">
+                        System
+                    </div>
+
+                    @php $maintenanceActive = request()->routeIs('backoffice.maintenance.index'); @endphp
+                    <a href="{{ route('backoffice.maintenance.index') }}" wire:navigate
+                        class="group flex items-center gap-3 border-l-2 px-4 py-2.5 text-sm transition-colors
+                            {{ $maintenanceActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
+                        <flux:icon.wrench
+                            class="size-4 shrink-0 {{ $maintenanceActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
+                        Maintenance
                     </a>
 
                 </nav>

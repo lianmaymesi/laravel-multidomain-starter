@@ -66,6 +66,28 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Error & Maintenance Page Style
+    |--------------------------------------------------------------------------
+    |
+    | Which error/maintenance view set each portal renders. Value is one of:
+    |   'shared' — the one common design (resources/views/errors/shared/*)
+    |   'own'    — the portal has its own set (resources/views/errors/{portal}/*)
+    |   '<portal>' — reuse another portal's set verbatim, e.g. 'landing'
+    |
+    | See resources/views/errors/_dispatch.blade.php for the resolution logic.
+    |
+    */
+
+    'page_style' => [
+        'auth' => 'shared',
+        'app' => 'shared',
+        'backoffice' => 'shared',
+        'account' => 'shared',
+        'landing' => 'landing',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Email Verification Grace Period
     |--------------------------------------------------------------------------
     |

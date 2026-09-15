@@ -95,6 +95,16 @@ class MakeSubdomainCommand extends Command
             )
             : null;
 
+        $pageStyle = select(
+            label: 'Error & maintenance page style for this portal?',
+            options: [
+                'shared' => 'Reuse the shared auth/app/backoffice/account style (recommended)',
+                'landing' => "Reuse landing's style",
+                'own' => 'Own style — scaffold a fresh, blank page to customize',
+            ],
+            default: 'shared',
+        );
+
         $stubs = base_path('stubs/subdomain');
         $replacements = [
             '{{ name }}' => $name,
@@ -111,6 +121,10 @@ class MakeSubdomainCommand extends Command
         File::ensureDirectoryExists($pageDir);
         $created[] = $this->putFromStub("{$stubs}/dashboard.stub", "{$pageDir}/dashboard.php", $replacements);
         $created[] = $this->putFromStub("{$stubs}/dashboard.blade.stub", "{$pageDir}/dashboard.blade.php", $replacements);
+
+        if ($pageStyle === 'own') {
+            $created[] = $this->putFromStub("{$stubs}/error-page.stub", resource_path("views/errors/{$name}/page.blade.php"), $replacements);
+        }
 
         $role = Role::firstOrCreate(['name' => $name, 'guard_name' => 'web']);
 
@@ -139,6 +153,10 @@ class MakeSubdomainCommand extends Command
 
         if ($openRegistration) {
             $steps[] = "Add '{$name}' =&gt; '".e($registerLabel)."' to config/multidomain.php registerable_portals array — turns on the \"".e($registerLabel)."\" option in the sign-up form's user-type dropdown, and the Register button on this portal's homepage.";
+        }
+
+        if ($pageStyle !== 'shared') {
+            $steps[] = "Add '{$name}' =&gt; '{$pageStyle}' to config/multidomain.php page_style array — otherwise error/maintenance pages fall back to the shared style.";
         }
 
         $stepRows = collect($steps)->map(fn (string $step) => "<li class=\"text-gray-300\">{$step}</li>")->implode('');
