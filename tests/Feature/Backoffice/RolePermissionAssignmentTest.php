@@ -1,10 +1,10 @@
 <?php
 
+use App\Models\Permission;
 use App\Models\Role;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
-use Spatie\Permission\Models\Permission;
 
 uses(RefreshDatabase::class);
 

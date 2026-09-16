@@ -8,3 +8,4 @@ Route::livewire('roles/{role}/permissions', 'pages::backoffice.roles.permissions
 Route::livewire('permissions', 'pages::backoffice.permissions')->name('permissions.index');
 Route::livewire('users', 'pages::backoffice.users')->name('users.index');
 Route::livewire('maintenance', 'pages::backoffice.maintenance')->name('maintenance.index');
+Route::livewire('activity', 'pages::backoffice.activity')->name('activity.index');

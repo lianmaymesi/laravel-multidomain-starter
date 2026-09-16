@@ -1,11 +1,11 @@
 <?php
 
+use App\Models\Permission;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
-use Spatie\Permission\Models\Permission;
 
 new #[Layout('layouts.backoffice')] class extends Component
 {

@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Permission;
 
 class RolePermissionSeeder extends Seeder
 {
@@ -28,6 +28,8 @@ class RolePermissionSeeder extends Seeder
      * @var array<int, string>
      */
     private const PERMISSIONS = [
+        'activity.view',
+        'activity.comment',
         'maintenance.view',
         'maintenance.update',
         'roles.view',

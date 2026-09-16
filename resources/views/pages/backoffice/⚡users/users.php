@@ -94,7 +94,31 @@ new #[Layout('layouts.backoffice')] class extends Component
         $allowedIds = $this->roles()->pluck('id')->all();
         $roleIds = array_intersect($this->selectedRoles, $allowedIds);
 
+        $beforeRoles = $user->roles->keyBy('id');
         $user->syncRoles(Role::whereIn('id', $roleIds)->get());
+        $afterRoles = $user->roles()->get()->keyBy('id');
+
+        $addedRoles = $afterRoles->except($beforeRoles->keys()->all())->values();
+        $removedRoles = $beforeRoles->except($afterRoles->keys()->all())->values();
+
+        if ($addedRoles->isNotEmpty() || $removedRoles->isNotEmpty()) {
+            activity()
+                ->causedBy(auth()->user())
+                ->performedOn($user)
+                ->withProperties(['added' => $addedRoles->pluck('name')->all(), 'removed' => $removedRoles->pluck('name')->all()])
+                ->log('roles synced');
+
+            // Mirrored onto each role too, so a role's own timeline shows
+            // every user it's been granted to or taken from — not just the
+            // user's timeline.
+            foreach ($addedRoles as $role) {
+                activity()->causedBy(auth()->user())->performedOn($role)->withProperties(['user' => $user->name])->log('role assigned');
+            }
+
+            foreach ($removedRoles as $role) {
+                activity()->causedBy(auth()->user())->performedOn($role)->withProperties(['user' => $user->name])->log('role unassigned');
+            }
+        }
 
         $this->showModal = false;
 

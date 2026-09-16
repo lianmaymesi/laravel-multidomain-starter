@@ -1,11 +1,11 @@
 <?php
 
+use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
-use Spatie\Permission\Models\Permission;
 
 new #[Layout('layouts.backoffice')] class extends Component
 {
@@ -62,11 +62,19 @@ new #[Layout('layouts.backoffice')] class extends Component
 
         abort_if(! $permission, 403);
 
-        if ($this->role->hasPermissionTo($permission)) {
+        $wasGranted = $this->role->hasPermissionTo($permission);
+
+        if ($wasGranted) {
             $this->role->revokePermissionTo($permission);
         } else {
             $this->role->givePermissionTo($permission);
         }
+
+        activity()
+            ->causedBy(auth()->user())
+            ->performedOn($this->role)
+            ->withProperties(['permission' => $permission->name])
+            ->log($wasGranted ? 'permission revoked' : 'permission granted');
 
         $this->role->load('permissions');
         $this->justSavedId = $permissionId;

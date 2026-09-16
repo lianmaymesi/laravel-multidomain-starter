@@ -17,6 +17,8 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
 
 #[Fillable(['name', 'email', 'password', 'country_code', 'phone', 'privilege', 'two_factor_secret', 'two_factor_recovery_codes', 'pending_email', 'pending_email_token'])]
@@ -24,7 +26,20 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use Anonymizable, HasFactory, HasRoles, MustVerifyPhone, Notifiable;
+    use Anonymizable, HasFactory, HasRoles, LogsActivity, MustVerifyPhone, Notifiable;
+
+    /**
+     * Only these are ever written to the activity log — password hash,
+     * 2FA secret/recovery codes, and pending-email tokens must never end up
+     * in activity_log.properties, logged or not.
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name', 'email', 'privilege'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     /**
      * Get the attributes that should be cast.

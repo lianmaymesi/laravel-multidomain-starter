@@ -1,0 +1,13 @@
+<?php
+
+use Illuminate\Support\Facades\Gate;
+use Livewire\Attributes\Layout;
+use Livewire\Component;
+
+new #[Layout('layouts.backoffice')] class extends Component
+{
+    public function mount(): void
+    {
+        abort_unless(Gate::allows('activity.view'), 403);
+    }
+};

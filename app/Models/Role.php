@@ -3,10 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Support\Str;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Models\Role as SpatieRole;
 
 class Role extends SpatieRole
 {
+    use LogsActivity;
+
     public const SUPER_ADMIN = 'super-admin';
 
     public const ADMIN = 'admin';
@@ -18,6 +22,14 @@ class Role extends SpatieRole
                 $role->slug = Str::slug($role->name);
             }
         });
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name', 'slug', 'locked'])
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 
     /**

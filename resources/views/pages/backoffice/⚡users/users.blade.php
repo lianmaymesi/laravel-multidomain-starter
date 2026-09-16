@@ -50,11 +50,16 @@
                         </div>
                     </flux:table.cell>
                     <flux:table.cell align="end">
-                        @can('users.assign-roles')
-                        <flux:button size="xs" variant="ghost" icon="shield-check" wire:click="editRoles({{ $user->id }})">
-                            Roles
-                        </flux:button>
-                        @endcan
+                        <div class="flex justify-end gap-2">
+                            @can('activity.view')
+                            <x-activity-log-button :model="$user" />
+                            @endcan
+                            @can('users.assign-roles')
+                            <flux:button size="xs" variant="ghost" icon="shield-check" wire:click="editRoles({{ $user->id }})">
+                                Roles
+                            </flux:button>
+                            @endcan
+                        </div>
                     </flux:table.cell>
                 </flux:table.row>
                 @empty

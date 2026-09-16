@@ -1,12 +1,12 @@
 <?php
 
+use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Livewire;
-use Spatie\Permission\Models\Permission;
 
 uses(RefreshDatabase::class);
 
