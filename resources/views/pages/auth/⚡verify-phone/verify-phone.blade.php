@@ -31,7 +31,7 @@
         <div class="w-full max-w-sm">
 
             {{-- Heading block --}}
-            <div class="mb-6 border-l-[3px] border-blue-500 pl-4">
+            <div class="mb-6 border-s-[3px] border-blue-500 ps-4">
                 <p class="mb-1 text-[10px] tracking-[0.25em] uppercase text-blue-500 dark:text-blue-400/55">Phone
                     verification</p>
                 <h1 class="text-2xl font-bold text-zinc-900 dark:text-white">Verify your phone</h1>
@@ -135,7 +135,7 @@
                         <button wire:click="resend" wire:loading.attr="disabled" @click="countdown = 60; start()"
                             class="text-sm font-medium text-blue-600 dark:text-blue-400 transition hover:text-blue-700 dark:hover:text-blue-300 disabled:opacity-50">
                             Resend code
-                            <span class="ml-1 text-blue-500 dark:text-blue-400/40">({{ $resendAttemptsLeft }}
+                            <span class="ms-1 text-blue-500 dark:text-blue-400/40">({{ $resendAttemptsLeft }}
                                 left)</span>
                         </button>
                         @else

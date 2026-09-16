@@ -4,7 +4,7 @@
 
     {{-- ── Brand panel ──────────────────────────────────────────────────── --}}
     <div
-        class="relative hidden overflow-hidden border-r border-zinc-200 dark:border-white/6 bg-blue-950 lg:flex lg:w-[42%] lg:flex-col">
+        class="relative hidden overflow-hidden border-e border-zinc-200 dark:border-white/6 bg-blue-950 lg:flex lg:w-[42%] lg:flex-col">
 
         {{-- Subtle grid overlay --}}
         <div class="absolute inset-0"
@@ -64,7 +64,7 @@
             <div class="w-full max-w-sm">
 
                 {{-- Heading block with left accent --}}
-                <div class="mb-7 border-l-[3px] border-blue-500 pl-4">
+                <div class="mb-7 border-s-[3px] border-blue-500 ps-4">
                     <p class="mb-1 text-[10px] tracking-[0.3em] uppercase text-blue-500 dark:text-blue-400/55">Account
                         access</p>
                     <h1 class="text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">Welcome back</h1>
@@ -77,7 +77,7 @@
                         <flux:icon.clock class="size-3.5 shrink-0 text-amber-400" />
                         <p class="text-xs font-medium text-amber-300">Account deletion scheduled</p>
                     </div>
-                    <p class="mt-1.5 pl-5 text-xs leading-relaxed text-zinc-500 dark:text-white/45">
+                    <p class="mt-1.5 ps-5 text-xs leading-relaxed text-zinc-500 dark:text-white/45">
                         Your account will be permanently deleted in
                         <span class="text-zinc-700 dark:text-white/75">{{
                             \App\Models\AccountDeletionRequest::GRACE_PERIOD_DAYS }} days</span>.

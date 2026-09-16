@@ -22,7 +22,7 @@
                         class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-500/20 text-xs font-semibold text-blue-600 dark:text-blue-400">1</span>
                     <p class="text-sm font-medium text-zinc-800 dark:text-white/80">Scan with your authenticator app</p>
                 </div>
-                <p class="text-sm text-zinc-500 dark:text-white/45 pl-9">
+                <p class="text-sm text-zinc-500 dark:text-white/45 ps-9">
                     Open Google Authenticator, Authy, or any TOTP app and scan the QR code shown on the right.
                 </p>
 
@@ -42,7 +42,7 @@
                     <p class="text-sm font-medium text-zinc-800 dark:text-white/80">Enter the 6-digit code to confirm</p>
                 </div>
 
-                <form wire:submit="confirm" class="flex flex-col items-center gap-5 pl-9">
+                <form wire:submit="confirm" class="flex flex-col items-center gap-5 ps-9">
                     <flux:otp wire:model="code" length="6" label="Authenticator code" label:sr-only :error:icon="false"
                         error:class="text-center" class="mx-auto" />
 
@@ -117,7 +117,7 @@
 
         <flux:button href="{{ auth()->user()?->redirect() }}" variant="primary" class="py-3.5!">
             Continue to dashboard
-            <flux:icon.arrow-right class="ml-1 size-4" />
+            <flux:icon.arrow-right class="ms-1 size-4 rtl:rotate-180" />
         </flux:button>
 
     </div>
@@ -223,7 +223,7 @@
 
         <flux:button href="{{ auth()->user()?->redirect() }}" variant="primary" class="py-3.5!">
             Continue to dashboard
-            <flux:icon.arrow-right class="ml-1 size-4" />
+            <flux:icon.arrow-right class="ms-1 size-4 rtl:rotate-180" />
         </flux:button>
 
     </div>

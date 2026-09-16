@@ -40,9 +40,9 @@
                     <flux:table.cell class="font-medium text-zinc-900 dark:text-white">
                         {{ $role->name }}
                         @if ($role->locked)
-                        <flux:badge size="sm" color="amber" class="ml-2">System</flux:badge>
+                        <flux:badge size="sm" color="amber" class="ms-2">System</flux:badge>
                         @elseif ($role->isPortalRole())
-                        <flux:badge size="sm" color="zinc" class="ml-2">Portal</flux:badge>
+                        <flux:badge size="sm" color="zinc" class="ms-2">Portal</flux:badge>
                         @endif
                     </flux:table.cell>
                     <flux:table.cell class="text-zinc-500 dark:text-white/50">{{ $role->permissions_count }}</flux:table.cell>

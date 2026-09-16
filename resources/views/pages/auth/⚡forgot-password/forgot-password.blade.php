@@ -21,7 +21,7 @@
         <div class="w-full max-w-sm">
 
             {{-- Heading block --}}
-            <div class="mb-6 border-l-[3px] border-blue-500 pl-4">
+            <div class="mb-6 border-s-[3px] border-blue-500 ps-4">
                 <p class="mb-1 text-[10px] tracking-[0.25em] uppercase text-blue-500 dark:text-blue-400/55">Password
                     recovery</p>
                 <h1 class="text-2xl font-bold text-zinc-900 dark:text-white">Reset password</h1>
@@ -121,7 +121,7 @@
                     </div>
                     <button type="button" wire:click="goBack"
                         class="flex items-center gap-1.5 border border-zinc-200 dark:border-white/10 bg-zinc-100 dark:bg-white/5 px-3 py-1.5 text-xs font-medium text-zinc-500 dark:text-white/50 transition hover:bg-zinc-100 dark:hover:bg-white/8 hover:text-zinc-800 dark:hover:text-white/80">
-                        <flux:icon.arrow-left class="size-3.5" />
+                        <flux:icon.arrow-left class="size-3.5 rtl:rotate-180" />
                         Change
                     </button>
                 </div>

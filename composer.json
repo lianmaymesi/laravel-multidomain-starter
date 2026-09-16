@@ -17,10 +17,12 @@
         "laravel/tinker": "^3.0",
         "livewire/flux": "^2.15",
         "livewire/livewire": "^4.2",
+        "mcamara/laravel-localization": "^2.4",
         "nunomaduro/termwind": "^2.4",
         "pragmarx/google2fa-laravel": "^3.0",
         "spatie/laravel-activitylog": "^4.12",
         "spatie/laravel-permission": "^8.3",
+        "spatie/laravel-translation-loader": "^2.8",
         "twilio/sdk": "^8.11"
     },
     "require-dev": {

@@ -118,9 +118,9 @@
                             wire:keydown.escape="cancelName" x-on:focus-name-input.window="$el.focus()" />
                     </div>
                     @error('name')
-                    <p class="text-xs text-red-400 text-right">{{ $message }}</p>
+                    <p class="text-xs text-red-400 text-end">{{ $message }}</p>
                     @enderror
-                    <p class="text-xs text-zinc-400 dark:text-white/30 text-right">↵ to save · Esc to cancel</p>
+                    <p class="text-xs text-zinc-400 dark:text-white/30 text-end">↵ to save · Esc to cancel</p>
                 </div>
                 @else
                 <div class="flex items-center justify-between">

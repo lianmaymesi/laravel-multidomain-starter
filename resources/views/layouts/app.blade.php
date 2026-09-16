@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app(App\Services\LanguageService::class)->currentDirection() }}">
 
 <head>
     <meta charset="utf-8">
@@ -30,9 +30,9 @@
 
                 @auth
                 <flux:dropdown position="bottom" align="end">
-                    <button type="button" class="flex items-center gap-2.5 rounded-lg py-1 pl-1 pr-2 transition-colors hover:bg-zinc-100 dark:hover:bg-white/5">
+                    <button type="button" class="flex items-center gap-2.5 rounded-lg py-1 ps-1 pe-2 transition-colors hover:bg-zinc-100 dark:hover:bg-white/5">
                         <flux:avatar size="sm" name="{{ auth()->user()->name }}" />
-                        <div class="hidden text-left sm:block">
+                        <div class="hidden text-start sm:block">
                             <div class="text-sm leading-tight text-zinc-800 dark:text-white/85">{{ auth()->user()->name }}</div>
                             <div class="text-xs leading-tight text-zinc-500 dark:text-white/40">{{ auth()->user()->email }}</div>
                         </div>
@@ -108,7 +108,7 @@
 
                     @php $dashboardActive = request()->routeIs('app.dashboard'); @endphp
                     <a href="{{ route('app.dashboard') }}" wire:navigate
-                        class="group flex items-center gap-3 border-l-2 px-4 py-2.5 text-sm transition-colors
+                        class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
                             {{ $dashboardActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.chart-bar
                             class="size-4 shrink-0 {{ $dashboardActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
@@ -122,7 +122,7 @@
                     @if (Route::has('app.projects.index'))
                     @php $projectsActive = request()->routeIs('app.projects.index'); @endphp
                     <a href="{{ route('app.projects.index') }}" wire:navigate
-                        class="group flex items-center gap-3 border-l-2 px-4 py-2.5 text-sm transition-colors
+                        class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
                                 {{ $projectsActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.folder
                             class="size-4 shrink-0 {{ $projectsActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
@@ -130,17 +130,17 @@
                     </a>
                     @else
                     <span
-                        class="flex cursor-not-allowed items-center gap-3 border-l-2 border-transparent px-4 py-2.5 text-sm text-zinc-300 dark:text-white/20">
+                        class="flex cursor-not-allowed items-center gap-3 border-s-2 border-transparent px-4 py-2.5 text-sm text-zinc-300 dark:text-white/20">
                         <flux:icon.folder class="size-4 shrink-0 text-zinc-300 dark:text-white/15" />
                         Projects
-                        <span class="ml-auto text-[10px] text-zinc-300 dark:text-white/20">Soon</span>
+                        <span class="ms-auto text-[10px] text-zinc-300 dark:text-white/20">Soon</span>
                     </span>
                     @endif
 
                     @if (Route::has('app.billing.index'))
                     @php $billingActive = request()->routeIs('app.billing.index'); @endphp
                     <a href="{{ route('app.billing.index') }}" wire:navigate
-                        class="group flex items-center gap-3 border-l-2 px-4 py-2.5 text-sm transition-colors
+                        class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
                                 {{ $billingActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.credit-card
                             class="size-4 shrink-0 {{ $billingActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
@@ -148,17 +148,17 @@
                     </a>
                     @else
                     <span
-                        class="flex cursor-not-allowed items-center gap-3 border-l-2 border-transparent px-4 py-2.5 text-sm text-zinc-300 dark:text-white/20">
+                        class="flex cursor-not-allowed items-center gap-3 border-s-2 border-transparent px-4 py-2.5 text-sm text-zinc-300 dark:text-white/20">
                         <flux:icon.credit-card class="size-4 shrink-0 text-zinc-300 dark:text-white/15" />
                         Billing
-                        <span class="ml-auto text-[10px] text-zinc-300 dark:text-white/20">Soon</span>
+                        <span class="ms-auto text-[10px] text-zinc-300 dark:text-white/20">Soon</span>
                     </span>
                     @endif
 
                     @if (Route::has('app.reports.index'))
                     @php $reportsActive = request()->routeIs('app.reports.index'); @endphp
                     <a href="{{ route('app.reports.index') }}" wire:navigate
-                        class="group flex items-center gap-3 border-l-2 px-4 py-2.5 text-sm transition-colors
+                        class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
                                 {{ $reportsActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.document-chart-bar
                             class="size-4 shrink-0 {{ $reportsActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
@@ -166,10 +166,10 @@
                     </a>
                     @else
                     <span
-                        class="flex cursor-not-allowed items-center gap-3 border-l-2 border-transparent px-4 py-2.5 text-sm text-zinc-300 dark:text-white/20">
+                        class="flex cursor-not-allowed items-center gap-3 border-s-2 border-transparent px-4 py-2.5 text-sm text-zinc-300 dark:text-white/20">
                         <flux:icon.document-chart-bar class="size-4 shrink-0 text-zinc-300 dark:text-white/15" />
                         Reports
-                        <span class="ml-auto text-[10px] text-zinc-300 dark:text-white/20">Soon</span>
+                        <span class="ms-auto text-[10px] text-zinc-300 dark:text-white/20">Soon</span>
                     </span>
                     @endif
 
@@ -179,8 +179,8 @@
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit"
-                            class="flex w-full items-center gap-3 border-l-2 border-transparent px-4 py-2.5 text-sm text-zinc-400 dark:text-white/30 transition-colors hover:border-red-500/40 hover:bg-red-500/5 hover:text-red-400">
-                            <flux:icon.arrow-right-start-on-rectangle class="size-4 shrink-0" />
+                            class="flex w-full items-center gap-3 border-s-2 border-transparent px-4 py-2.5 text-sm text-zinc-400 dark:text-white/30 transition-colors hover:border-red-500/40 hover:bg-red-500/5 hover:text-red-400">
+                            <flux:icon.arrow-right-start-on-rectangle class="size-4 shrink-0 rtl:rotate-180" />
                             Sign out
                         </button>
                     </form>

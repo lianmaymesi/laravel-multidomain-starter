@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app(App\Services\LanguageService::class)->currentDirection() }}">
 
 <head>
     <meta charset="utf-8">
@@ -23,6 +23,7 @@
             <span class="text-[11px] font-medium tracking-[0.12em] uppercase text-zinc-400 dark:text-white/30">{{ config('app.name') }}</span>
             <div class="ml-auto">
                 <x-theme-switcher />
+                <x-locale-switcher />
             </div>
         </div>
     </header>

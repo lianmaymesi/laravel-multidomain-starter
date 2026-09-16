@@ -27,7 +27,7 @@
                 {{ \Illuminate\Support\Carbon::parse($day)->isToday() ? 'Today' : \Illuminate\Support\Carbon::parse($day)->format('l, F j, Y') }}
             </flux:heading>
 
-            <div class="relative space-y-6 pl-2">
+            <div class="relative space-y-6 ps-2">
                 @foreach ($groups as $group)
                 @php
                     $activity = $group['activity'];
@@ -90,7 +90,7 @@
                         </div>
 
                         @if ($similar->isNotEmpty())
-                        <div x-data="{ open: false }" class="mt-2 ml-1 border-l border-zinc-200 dark:border-white/10 pl-3">
+                        <div x-data="{ open: false }" class="mt-2 ms-1 border-s border-zinc-200 dark:border-white/10 ps-3">
                             <button type="button" @click="open = !open" class="flex items-center gap-1.5 text-sm text-blue-500 hover:text-blue-600">
                                 <flux:icon.ellipsis-horizontal-circle class="size-4" />
                                 <span x-show="!open">Show {{ $similar->count() }} similar {{ Str::plural('activity', $similar->count()) }}</span>

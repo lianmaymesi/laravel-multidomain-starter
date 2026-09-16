@@ -20,7 +20,7 @@
         <div class="w-full max-w-sm">
 
             {{-- Heading block --}}
-            <div class="mb-6 border-l-[3px] border-blue-500 pl-4">
+            <div class="mb-6 border-s-[3px] border-blue-500 ps-4">
                 <p class="mb-1 text-[10px] tracking-[0.25em] uppercase text-blue-500 dark:text-blue-400/55">Account
                     security</p>
                 <h1 class="text-2xl font-bold text-zinc-900 dark:text-white">Email verification</h1>
@@ -44,7 +44,7 @@
                     </div>
                     <flux:button href="{{ route('account.index') }}" variant="primary" class="w-full">
                         Go to account
-                        <flux:icon.arrow-right class="ml-1 size-4" />
+                        <flux:icon.arrow-right class="ms-1 size-4 rtl:rotate-180" />
                     </flux:button>
                 </div>
 

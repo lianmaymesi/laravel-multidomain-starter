@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app(App\Services\LanguageService::class)->currentDirection() }}">
 
 <head>
     <meta charset="utf-8">
@@ -88,7 +88,7 @@
 
                     @php $dashboardActive = request()->routeIs('backoffice.dashboard'); @endphp
                     <a href="{{ route('backoffice.dashboard') }}" wire:navigate
-                        class="group flex items-center gap-3 border-l-2 px-4 py-2.5 text-sm transition-colors
+                        class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
                             {{ $dashboardActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.chart-bar
                             class="size-4 shrink-0 {{ $dashboardActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
@@ -104,7 +104,7 @@
                     @can('roles.view')
                     @php $rolesActive = request()->routeIs('backoffice.roles.*'); @endphp
                     <a href="{{ route('backoffice.roles.index') }}" wire:navigate
-                        class="group flex items-center gap-3 border-l-2 px-4 py-2.5 text-sm transition-colors
+                        class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
                             {{ $rolesActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.shield-check
                             class="size-4 shrink-0 {{ $rolesActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
@@ -115,7 +115,7 @@
                     @can('permissions.view')
                     @php $permissionsActive = request()->routeIs('backoffice.permissions.index'); @endphp
                     <a href="{{ route('backoffice.permissions.index') }}" wire:navigate
-                        class="group flex items-center gap-3 border-l-2 px-4 py-2.5 text-sm transition-colors
+                        class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
                             {{ $permissionsActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.key
                             class="size-4 shrink-0 {{ $permissionsActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
@@ -126,7 +126,7 @@
                     @can('users.view')
                     @php $usersActive = request()->routeIs('backoffice.users.index'); @endphp
                     <a href="{{ route('backoffice.users.index') }}" wire:navigate
-                        class="group flex items-center gap-3 border-l-2 px-4 py-2.5 text-sm transition-colors
+                        class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
                             {{ $usersActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.users
                             class="size-4 shrink-0 {{ $usersActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
@@ -134,7 +134,7 @@
                     </a>
                     @endcan
 
-                    @canany(['maintenance.view', 'activity.view'])
+                    @canany(['maintenance.view', 'activity.view', 'languages.edit'])
                     <div class="mt-4 mb-1 px-4 text-[10px] font-medium tracking-[0.12em] uppercase text-zinc-300 dark:text-white/20">
                         System
                     </div>
@@ -143,7 +143,7 @@
                     @can('maintenance.view')
                     @php $maintenanceActive = request()->routeIs('backoffice.maintenance.index'); @endphp
                     <a href="{{ route('backoffice.maintenance.index') }}" wire:navigate
-                        class="group flex items-center gap-3 border-l-2 px-4 py-2.5 text-sm transition-colors
+                        class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
                             {{ $maintenanceActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.wrench
                             class="size-4 shrink-0 {{ $maintenanceActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
@@ -154,7 +154,7 @@
                     @can('activity.view')
                     @php $activityActive = request()->routeIs('backoffice.activity.index'); @endphp
                     <a href="{{ route('backoffice.activity.index') }}" wire:navigate
-                        class="group flex items-center gap-3 border-l-2 px-4 py-2.5 text-sm transition-colors
+                        class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
                             {{ $activityActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.clock
                             class="size-4 shrink-0 {{ $activityActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
@@ -162,14 +162,47 @@
                     </a>
                     @endcan
 
+                    @can('languages.view')
+                    @php $languagesActive = request()->routeIs('backoffice.languages.index'); @endphp
+                    <a href="{{ route('backoffice.languages.index') }}" wire:navigate
+                        class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
+                            {{ $languagesActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
+                        <flux:icon.language
+                            class="size-4 shrink-0 {{ $languagesActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
+                        Languages
+                    </a>
+                    @endcan
+
+                    @can('languages.edit')
+                    @php $settingsActive = request()->routeIs('backoffice.settings.index'); @endphp
+                    <a href="{{ route('backoffice.settings.index') }}" wire:navigate
+                        class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
+                            {{ $settingsActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
+                        <flux:icon.cog-6-tooth
+                            class="size-4 shrink-0 {{ $settingsActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
+                        Settings
+                    </a>
+                    @endcan
+
+                    @canany(['translations.landing', 'translations.portal', 'translations.common'])
+                    @php $translationsActive = request()->routeIs('backoffice.translations.index'); @endphp
+                    <a href="{{ route('backoffice.translations.index') }}" wire:navigate
+                        class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
+                            {{ $translationsActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
+                        <flux:icon.chat-bubble-left-right
+                            class="size-4 shrink-0 {{ $translationsActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
+                        Translations
+                    </a>
+                    @endcanany
+
                 </nav>
 
                 <div class="shrink-0 border-t border-zinc-200 dark:border-white/6 pt-2">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit"
-                            class="flex w-full items-center gap-3 border-l-2 border-transparent px-4 py-2.5 text-sm text-zinc-400 dark:text-white/30 transition-colors hover:border-red-500/40 hover:bg-red-500/5 hover:text-red-400">
-                            <flux:icon.arrow-right-start-on-rectangle class="size-4 shrink-0" />
+                            class="flex w-full items-center gap-3 border-s-2 border-transparent px-4 py-2.5 text-sm text-zinc-400 dark:text-white/30 transition-colors hover:border-red-500/40 hover:bg-red-500/5 hover:text-red-400">
+                            <flux:icon.arrow-right-start-on-rectangle class="size-4 shrink-0 rtl:rotate-180" />
                             Sign out
                         </button>
                     </form>

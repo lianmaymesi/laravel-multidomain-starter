@@ -49,7 +49,7 @@
                 <p class="text-xs font-medium text-zinc-400 dark:text-white/30 uppercase tracking-wider">Exported</p>
                 <p class="text-xs font-medium text-zinc-400 dark:text-white/30 uppercase tracking-wider">Expires</p>
                 <p class="text-xs font-medium text-zinc-400 dark:text-white/30 uppercase tracking-wider">Last downloaded</p>
-                <p class="text-xs font-medium text-zinc-400 dark:text-white/30 uppercase tracking-wider w-28 text-right">Action</p>
+                <p class="text-xs font-medium text-zinc-400 dark:text-white/30 uppercase tracking-wider w-28 text-end">Action</p>
             </div>
 
             @foreach ($exports as $export)
@@ -117,9 +117,9 @@
                             Cancel
                         </flux:button>
                         @elseif ($isProcessing)
-                        <span class="text-xs text-blue-500 dark:text-blue-400/60 pr-1">Processing…</span>
+                        <span class="text-xs text-blue-500 dark:text-blue-400/60 pe-1">Processing…</span>
                         @else
-                        <span class="text-xs text-zinc-300 dark:text-white/20 pr-1">—</span>
+                        <span class="text-xs text-zinc-300 dark:text-white/20 pe-1">—</span>
                         @endif
                     </div>
 

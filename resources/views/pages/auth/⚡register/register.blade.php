@@ -2,7 +2,7 @@
 
     {{-- ── Brand panel ──────────────────────────────────────────────────── --}}
     <div
-        class="relative hidden overflow-hidden border-r border-zinc-200 dark:border-white/6 bg-blue-950 lg:flex lg:w-[38%] lg:flex-col">
+        class="relative hidden overflow-hidden border-e border-zinc-200 dark:border-white/6 bg-blue-950 lg:flex lg:w-[38%] lg:flex-col">
 
         {{-- Subtle grid overlay --}}
         <div class="absolute inset-0"
@@ -62,7 +62,7 @@
             <div class="w-full max-w-md">
 
                 {{-- Heading block with left accent --}}
-                <div class="mb-7 border-l-[3px] border-blue-500 pl-4">
+                <div class="mb-7 border-s-[3px] border-blue-500 ps-4">
                     <p class="mb-1 text-[10px] tracking-[0.3em] uppercase text-blue-500 dark:text-blue-400/55">New
                         account</p>
                     <h1 class="text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">Create account</h1>
