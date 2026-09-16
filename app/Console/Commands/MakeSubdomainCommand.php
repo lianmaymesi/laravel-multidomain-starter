@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Role;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use Spatie\Permission\Models\Role;
 
 use function Laravel\Prompts\confirm;
 use function Laravel\Prompts\select;
@@ -126,7 +126,10 @@ class MakeSubdomainCommand extends Command
             $created[] = $this->putFromStub("{$stubs}/error-page.stub", resource_path("views/errors/{$name}/page.blade.php"), $replacements);
         }
 
-        $role = Role::firstOrCreate(['name' => $name, 'guard_name' => 'web']);
+        $role = Role::firstOrCreate(
+            ['slug' => $name, 'guard_name' => 'web'],
+            ['name' => Str::headline($name)],
+        );
 
         $fileRows = collect($created)
             ->map(fn (string $path) => str_replace(base_path().DIRECTORY_SEPARATOR, '', $path))

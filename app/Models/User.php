@@ -149,6 +149,17 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Portal identity lives in the role's `slug` (see App\Models\Role),
+     * decoupled from the Title Case `name` shown in the UI. Spatie's own
+     * hasRole() only matches `name`, so portal/system-role checks go
+     * through this instead.
+     */
+    public function hasRoleSlug(string $slug): bool
+    {
+        return $this->roles->contains('slug', $slug);
+    }
+
+    /**
      * Send the user to their portal dashboard after login. A role sharing
      * its name with a configured subdomain (e.g. "blog", created via
      * `make:subdomain`) wins over the legacy app/backoffice privilege split.
@@ -161,7 +172,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function redirect(): string
     {
-        $portal = collect($this->getRoleNames())
+        $portal = $this->roles->pluck('slug')
             ->reject(fn (string $role) => in_array($role, ['app', 'backoffice'], true))
             ->first(fn (string $role) => array_key_exists($role, config('multidomain.sub_domains', [])) && Route::has("{$role}.dashboard"));
 

@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Role;
+use App\Models\User;
 use Tests\TestCase;
 
 /*
@@ -46,4 +48,29 @@ expect()->extend('toBeOne', function () {
 function something()
 {
     // ..
+}
+
+function staffUser(): User
+{
+    return User::factory()->create([
+        'privilege' => 'staff',
+        'email_verified_at' => now(),
+        'phone_verified_at' => now(),
+    ]);
+}
+
+function superAdminActor(): User
+{
+    $user = staffUser();
+    $user->assignRole(Role::where('slug', Role::SUPER_ADMIN)->firstOrFail());
+
+    return $user;
+}
+
+function adminActor(): User
+{
+    $user = staffUser();
+    $user->assignRole(Role::where('slug', Role::ADMIN)->firstOrFail());
+
+    return $user;
 }

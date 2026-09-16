@@ -1,8 +1,8 @@
 <?php
 
+use App\Models\Role;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
-use Spatie\Permission\Models\Role;
 use Symfony\Component\Console\Output\NullOutput;
 
 use function Termwind\renderUsing;
@@ -26,7 +26,8 @@ afterEach(function () {
         base_path('routes/blog.php'),
     ]);
     File::deleteDirectory(resource_path('views/pages/blog'));
-    Role::where('name', 'blog')->delete();
+    File::deleteDirectory(resource_path('views/errors/blog'));
+    Role::where('slug', 'blog')->delete();
 });
 
 it('scaffolds a new subdomain portal', function () {
@@ -34,6 +35,7 @@ it('scaffolds a new subdomain portal', function () {
         ->expectsQuestion('Who should be able to access this portal?', 'auth')
         ->expectsQuestion('Access level', 'user')
         ->expectsConfirmation('Should visitors be able to sign up for "blog" themselves, from the public register page?', 'no')
+        ->expectsQuestion('Error & maintenance page style for this portal?', 'shared')
         ->assertSuccessful();
 
     expect(resource_path('css/blog.css'))->toBeFile()
@@ -44,7 +46,8 @@ it('scaffolds a new subdomain portal', function () {
         ->and(resource_path('views/pages/blog/⚡dashboard/dashboard.blade.php'))->toBeFile();
 
     expect(File::get(base_path('routes/blog.php')))->toContain('pages::blog.dashboard')
-        ->and(Role::where('name', 'blog')->where('guard_name', 'web')->exists())->toBeTrue();
+        ->and(Role::where('slug', 'blog')->where('guard_name', 'web')->exists())->toBeTrue()
+        ->and(Role::where('slug', 'blog')->value('name'))->toBe('Blog');
 
     // The registration guard is always baked into the dashboard stub —
     // visibility is decided at runtime by the (unpopulated) config array.
@@ -58,9 +61,21 @@ it('opts a subdomain into public self-registration', function () {
         ->expectsQuestion('Access level', 'user')
         ->expectsConfirmation('Should visitors be able to sign up for "blog" themselves, from the public register page?', 'yes')
         ->expectsQuestion('What should this portal be called on the sign-up form?', "Blog & Vlog Writer's Club")
+        ->expectsQuestion('Error & maintenance page style for this portal?', 'shared')
         ->assertSuccessful();
 
     expect(resource_path('views/pages/blog/⚡dashboard/dashboard.blade.php'))->toBeFile();
+});
+
+it('scaffolds its own error page style when chosen', function () {
+    $this->artisan('make:subdomain', ['name' => 'blog'])
+        ->expectsQuestion('Who should be able to access this portal?', 'auth')
+        ->expectsQuestion('Access level', 'user')
+        ->expectsConfirmation('Should visitors be able to sign up for "blog" themselves, from the public register page?', 'no')
+        ->expectsQuestion('Error & maintenance page style for this portal?', 'own')
+        ->assertSuccessful();
+
+    expect(resource_path('views/errors/blog/page.blade.php'))->toBeFile();
 });
 
 it('rejects an invalid subdomain name', function () {

@@ -8,7 +8,9 @@
             <flux:heading size="xl">Permissions</flux:heading>
             <flux:text class="mt-1 text-zinc-500 dark:text-white/50">Manage the individual permissions roles can be granted.</flux:text>
         </div>
+        @can('permissions.create')
         <flux:button variant="primary" icon="plus" wire:click="create">New Permission</flux:button>
+        @endcan
     </div>
 
     @if (session('status'))
@@ -32,13 +34,17 @@
                     <flux:table.cell class="text-zinc-500 dark:text-white/50">{{ $permission->roles_count }}</flux:table.cell>
                     <flux:table.cell align="end">
                         <div class="flex justify-end gap-2">
+                            @can('permissions.edit')
                             <flux:button size="xs" variant="ghost" icon="pencil-square" wire:click="edit({{ $permission->id }})">
                                 Edit
                             </flux:button>
+                            @endcan
+                            @can('permissions.delete')
                             <flux:button size="xs" variant="ghost" icon="trash" wire:click="confirmDelete({{ $permission->id }})"
                                 class="text-red-400! hover:text-red-300!">
                                 Delete
                             </flux:button>
+                            @endcan
                         </div>
                     </flux:table.cell>
                 </flux:table.row>

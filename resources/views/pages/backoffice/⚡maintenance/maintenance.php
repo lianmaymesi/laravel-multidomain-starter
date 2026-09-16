@@ -2,6 +2,7 @@
 
 use App\Models\PortalSetting;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -12,6 +13,8 @@ new #[Layout('layouts.backoffice')] class extends Component
 
     public function mount(): void
     {
+        abort_unless(Gate::allows('maintenance.view'), 403);
+
         foreach ($this->portals() as $portal) {
             $this->messages[$portal] = PortalSetting::messageFor($portal) ?? '';
         }
@@ -33,6 +36,7 @@ new #[Layout('layouts.backoffice')] class extends Component
 
     public function toggle(string $portal): void
     {
+        abort_unless(Gate::allows('maintenance.update'), 403);
         abort_unless(in_array($portal, $this->portals(), true), 403);
 
         $setting = PortalSetting::firstOrNew(['portal' => $portal]);
@@ -47,6 +51,7 @@ new #[Layout('layouts.backoffice')] class extends Component
 
     public function saveMessage(string $portal): void
     {
+        abort_unless(Gate::allows('maintenance.update'), 403);
         abort_unless(in_array($portal, $this->portals(), true), 403);
 
         $setting = PortalSetting::firstOrNew(['portal' => $portal]);

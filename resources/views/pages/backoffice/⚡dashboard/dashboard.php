@@ -1,10 +1,10 @@
 <?php
 
+use App\Models\Role;
 use App\Models\User;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
-use Livewire\Attributes\Layout;
 
 new #[Layout('layouts.backoffice')] class extends Component
 {

@@ -30,9 +30,16 @@
                         {{ $setting?->maintenance_mode ? 'Currently under maintenance.' : 'Currently online.' }}
                     </flux:text>
                 </div>
+                @can('maintenance.update')
                 <flux:switch :checked="(bool) $setting?->maintenance_mode" wire:click="toggle('{{ $portal }}')" />
+                @else
+                <flux:badge size="sm" :color="$setting?->maintenance_mode ? 'amber' : 'zinc'">
+                    {{ $setting?->maintenance_mode ? 'Under maintenance' : 'Online' }}
+                </flux:badge>
+                @endcan
             </div>
 
+            @can('maintenance.update')
             <form wire:submit="saveMessage('{{ $portal }}')" class="flex items-end gap-3">
                 <flux:field class="flex-1">
                     <flux:label>Maintenance message (optional)</flux:label>
@@ -40,6 +47,7 @@
                 </flux:field>
                 <flux:button type="submit" variant="ghost">Save message</flux:button>
             </form>
+            @endcan
         </flux:card>
         @endforeach
     </div>

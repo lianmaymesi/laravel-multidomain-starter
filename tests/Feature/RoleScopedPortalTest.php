@@ -1,9 +1,9 @@
 <?php
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Route;
-use Spatie\Permission\Models\Role;
 
 uses(RefreshDatabase::class);
 
@@ -46,6 +46,15 @@ it('bounces a user without the matching role away from a role-scoped portal', fu
     $this->actingAs($user)
         ->get(route('blog.dashboard'))
         ->assertRedirect($user->redirect());
+});
+
+it('lets Super Admin into a role-scoped portal without holding that role', function () {
+    $user = roleScopedPortalUser();
+    $user->assignRole(Role::create(['name' => 'Super Admin', 'slug' => Role::SUPER_ADMIN, 'guard_name' => 'web']));
+
+    $this->actingAs($user)
+        ->get(route('blog.dashboard'))
+        ->assertSuccessful();
 });
 
 it('sends a user with a subdomain role to that portal after login', function () {

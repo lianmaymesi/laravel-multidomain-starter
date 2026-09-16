@@ -2,12 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 class AdminUserSeeder extends Seeder
 {
@@ -29,10 +28,7 @@ class AdminUserSeeder extends Seeder
             ]
         );
 
-        $role = Role::firstOrCreate(['name' => 'Super Admin', 'guard_name' => 'web']);
-        $role->syncPermissions(Permission::where('guard_name', 'web')->get());
-
-        $admin->syncRoles([$role]);
+        $admin->syncRoles([Role::where('slug', Role::SUPER_ADMIN)->firstOrFail()]);
 
         $this->command?->info("Admin user ready: {$admin->email}");
     }

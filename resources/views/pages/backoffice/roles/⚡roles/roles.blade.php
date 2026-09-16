@@ -8,7 +8,9 @@
             <flux:heading size="xl">Roles</flux:heading>
             <flux:text class="mt-1 text-zinc-500 dark:text-white/50">Manage roles and the permissions assigned to them.</flux:text>
         </div>
+        @can('roles.create')
         <flux:button variant="primary" icon="plus" wire:click="create">New Role</flux:button>
+        @endcan
     </div>
 
     @if (session('status'))
@@ -37,7 +39,9 @@
                 <flux:table.row wire:key="role-{{ $role->id }}">
                     <flux:table.cell class="font-medium text-zinc-900 dark:text-white">
                         {{ $role->name }}
-                        @if ($this->isProtected($role->name))
+                        @if ($role->locked)
+                        <flux:badge size="sm" color="amber" class="ml-2">System</flux:badge>
+                        @elseif ($role->isPortalRole())
                         <flux:badge size="sm" color="zinc" class="ml-2">Portal</flux:badge>
                         @endif
                     </flux:table.cell>
@@ -45,15 +49,28 @@
                     <flux:table.cell class="text-zinc-500 dark:text-white/50">{{ $role->users_count }}</flux:table.cell>
                     <flux:table.cell align="end">
                         <div class="flex justify-end gap-2">
+                            @can('roles.assign-permissions')
+                            @unless ($role->locked || ($role->isPortalRole() && ! $this->viewerIsSuperAdmin()))
+                            <flux:button size="xs" variant="ghost" icon="key" :href="route('backoffice.roles.permissions', $role)" wire:navigate>
+                                Permissions
+                            </flux:button>
+                            @endunless
+                            @endcan
+                            @can('roles.edit')
+                            @unless ($role->locked || ($role->isPortalRole() && ! $this->viewerIsSuperAdmin()))
                             <flux:button size="xs" variant="ghost" icon="pencil-square" wire:click="edit({{ $role->id }})">
                                 Edit
                             </flux:button>
-                            @unless ($this->isProtected($role->name))
+                            @endunless
+                            @endcan
+                            @can('roles.delete')
+                            @unless ($role->locked || ($role->isPortalRole() && ! $this->viewerIsSuperAdmin()))
                             <flux:button size="xs" variant="ghost" icon="trash" wire:click="confirmDelete({{ $role->id }})"
                                 class="text-red-400! hover:text-red-300!">
                                 Delete
                             </flux:button>
                             @endunless
+                            @endcan
                         </div>
                     </flux:table.cell>
                 </flux:table.row>
@@ -77,17 +94,6 @@
                 <flux:label>Name</flux:label>
                 <flux:input wire:model="name" placeholder="e.g. editor" />
                 <flux:error name="name" />
-            </flux:field>
-
-            <flux:field>
-                <flux:label>Permissions</flux:label>
-                <div class="max-h-64 space-y-2 overflow-y-auto rounded-lg border border-zinc-200 dark:border-white/10 p-3">
-                    @forelse ($this->permissions() as $permission)
-                    <flux:checkbox wire:model="selectedPermissions" value="{{ $permission->id }}" label="{{ $permission->name }}" />
-                    @empty
-                    <flux:text class="text-sm text-zinc-500 dark:text-white/40">No permissions yet.</flux:text>
-                    @endforelse
-                </div>
             </flux:field>
 
             <div class="flex justify-end gap-2">
