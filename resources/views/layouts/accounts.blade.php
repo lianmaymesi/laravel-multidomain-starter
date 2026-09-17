@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ ($title ?? 'Account') . ' · ' . config('app.name') }}</title>
+    <title>{{ ($title ?? __('Account')) . ' · ' . config('app.name') }}</title>
     @vite(['resources/css/account.css', 'resources/js/app.js'])
     @fluxAppearance
 </head>
@@ -19,7 +19,7 @@
                 <img src="{{ Vite::asset('resources/assets/images/logo.svg') }}" alt="{{ config('app.name') }}"
                     class="h-6 w-auto" />
                 <div class="h-4 w-px bg-zinc-200 dark:bg-white/10"></div>
-                <span class="text-[11px] font-medium tracking-[0.12em] uppercase text-zinc-400 dark:text-white/30">Account</span>
+                <span class="text-[11px] font-medium tracking-[0.12em] uppercase text-zinc-400 dark:text-white/30">{{ __('Account') }}</span>
             </div>
 
             <div class="flex items-center gap-3">
@@ -28,7 +28,7 @@
                 <a href="{{ auth()->user()->redirect() }}"
                     class="hidden items-center gap-2 border border-zinc-200 dark:border-white/10 px-3 py-1.5 text-xs text-zinc-500 dark:text-white/40 transition-colors hover:bg-zinc-100 dark:hover:bg-white/5 hover:text-zinc-700 dark:hover:text-white/70 sm:flex">
                     <flux:icon.arrow-left class="size-3 rtl:rotate-180" />
-                    Back to app
+                    {{ __('Back to app') }}
                 </a>
                 <flux:avatar size="sm" name="{{ auth()->user()->name }}" />
                 @endauth
@@ -43,12 +43,12 @@
             <nav class="flex">
                 @php
                 $mobileItems = [
-                ['label' => 'Profile', 'route' => 'account.index'],
-                ['label' => 'Security', 'route' => 'account.security'],
-                ['label' => '2FA', 'route' => 'account.two-factor-setup'],
-                ['label' => 'Export', 'route' => 'account.export'],
-                ['label' => 'Settings', 'route' => 'account.settings'],
-                ['label' => 'Settings', 'route' => 'account.settings'],
+                ['label' => __('Profile'), 'route' => 'account.index'],
+                ['label' => __('Security'), 'route' => 'account.security'],
+                ['label' => __('2FA'), 'route' => 'account.two-factor-setup'],
+                ['label' => __('Export'), 'route' => 'account.export'],
+                ['label' => __('Settings'), 'route' => 'account.settings'],
+                ['label' => __('Settings'), 'route' => 'account.settings'],
                 ];
                 @endphp
                 @foreach ($mobileItems as $item)
@@ -83,7 +83,7 @@
                             {{ $profileActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.user
                             class="size-4 shrink-0 {{ $profileActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        Profile
+                        {{ __('Profile') }}
                     </a>
 
                     @if (Route::has('account.security'))
@@ -93,14 +93,14 @@
                                 {{ $secActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.lock-closed
                             class="size-4 shrink-0 {{ $secActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        Security
+                        {{ __('Security') }}
                     </a>
                     @else
                     <span
                         class="flex cursor-not-allowed items-center gap-3 border-s-2 border-transparent px-4 py-2.5 text-sm text-zinc-300 dark:text-white/20">
                         <flux:icon.lock-closed class="size-4 shrink-0 text-zinc-300 dark:text-white/15" />
-                        Security
-                        <span class="ms-auto text-[10px] text-zinc-300 dark:text-white/20">Soon</span>
+                        {{ __('Security') }}
+                        <span class="ms-auto text-[10px] text-zinc-300 dark:text-white/20">{{ __('Soon') }}</span>
                     </span>
                     @endif
 
@@ -110,7 +110,7 @@
                             {{ $tfaActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.shield-check
                             class="size-4 shrink-0 {{ $tfaActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        Two-Factor
+                        {{ __('Two-Factor') }}
                     </a>
 
                     @if (Route::has('account.export'))
@@ -120,7 +120,7 @@
                                 {{ $exportActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.arrow-down-tray
                             class="size-4 shrink-0 {{ $exportActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        Export Data
+                        {{ __('Export Data') }}
                     </a>
                     @endif
 
@@ -131,14 +131,14 @@
                                 {{ $settActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.cog-6-tooth
                             class="size-4 shrink-0 {{ $settActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        Settings
+                        {{ __('Settings') }}
                     </a>
                     @else
                     <span
                         class="flex cursor-not-allowed items-center gap-3 border-s-2 border-transparent px-4 py-2.5 text-sm text-zinc-300 dark:text-white/20">
                         <flux:icon.cog-6-tooth class="size-4 shrink-0 text-zinc-300 dark:text-white/15" />
-                        Settings
-                        <span class="ms-auto text-[10px] text-zinc-300 dark:text-white/20">Soon</span>
+                        {{ __('Settings') }}
+                        <span class="ms-auto text-[10px] text-zinc-300 dark:text-white/20">{{ __('Soon') }}</span>
                     </span>
                     @endif
 
@@ -150,7 +150,7 @@
                         <button type="submit"
                             class="flex w-full items-center gap-3 border-s-2 border-transparent px-4 py-2.5 text-sm text-zinc-400 dark:text-white/30 transition-colors hover:border-red-500/40 hover:bg-red-500/5 hover:text-red-400">
                             <flux:icon.arrow-right-start-on-rectangle class="size-4 shrink-0 rtl:rotate-180" />
-                            Sign out
+                            {{ __('Sign out') }}
                         </button>
                     </form>
                 </div>

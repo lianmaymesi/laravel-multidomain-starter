@@ -16,20 +16,20 @@ use Livewire\Component;
 
 new #[Layout('layouts.auth')] class extends Component
 {
-    #[Validate('required', message: 'Name is required')]
-    #[Validate('string', message: 'Name must be a alphabetical letters')]
-    #[Validate('max:255', message: 'Name is too long')]
+    #[Validate('required')]
+    #[Validate('string')]
+    #[Validate('max:255')]
     public string $name = '';
 
-    #[Validate('required', message: 'Email is required')]
-    #[Validate('email', message: 'Invalid email')]
-    #[Validate('max:255', message: 'Email is too long')]
-    #[Validate('unique:users,email', message: 'This email is already exists')]
+    #[Validate('required')]
+    #[Validate('email')]
+    #[Validate('max:255')]
+    #[Validate('unique:users,email')]
     public string $email = '';
 
     public string $password = '';
 
-    #[Validate('required', message: 'Confirmed Password is required')]
+    #[Validate('required')]
     public string $password_confirmation = '';
 
     public string $phone = '';
@@ -64,14 +64,22 @@ new #[Layout('layouts.auth')] class extends Component
     protected function messages()
     {
         return [
-            'password.required' => 'Password is required',
-            'password.confirmed' => 'Passwords do not match',
-            'password.letters' => 'The Password must contain at least one letter.',
-            'password.mixed' => 'The Password must contain at least one uppercase and one lowercase letter.',
-            'password.numbers' => 'The Password must contain at least one number.',
-            'password.symbols' => 'The Password must contain at least one special character.',
-            'password.uncompromised' => 'Please chose a stronger password.',
-            'phone.required' => 'Phone number is required',
+            'name.required' => __('Name is required'),
+            'name.string' => __('Name must be a alphabetical letters'),
+            'name.max' => __('Name is too long'),
+            'email.required' => __('Email is required'),
+            'email.email' => __('Invalid email'),
+            'email.max' => __('Email is too long'),
+            'email.unique' => __('This email is already exists'),
+            'password_confirmation.required' => __('Confirmed Password is required'),
+            'password.required' => __('Password is required'),
+            'password.confirmed' => __('Passwords do not match'),
+            'password.letters' => __('The Password must contain at least one letter.'),
+            'password.mixed' => __('The Password must contain at least one uppercase and one lowercase letter.'),
+            'password.numbers' => __('The Password must contain at least one number.'),
+            'password.symbols' => __('The Password must contain at least one special character.'),
+            'password.uncompromised' => __('Please chose a stronger password.'),
+            'phone.required' => __('Phone number is required'),
         ];
     }
 

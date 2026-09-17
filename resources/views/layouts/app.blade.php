@@ -22,7 +22,7 @@
                 <img src="{{ Vite::asset('resources/assets/images/logo.svg') }}" alt="{{ config('app.name') }}"
                     class="h-6 w-auto" />
                 <div class="h-4 w-px bg-zinc-200 dark:bg-white/10"></div>
-                <span class="text-[11px] font-medium tracking-[0.12em] uppercase text-zinc-400 dark:text-white/30">App</span>
+                <span class="text-[11px] font-medium tracking-[0.12em] uppercase text-zinc-400 dark:text-white/30">{{ __('App') }}</span>
             </div>
 
             <div class="flex items-center gap-2">
@@ -46,18 +46,18 @@
                         </div>
                         <flux:menu.separator class="dark:bg-white/10!" />
                         <flux:menu.item icon="user-circle" href="{{ route('account.index') }}" class="dark:data-active:bg-white/8!">
-                            Account
+                            {{ __('Account') }}
                         </flux:menu.item>
                         @if (Route::has('account.security'))
                         <flux:menu.item icon="lock-closed" href="{{ route('account.security') }}" class="dark:data-active:bg-white/8!">
-                            Security
+                            {{ __('Security') }}
                         </flux:menu.item>
                         @endif
                         <flux:menu.separator class="dark:bg-white/10!" />
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" variant="danger">
-                                Logout
+                                {{ __('Logout') }}
                             </flux:menu.item>
                         </form>
                     </flux:menu>
@@ -74,10 +74,10 @@
             <nav class="flex">
                 @php
                 $mobileItems = [
-                ['label' => 'Dashboard', 'route' => 'app.dashboard'],
-                ['label' => 'Projects', 'route' => 'app.projects.index'],
-                ['label' => 'Billing', 'route' => 'app.billing.index'],
-                ['label' => 'Reports', 'route' => 'app.reports.index'],
+                ['label' => __('Dashboard'), 'route' => 'app.dashboard'],
+                ['label' => __('Projects'), 'route' => 'app.projects.index'],
+                ['label' => __('Billing'), 'route' => 'app.billing.index'],
+                ['label' => __('Reports'), 'route' => 'app.reports.index'],
                 ];
                 @endphp
                 @foreach ($mobileItems as $item)
@@ -112,11 +112,11 @@
                             {{ $dashboardActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.chart-bar
                             class="size-4 shrink-0 {{ $dashboardActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        Dashboard
+                        {{ __('Dashboard') }}
                     </a>
 
                     <div class="mt-4 mb-1 px-4 text-[10px] font-medium tracking-[0.12em] uppercase text-zinc-300 dark:text-white/20">
-                        Workspace
+                        {{ __('Workspace') }}
                     </div>
 
                     @if (Route::has('app.projects.index'))
@@ -126,14 +126,14 @@
                                 {{ $projectsActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.folder
                             class="size-4 shrink-0 {{ $projectsActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        Projects
+                        {{ __('Projects') }}
                     </a>
                     @else
                     <span
                         class="flex cursor-not-allowed items-center gap-3 border-s-2 border-transparent px-4 py-2.5 text-sm text-zinc-300 dark:text-white/20">
                         <flux:icon.folder class="size-4 shrink-0 text-zinc-300 dark:text-white/15" />
-                        Projects
-                        <span class="ms-auto text-[10px] text-zinc-300 dark:text-white/20">Soon</span>
+                        {{ __('Projects') }}
+                        <span class="ms-auto text-[10px] text-zinc-300 dark:text-white/20">{{ __('Soon') }}</span>
                     </span>
                     @endif
 
@@ -144,14 +144,14 @@
                                 {{ $billingActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.credit-card
                             class="size-4 shrink-0 {{ $billingActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        Billing
+                        {{ __('Billing') }}
                     </a>
                     @else
                     <span
                         class="flex cursor-not-allowed items-center gap-3 border-s-2 border-transparent px-4 py-2.5 text-sm text-zinc-300 dark:text-white/20">
                         <flux:icon.credit-card class="size-4 shrink-0 text-zinc-300 dark:text-white/15" />
-                        Billing
-                        <span class="ms-auto text-[10px] text-zinc-300 dark:text-white/20">Soon</span>
+                        {{ __('Billing') }}
+                        <span class="ms-auto text-[10px] text-zinc-300 dark:text-white/20">{{ __('Soon') }}</span>
                     </span>
                     @endif
 
@@ -162,14 +162,14 @@
                                 {{ $reportsActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.document-chart-bar
                             class="size-4 shrink-0 {{ $reportsActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        Reports
+                        {{ __('Reports') }}
                     </a>
                     @else
                     <span
                         class="flex cursor-not-allowed items-center gap-3 border-s-2 border-transparent px-4 py-2.5 text-sm text-zinc-300 dark:text-white/20">
                         <flux:icon.document-chart-bar class="size-4 shrink-0 text-zinc-300 dark:text-white/15" />
-                        Reports
-                        <span class="ms-auto text-[10px] text-zinc-300 dark:text-white/20">Soon</span>
+                        {{ __('Reports') }}
+                        <span class="ms-auto text-[10px] text-zinc-300 dark:text-white/20">{{ __('Soon') }}</span>
                     </span>
                     @endif
 
@@ -181,7 +181,7 @@
                         <button type="submit"
                             class="flex w-full items-center gap-3 border-s-2 border-transparent px-4 py-2.5 text-sm text-zinc-400 dark:text-white/30 transition-colors hover:border-red-500/40 hover:bg-red-500/5 hover:text-red-400">
                             <flux:icon.arrow-right-start-on-rectangle class="size-4 shrink-0 rtl:rotate-180" />
-                            Sign out
+                            {{ __('Sign out') }}
                         </button>
                     </form>
                 </div>

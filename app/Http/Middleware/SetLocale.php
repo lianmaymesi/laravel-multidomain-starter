@@ -2,11 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\LocaleSetting;
+use App\Models\AppSetting;
 use App\Services\LanguageService;
 use App\Support\PortalResolver;
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -46,6 +47,7 @@ class SetLocale
         // negotiation is pointless — force it and move on.
         if ($active->count() < 2) {
             LaravelLocalization::setLocale($active->first()->code);
+            Carbon::setLocale($active->first()->code);
 
             return $next($request);
         }
@@ -54,6 +56,7 @@ class SetLocale
         $code = $this->resolve($request, $codes);
 
         LaravelLocalization::setLocale($code);
+        Carbon::setLocale($code);
         $request->session()->put('locale', $code);
 
         return $next($request);
@@ -87,7 +90,7 @@ class SetLocale
             // versa. `?lang=`/the path segment never apply at all on
             // app/account/backoffice (see above) — this whole branch is
             // landing/auth only.
-            if (LocaleSetting::isPathMode()) {
+            if (AppSetting::isPathMode()) {
                 // routes/web.php already registered this request's routes
                 // under this same prefix, so honoring anything else here
                 // would desync app()->getLocale() from the URL the visitor

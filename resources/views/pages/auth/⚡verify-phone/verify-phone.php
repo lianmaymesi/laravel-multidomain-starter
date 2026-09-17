@@ -11,9 +11,9 @@ use Livewire\Component;
 
 new #[Layout('layouts.auth')] class extends Component
 {
-    #[Validate('required', message: 'Code is required')]
-    #[Validate('numeric', message: 'Invalid code')]
-    #[Validate('digits:6', message: 'Code must be 6 digits')]
+    #[Validate('required')]
+    #[Validate('numeric')]
+    #[Validate('digits:6')]
     public int $code;
 
     /** Remaining seconds before user can resend */
@@ -30,10 +30,22 @@ new #[Layout('layouts.auth')] class extends Component
 
     public string $newCountryCode = '+91';
 
-    #[Validate('required', message: 'Phone number is required')]
-    #[Validate('numeric', message: 'Invalid phone number')]
-    #[Validate('digits:10', message: 'Invalid phone number')]
+    #[Validate('required')]
+    #[Validate('numeric')]
+    #[Validate('digits:10')]
     public string $newPhone = '';
+
+    protected function messages()
+    {
+        return [
+            'code.required' => __('Code is required'),
+            'code.numeric' => __('Invalid code'),
+            'code.digits' => __('Code must be 6 digits'),
+            'newPhone.required' => __('Phone number is required'),
+            'newPhone.numeric' => __('Invalid phone number'),
+            'newPhone.digits' => __('Invalid phone number'),
+        ];
+    }
 
     public function mount(OtpService $otpService): void
     {
@@ -74,7 +86,7 @@ new #[Layout('layouts.auth')] class extends Component
     {
         if ($this->resendAttemptsLeft <= 0) {
             throw ValidationException::withMessages([
-                'code' => 'You have reached the maximum number of resend attempts.',
+                'code' => __('You have reached the maximum number of resend attempts.'),
             ]);
         }
 
@@ -88,7 +100,7 @@ new #[Layout('layouts.auth')] class extends Component
         $this->resendAttemptsLeft--;
         $this->resendCooldown = 60;
 
-        session()->flash('status', 'A new code has been sent to your phone.');
+        session()->flash('status', __('A new code has been sent to your phone.'));
     }
 
     public function startEdit(): void
@@ -143,6 +155,6 @@ new #[Layout('layouts.auth')] class extends Component
         $this->editingPhone = false;
         $this->reset(['newCountryCode', 'newPhone']);
 
-        session()->flash('status', 'Phone updated. A new code has been sent.');
+        session()->flash('status', __('Phone updated. A new code has been sent.'));
     }
 };

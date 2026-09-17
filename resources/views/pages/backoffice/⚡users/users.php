@@ -122,6 +122,6 @@ new #[Layout('layouts.backoffice')] class extends Component
 
         $this->showModal = false;
 
-        session()->flash('status', 'Roles updated.');
+        session()->flash('status', __('Roles updated.'));
     }
 };

@@ -1,15 +1,15 @@
-@php $title = 'Roles'; @endphp
+@php $title = __('Roles'); @endphp
 
 <div class="space-y-8">
 
     {{-- Header --}}
     <div class="flex items-center justify-between">
         <div>
-            <flux:heading size="xl">Roles</flux:heading>
-            <flux:text class="mt-1 text-zinc-500 dark:text-white/50">Manage roles and the permissions assigned to them.</flux:text>
+            <flux:heading size="xl">{{ __('Roles') }}</flux:heading>
+            <flux:text class="mt-1 text-zinc-500 dark:text-white/50">{{ __('Manage roles and the permissions assigned to them.') }}</flux:text>
         </div>
         @can('roles.create')
-        <flux:button variant="primary" icon="plus" wire:click="create">New Role</flux:button>
+        <flux:button variant="primary" icon="plus" wire:click="create">{{ __('New Role') }}</flux:button>
         @endcan
     </div>
 
@@ -28,9 +28,9 @@
     <flux:card>
         <flux:table>
             <flux:table.columns>
-                <flux:table.column>Name</flux:table.column>
-                <flux:table.column>Permissions</flux:table.column>
-                <flux:table.column>Users</flux:table.column>
+                <flux:table.column>{{ __('Name') }}</flux:table.column>
+                <flux:table.column>{{ __('Permissions') }}</flux:table.column>
+                <flux:table.column>{{ __('Users') }}</flux:table.column>
                 <flux:table.column></flux:table.column>
             </flux:table.columns>
 
@@ -40,9 +40,9 @@
                     <flux:table.cell class="font-medium text-zinc-900 dark:text-white">
                         {{ $role->name }}
                         @if ($role->locked)
-                        <flux:badge size="sm" color="amber" class="ms-2">System</flux:badge>
+                        <flux:badge size="sm" color="amber" class="ms-2">{{ __('System') }}</flux:badge>
                         @elseif ($role->isPortalRole())
-                        <flux:badge size="sm" color="zinc" class="ms-2">Portal</flux:badge>
+                        <flux:badge size="sm" color="zinc" class="ms-2">{{ __('Portal') }}</flux:badge>
                         @endif
                     </flux:table.cell>
                     <flux:table.cell class="text-zinc-500 dark:text-white/50">{{ $role->permissions_count }}</flux:table.cell>
@@ -55,14 +55,14 @@
                             @can('roles.assign-permissions')
                             @unless ($role->locked || ($role->isPortalRole() && ! $this->viewerIsSuperAdmin()))
                             <flux:button size="xs" variant="ghost" icon="key" :href="route('backoffice.roles.permissions', $role)" wire:navigate>
-                                Permissions
+                                {{ __('Permissions') }}
                             </flux:button>
                             @endunless
                             @endcan
                             @can('roles.edit')
                             @unless ($role->locked || ($role->isPortalRole() && ! $this->viewerIsSuperAdmin()))
                             <flux:button size="xs" variant="ghost" icon="pencil-square" wire:click="edit({{ $role->id }})">
-                                Edit
+                                {{ __('Edit') }}
                             </flux:button>
                             @endunless
                             @endcan
@@ -70,7 +70,7 @@
                             @unless ($role->locked || ($role->isPortalRole() && ! $this->viewerIsSuperAdmin()))
                             <flux:button size="xs" variant="ghost" icon="trash" wire:click="confirmDelete({{ $role->id }})"
                                 class="text-red-400! hover:text-red-300!">
-                                Delete
+                                {{ __('Delete') }}
                             </flux:button>
                             @endunless
                             @endcan
@@ -79,7 +79,7 @@
                 </flux:table.row>
                 @empty
                 <flux:table.row>
-                    <flux:table.cell colspan="4" class="text-center text-zinc-500 dark:text-white/40">No roles yet.</flux:table.cell>
+                    <flux:table.cell colspan="4" class="text-center text-zinc-500 dark:text-white/40">{{ __('No roles yet.') }}</flux:table.cell>
                 </flux:table.row>
                 @endforelse
             </flux:table.rows>
@@ -90,18 +90,18 @@
     <flux:modal wire:model="showModal" class="md:w-[28rem]">
         <form wire:submit="save" class="space-y-6">
             <div>
-                <flux:heading size="lg">{{ $editingId ? 'Edit Role' : 'New Role' }}</flux:heading>
+                <flux:heading size="lg">{{ $editingId ? __('Edit Role') : __('New Role') }}</flux:heading>
             </div>
 
             <flux:field>
-                <flux:label>Name</flux:label>
-                <flux:input wire:model="name" placeholder="e.g. editor" />
+                <flux:label>{{ __('Name') }}</flux:label>
+                <flux:input wire:model="name" placeholder="{{ __('e.g. editor') }}" />
                 <flux:error name="name" />
             </flux:field>
 
             <div class="flex justify-end gap-2">
-                <flux:button type="button" variant="ghost" wire:click="$set('showModal', false)">Cancel</flux:button>
-                <flux:button type="submit" variant="primary">Save</flux:button>
+                <flux:button type="button" variant="ghost" wire:click="$set('showModal', false)">{{ __('Cancel') }}</flux:button>
+                <flux:button type="submit" variant="primary">{{ __('Save') }}</flux:button>
             </div>
         </form>
     </flux:modal>
@@ -110,12 +110,12 @@
     <flux:modal wire:model="confirmingDelete" class="md:w-96">
         <div class="space-y-6">
             <div>
-                <flux:heading size="lg">Delete role?</flux:heading>
-                <flux:text class="mt-2 text-zinc-500 dark:text-white/50">This cannot be undone. Users with this role will lose the permissions it grants.</flux:text>
+                <flux:heading size="lg">{{ __('Delete role?') }}</flux:heading>
+                <flux:text class="mt-2 text-zinc-500 dark:text-white/50">{{ __('This cannot be undone. Users with this role will lose the permissions it grants.') }}</flux:text>
             </div>
             <div class="flex justify-end gap-2">
-                <flux:button variant="ghost" wire:click="$set('confirmingDelete', false)">Cancel</flux:button>
-                <flux:button variant="danger" wire:click="delete">Delete</flux:button>
+                <flux:button variant="ghost" wire:click="$set('confirmingDelete', false)">{{ __('Cancel') }}</flux:button>
+                <flux:button variant="danger" wire:click="delete">{{ __('Delete') }}</flux:button>
             </div>
         </div>
     </flux:modal>

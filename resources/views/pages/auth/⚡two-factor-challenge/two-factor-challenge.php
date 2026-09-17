@@ -41,8 +41,8 @@ new #[Layout('layouts.auth')] class extends Component
         if (!$valid) {
             throw ValidationException::withMessages([
                 'code' => $this->usingRecovery
-                    ? 'Invalid recovery code.'
-                    : 'Invalid authenticator code. Please try again.',
+                    ? __('Invalid recovery code.')
+                    : __('Invalid authenticator code. Please try again.'),
             ]);
         }
 

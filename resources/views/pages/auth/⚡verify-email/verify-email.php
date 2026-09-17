@@ -10,11 +10,19 @@ use Livewire\Component;
 
 new #[Layout('layouts.auth')] class extends Component
 {
-    #[Validate('required', message: 'Code is required')]
-    #[Validate('digits:6', message: 'Code must be 6 digits')]
+    #[Validate('required')]
+    #[Validate('digits:6')]
     public string $code = '';
 
     public int $daysLeft = 0;
+
+    protected function messages()
+    {
+        return [
+            'code.required' => __('Code is required'),
+            'code.digits' => __('Code must be 6 digits'),
+        ];
+    }
 
     public function mount(): void
     {
@@ -52,6 +60,6 @@ new #[Layout('layouts.auth')] class extends Component
 
         $user->notify(new VerifyEmail($otp->code));
 
-        session()->flash('status', 'A new verification code has been sent to your email.');
+        session()->flash('status', __('A new verification code has been sent to your email.'));
     }
 };

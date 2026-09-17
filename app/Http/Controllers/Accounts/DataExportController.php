@@ -16,17 +16,17 @@ class DataExportController extends Controller
         $dt = (string) $request->query('dt', '');
 
         if (! $export->isReady()) {
-            abort(404, 'Export not available.');
+            abort(404, __('Export not available.'));
         }
 
         if (! $export->hasValidDownloadToken($dt)) {
-            abort(403, 'Invalid or expired download link. Please re-authenticate from your account.');
+            abort(403, __('Invalid or expired download link. Please re-authenticate from your account.'));
         }
 
         $fullPath = Storage::disk('local')->path($export->path);
 
         if (! file_exists($fullPath)) {
-            abort(404, 'Export file not found.');
+            abort(404, __('Export file not found.'));
         }
 
         $export->consumeDownloadToken();

@@ -1,11 +1,11 @@
-@php $title = 'Dashboard'; @endphp
+@php $title = __('Dashboard'); @endphp
 
 <div class="space-y-8">
 
     {{-- Header --}}
     <div>
-        <flux:heading size="xl">Dashboard</flux:heading>
-        <flux:text class="mt-1 text-zinc-500 dark:text-white/50">Overview of your application.</flux:text>
+        <flux:heading size="xl">{{ __('Dashboard') }}</flux:heading>
+        <flux:text class="mt-1 text-zinc-500 dark:text-white/50">{{ __('Overview of your application.') }}</flux:text>
     </div>
 
     {{-- Stat cards --}}
@@ -17,7 +17,7 @@
             </div>
             <div>
                 <flux:heading size="lg">{{ $totalUsers }}</flux:heading>
-                <flux:text class="text-sm text-zinc-500 dark:text-white/50">Total Users</flux:text>
+                <flux:text class="text-sm text-zinc-500 dark:text-white/50">{{ __('Total Users') }}</flux:text>
             </div>
         </flux:card>
 
@@ -27,7 +27,7 @@
             </div>
             <div>
                 <flux:heading size="lg">{{ $staffUsers }}</flux:heading>
-                <flux:text class="text-sm text-zinc-500 dark:text-white/50">Staff Members</flux:text>
+                <flux:text class="text-sm text-zinc-500 dark:text-white/50">{{ __('Staff Members') }}</flux:text>
             </div>
         </flux:card>
 
@@ -37,7 +37,7 @@
             </div>
             <div>
                 <flux:heading size="lg">{{ $totalRoles }}</flux:heading>
-                <flux:text class="text-sm text-zinc-500 dark:text-white/50">Roles</flux:text>
+                <flux:text class="text-sm text-zinc-500 dark:text-white/50">{{ __('Roles') }}</flux:text>
             </div>
         </flux:card>
 
@@ -47,7 +47,7 @@
             </div>
             <div>
                 <flux:heading size="lg">{{ $totalPermissions }}</flux:heading>
-                <flux:text class="text-sm text-zinc-500 dark:text-white/50">Permissions</flux:text>
+                <flux:text class="text-sm text-zinc-500 dark:text-white/50">{{ __('Permissions') }}</flux:text>
             </div>
         </flux:card>
 
@@ -56,16 +56,16 @@
     {{-- Recent users --}}
     <flux:card class="space-y-5">
         <div class="flex items-center justify-between">
-            <flux:heading size="lg">Recent Users</flux:heading>
-            <flux:button :href="route('backoffice.users.index')" variant="ghost" size="sm">View all</flux:button>
+            <flux:heading size="lg">{{ __('Recent Users') }}</flux:heading>
+            <flux:button :href="route('backoffice.users.index')" variant="ghost" size="sm">{{ __('View all') }}</flux:button>
         </div>
 
         <flux:table>
             <flux:table.columns>
-                <flux:table.column>Name</flux:table.column>
-                <flux:table.column>Email</flux:table.column>
-                <flux:table.column>Role</flux:table.column>
-                <flux:table.column>Joined</flux:table.column>
+                <flux:table.column>{{ __('Name') }}</flux:table.column>
+                <flux:table.column>{{ __('Email') }}</flux:table.column>
+                <flux:table.column>{{ __('Role') }}</flux:table.column>
+                <flux:table.column>{{ __('Joined') }}</flux:table.column>
             </flux:table.columns>
 
             <flux:table.rows>
@@ -85,7 +85,7 @@
                 </flux:table.row>
                 @empty
                 <flux:table.row>
-                    <flux:table.cell colspan="4" class="text-center text-zinc-500 dark:text-white/40">No users yet.</flux:table.cell>
+                    <flux:table.cell colspan="4" class="text-center text-zinc-500 dark:text-white/40">{{ __('No users yet.') }}</flux:table.cell>
                 </flux:table.row>
                 @endforelse
             </flux:table.rows>

@@ -2,9 +2,9 @@
 
     @if ($isGlobal)
     <div class="flex items-center justify-between gap-3">
-        <flux:text class="text-sm text-zinc-500 dark:text-white/50">Every change, permanently — nothing here can be edited or deleted.</flux:text>
+        <flux:text class="text-sm text-zinc-500 dark:text-white/50">{{ __('Every change, permanently — nothing here can be edited or deleted.') }}</flux:text>
         <flux:select wire:model.live="modelFilter" class="max-w-48">
-            <flux:select.option value="">All models</flux:select.option>
+            <flux:select.option value="">{{ __('All models') }}</flux:select.option>
             @foreach ($this->availableModels() as $fqcn => $label)
             <flux:select.option value="{{ $fqcn }}">{{ $label }}</flux:select.option>
             @endforeach
@@ -16,7 +16,7 @@
 
     @if ($days->isEmpty())
     <flux:card>
-        <flux:text class="text-sm text-zinc-500 dark:text-white/40">No activity recorded yet.</flux:text>
+        <flux:text class="text-sm text-zinc-500 dark:text-white/40">{{ __('No activity recorded yet.') }}</flux:text>
     </flux:card>
     @endif
 
@@ -24,7 +24,7 @@
         @foreach ($days as $day => $groups)
         <div wire:key="day-{{ $day }}">
             <flux:heading size="sm" class="mb-3 text-zinc-400 dark:text-white/30">
-                {{ \Illuminate\Support\Carbon::parse($day)->isToday() ? 'Today' : \Illuminate\Support\Carbon::parse($day)->format('l, F j, Y') }}
+                {{ \Illuminate\Support\Carbon::parse($day)->forUser()->isToday() ? __('Today') : \Illuminate\Support\Carbon::parse($day)->forUser()->translatedFormat('l, F j, Y') }}
             </flux:heading>
 
             <div class="relative space-y-6 ps-2">
@@ -59,7 +59,7 @@
                         <div class="flex items-start justify-between gap-3">
                             <div class="min-w-0">
                                 <div class="flex items-center gap-2 text-xs text-zinc-400 dark:text-white/30">
-                                    <span>{{ $activity->created_at->format('g:i A') }}</span>
+                                    <span>{{ $activity->created_at->forUser()->translatedFormat('g:i A') }}</span>
                                     @if ($isGlobal)
                                     <flux:badge size="sm" color="zinc">{{ $this->modelLabel($activity->subject_type) }} — {{ $this->recordLabel($activity) }}</flux:badge>
                                     @endif
@@ -70,7 +70,7 @@
                                     <flux:avatar size="xs" name="{{ $activity->causer->name }}" />
                                     <span>{{ $activity->causer->name }}</span>
                                     @else
-                                    <span>System</span>
+                                    <span>{{ __('System') }}</span>
                                     @endif
                                 </div>
                                 @php $lines = $this->changeLines($activity); @endphp
@@ -93,13 +93,13 @@
                         <div x-data="{ open: false }" class="mt-2 ms-1 border-s border-zinc-200 dark:border-white/10 ps-3">
                             <button type="button" @click="open = !open" class="flex items-center gap-1.5 text-sm text-blue-500 hover:text-blue-600">
                                 <flux:icon.ellipsis-horizontal-circle class="size-4" />
-                                <span x-show="!open">Show {{ $similar->count() }} similar {{ Str::plural('activity', $similar->count()) }}</span>
-                                <span x-show="open" x-cloak>Hide similar activities</span>
+                                <span x-show="!open">{{ __('Show :count similar :plural', ['count' => $similar->count(), 'plural' => Str::plural('activity', $similar->count())]) }}</span>
+                                <span x-show="open" x-cloak>{{ __('Hide similar activities') }}</span>
                             </button>
                             <div x-show="open" x-cloak class="mt-2 space-y-2">
                                 @foreach ($similar as $extra)
                                 <div class="text-xs text-zinc-500 dark:text-white/40" wire:key="similar-{{ $extra->id }}">
-                                    {{ $extra->created_at->format('g:i A') }} — {{ $extra->causer?->name ?? 'System' }}
+                                    {{ $extra->created_at->forUser()->translatedFormat('g:i A') }} — {{ $extra->causer?->name ?? __('System') }}
                                 </div>
                                 @endforeach
                             </div>
@@ -109,10 +109,10 @@
                         <div x-show="commentsOpen" x-cloak class="mt-3 space-y-3 rounded-md bg-zinc-50 dark:bg-white/3 p-3">
                             @forelse ($activity->comments->sortBy('created_at') as $comment)
                             <div class="flex items-start gap-2" wire:key="comment-{{ $comment->id }}">
-                                <flux:avatar size="xs" name="{{ $comment->user?->name ?? 'Deleted user' }}" />
+                                <flux:avatar size="xs" name="{{ $comment->user?->name ?? __('Deleted user') }}" />
                                 <div class="min-w-0 flex-1">
                                     <div class="flex items-center gap-2 text-xs text-zinc-500 dark:text-white/40">
-                                        <span class="font-medium text-zinc-700 dark:text-white/70">{{ $comment->user?->name ?? 'Deleted user' }}</span>
+                                        <span class="font-medium text-zinc-700 dark:text-white/70">{{ $comment->user?->name ?? __('Deleted user') }}</span>
                                         <span>{{ $comment->created_at->diffForHumans() }}</span>
                                     </div>
                                     <p class="mt-0.5 text-sm text-zinc-700 dark:text-white/75 whitespace-pre-wrap">{{ $comment->body }}</p>
@@ -132,15 +132,15 @@
                                 </div>
                             </div>
                             @empty
-                            <flux:text class="text-xs text-zinc-400 dark:text-white/30">No comments yet.</flux:text>
+                            <flux:text class="text-xs text-zinc-400 dark:text-white/30">{{ __('No comments yet.') }}</flux:text>
                             @endforelse
 
                             @can('activity.comment')
                             <form wire:submit="postComment({{ $activity->id }})" class="flex items-start gap-2">
                                 <div class="flex-1">
-                                    <flux:textarea wire:model="commentDrafts.{{ $activity->id }}" rows="2" placeholder="Explain why this changed…" />
+                                    <flux:textarea wire:model="commentDrafts.{{ $activity->id }}" rows="2" placeholder="{{ __('Explain why this changed…') }}" />
                                 </div>
-                                <flux:button type="submit" size="sm" variant="primary">Post</flux:button>
+                                <flux:button type="submit" size="sm" variant="primary">{{ __('Post') }}</flux:button>
                             </form>
                             @endcan
                         </div>
@@ -154,7 +154,7 @@
 
     @if ($this->hasMore())
     <div class="flex justify-center">
-        <flux:button variant="ghost" wire:click="loadMore">Load more</flux:button>
+        <flux:button variant="ghost" wire:click="loadMore">{{ __('Load more') }}</flux:button>
     </div>
     @endif
 

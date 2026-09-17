@@ -11,13 +11,13 @@
 
 <flux:modal.trigger name="{{ $modalName }}">
     <flux:button size="xs" variant="ghost" icon="clock">
-        Activity
+        {{ __('Activity') }}
     </flux:button>
 </flux:modal.trigger>
 
 <flux:modal name="{{ $modalName }}" class="md:w-xl">
     <div class="space-y-6">
-        <flux:heading size="lg">Activity</flux:heading>
+        <flux:heading size="lg">{{ __('Activity') }}</flux:heading>
         <livewire:activity-timeline :model="$model" :key="$modalName" />
     </div>
 </flux:modal>

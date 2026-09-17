@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ ($title ?? 'Backoffice') . ' · ' . config('app.name') }}</title>
+    <title>{{ ($title ?? __('Backoffice')) . ' · ' . config('app.name') }}</title>
     @vite(['resources/css/backoffice.css', 'resources/js/backoffice.js'])
     @fluxAppearance
 </head>
@@ -19,7 +19,7 @@
                 <img src="{{ Vite::asset('resources/assets/images/logo.svg') }}" alt="{{ config('app.name') }}"
                     class="h-6 w-auto" />
                 <div class="h-4 w-px bg-zinc-200 dark:bg-white/10"></div>
-                <span class="text-[11px] font-medium tracking-[0.12em] uppercase text-zinc-400 dark:text-white/30">Backoffice</span>
+                <span class="text-[11px] font-medium tracking-[0.12em] uppercase text-zinc-400 dark:text-white/30">{{ __('Backoffice') }}</span>
             </div>
 
             <div class="flex items-center gap-2">
@@ -31,13 +31,13 @@
 
                     <flux:menu class="min-w-56 dark:border-white/10! dark:bg-zinc-900! shadow-lg shadow-black/40">
                         <flux:menu.item icon="user-circle" href="{{ route('account.index') }}" class="dark:data-active:bg-white/8!">
-                            Account
+                            {{ __('Account') }}
                         </flux:menu.item>
                         <flux:menu.separator class="dark:bg-white/10!" />
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" variant="danger">
-                                Logout
+                                {{ __('Logout') }}
                             </flux:menu.item>
                         </form>
                     </flux:menu>
@@ -53,11 +53,11 @@
             <nav class="flex">
                 @php
                 $mobileItems = [
-                ['label' => 'Dashboard', 'route' => 'backoffice.dashboard'],
-                ['label' => 'Roles', 'route' => 'backoffice.roles.index'],
-                ['label' => 'Permissions', 'route' => 'backoffice.permissions.index'],
-                ['label' => 'Users', 'route' => 'backoffice.users.index'],
-                ['label' => 'Maintenance', 'route' => 'backoffice.maintenance.index'],
+                ['label' => __('Dashboard'), 'route' => 'backoffice.dashboard'],
+                ['label' => __('Roles'), 'route' => 'backoffice.roles.index'],
+                ['label' => __('Permissions'), 'route' => 'backoffice.permissions.index'],
+                ['label' => __('Users'), 'route' => 'backoffice.users.index'],
+                ['label' => __('Maintenance'), 'route' => 'backoffice.maintenance.index'],
                 ];
                 @endphp
                 @foreach ($mobileItems as $item)
@@ -92,12 +92,12 @@
                             {{ $dashboardActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.chart-bar
                             class="size-4 shrink-0 {{ $dashboardActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        Dashboard
+                        {{ __('Dashboard') }}
                     </a>
 
                     @canany(['roles.view', 'permissions.view', 'users.view'])
                     <div class="mt-4 mb-1 px-4 text-[10px] font-medium tracking-[0.12em] uppercase text-zinc-300 dark:text-white/20">
-                        Access Control
+                        {{ __('Access Control') }}
                     </div>
                     @endcanany
 
@@ -108,7 +108,7 @@
                             {{ $rolesActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.shield-check
                             class="size-4 shrink-0 {{ $rolesActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        Roles
+                        {{ __('Roles') }}
                     </a>
                     @endcan
 
@@ -119,7 +119,7 @@
                             {{ $permissionsActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.key
                             class="size-4 shrink-0 {{ $permissionsActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        Permissions
+                        {{ __('Permissions') }}
                     </a>
                     @endcan
 
@@ -130,13 +130,13 @@
                             {{ $usersActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.users
                             class="size-4 shrink-0 {{ $usersActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        Users
+                        {{ __('Users') }}
                     </a>
                     @endcan
 
                     @canany(['maintenance.view', 'activity.view', 'languages.edit'])
                     <div class="mt-4 mb-1 px-4 text-[10px] font-medium tracking-[0.12em] uppercase text-zinc-300 dark:text-white/20">
-                        System
+                        {{ __('System') }}
                     </div>
                     @endcanany
 
@@ -147,7 +147,7 @@
                             {{ $maintenanceActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.wrench
                             class="size-4 shrink-0 {{ $maintenanceActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        Maintenance
+                        {{ __('Maintenance') }}
                     </a>
                     @endcan
 
@@ -158,7 +158,7 @@
                             {{ $activityActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.clock
                             class="size-4 shrink-0 {{ $activityActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        Activity Log
+                        {{ __('Activity Log') }}
                     </a>
                     @endcan
 
@@ -169,7 +169,18 @@
                             {{ $languagesActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.language
                             class="size-4 shrink-0 {{ $languagesActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        Languages
+                        {{ __('Languages') }}
+                    </a>
+                    @endcan
+
+                    @can('currencies.view')
+                    @php $currenciesActive = request()->routeIs('backoffice.currencies.index'); @endphp
+                    <a href="{{ route('backoffice.currencies.index') }}" wire:navigate
+                        class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
+                            {{ $currenciesActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
+                        <flux:icon.banknotes
+                            class="size-4 shrink-0 {{ $currenciesActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
+                        {{ __('Currencies') }}
                     </a>
                     @endcan
 
@@ -180,10 +191,14 @@
                             {{ $settingsActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.cog-6-tooth
                             class="size-4 shrink-0 {{ $settingsActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        Settings
+                        {{ __('Settings') }}
                     </a>
                     @endcan
 
+                    {{-- Nothing to translate with a single active language, so this
+                        stays hidden until there's a second one — same rule the
+                        locale switcher itself follows. --}}
+                    @if (app(App\Services\LanguageService::class)->isMultiLanguageEnabled())
                     @canany(['translations.landing', 'translations.portal', 'translations.common'])
                     @php $translationsActive = request()->routeIs('backoffice.translations.index'); @endphp
                     <a href="{{ route('backoffice.translations.index') }}" wire:navigate
@@ -191,9 +206,10 @@
                             {{ $translationsActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
                         <flux:icon.chat-bubble-left-right
                             class="size-4 shrink-0 {{ $translationsActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        Translations
+                        {{ __('Translations') }}
                     </a>
                     @endcanany
+                    @endif
 
                 </nav>
 
@@ -203,7 +219,7 @@
                         <button type="submit"
                             class="flex w-full items-center gap-3 border-s-2 border-transparent px-4 py-2.5 text-sm text-zinc-400 dark:text-white/30 transition-colors hover:border-red-500/40 hover:bg-red-500/5 hover:text-red-400">
                             <flux:icon.arrow-right-start-on-rectangle class="size-4 shrink-0 rtl:rotate-180" />
-                            Sign out
+                            {{ __('Sign out') }}
                         </button>
                     </form>
                 </div>

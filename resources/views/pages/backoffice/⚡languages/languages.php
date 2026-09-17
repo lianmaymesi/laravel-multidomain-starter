@@ -38,7 +38,7 @@ new #[Layout('layouts.backoffice')] class extends Component
         $data['code'] = strtolower($data['code']);
 
         if (Language::where('code', $data['code'])->exists()) {
-            $this->addError('code', 'That language code is already added.');
+            $this->addError('code', __('That language code is already added.'));
 
             return;
         }
@@ -51,7 +51,7 @@ new #[Layout('layouts.backoffice')] class extends Component
         $this->reset(['code', 'name', 'native_name']);
         $this->direction = 'ltr';
 
-        session()->flash('status', 'Language added.');
+        session()->flash('status', __('Language added.'));
     }
 
     public function toggleActive(int $id): void
@@ -61,7 +61,7 @@ new #[Layout('layouts.backoffice')] class extends Component
         $language = Language::findOrFail($id);
 
         if ($language->is_primary && $language->is_active) {
-            session()->flash('error', 'The primary language must stay active — set another language as primary first.');
+            session()->flash('error', __('The primary language must stay active — set another language as primary first.'));
 
             return;
         }
@@ -76,7 +76,7 @@ new #[Layout('layouts.backoffice')] class extends Component
         $language = Language::findOrFail($id);
         $language->update(['is_primary' => true, 'is_active' => true]);
 
-        session()->flash('status', "\"{$language->name}\" is now the primary language.");
+        session()->flash('status', __('":name" is now the primary language.', ['name' => $language->name]));
     }
 
     public function move(int $id, int $direction): void
@@ -104,13 +104,13 @@ new #[Layout('layouts.backoffice')] class extends Component
         $language = Language::findOrFail($id);
 
         if ($language->is_primary) {
-            session()->flash('error', 'The primary language can\'t be deleted — set another language as primary first.');
+            session()->flash('error', __('The primary language can\'t be deleted — set another language as primary first.'));
 
             return;
         }
 
         $language->delete();
 
-        session()->flash('status', 'Language removed.');
+        session()->flash('status', __('Language removed.'));
     }
 };

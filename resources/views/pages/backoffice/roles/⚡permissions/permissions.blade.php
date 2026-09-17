@@ -1,15 +1,15 @@
-@php $title = "Permissions — {$role->name}"; @endphp
+@php $title = __('Permissions — :name', ['name' => $role->name]); @endphp
 
 <div class="space-y-8">
 
     {{-- Header --}}
     <div class="flex items-center justify-between">
         <div>
-            <flux:heading size="xl">Permissions for "{{ $role->name }}"</flux:heading>
-            <flux:text class="mt-1 text-zinc-500 dark:text-white/50">Toggle a permission to grant or revoke it — changes save immediately.</flux:text>
+            <flux:heading size="xl">{{ __('Permissions for ":name"', ['name' => $role->name]) }}</flux:heading>
+            <flux:text class="mt-1 text-zinc-500 dark:text-white/50">{{ __('Toggle a permission to grant or revoke it — changes save immediately.') }}</flux:text>
         </div>
         <flux:button variant="ghost" icon="arrow-left" :href="route('backoffice.roles.index')" wire:navigate>
-            Back to Roles
+            {{ __('Back to Roles') }}
         </flux:button>
     </div>
 
@@ -26,7 +26,7 @@
                     <div class="flex items-center gap-2">
                         <flux:text class="text-sm text-zinc-700 dark:text-white/75">{{ $permission->name }}</flux:text>
                         @if ($justSavedId === $permission->id)
-                        <flux:badge size="sm" color="emerald">Saved</flux:badge>
+                        <flux:badge size="sm" color="emerald">{{ __('Saved') }}</flux:badge>
                         @endif
                     </div>
                     <flux:switch :checked="in_array($permission->id, $assignedIds)" wire:click="togglePermission({{ $permission->id }})" />
@@ -36,7 +36,7 @@
         </flux:card>
         @empty
         <flux:card>
-            <flux:text class="text-sm text-zinc-500 dark:text-white/40">No permissions you can grant yet.</flux:text>
+            <flux:text class="text-sm text-zinc-500 dark:text-white/40">{{ __('No permissions you can grant yet.') }}</flux:text>
         </flux:card>
         @endforelse
     </div>

@@ -44,14 +44,14 @@ class VerifyEmail extends Notification implements ShouldQueue
         $expires = config('multidomain.otp.expires_minutes', 10);
 
         return (new MailMessage)
-            ->subject("Your {$appName} email verification code")
-            ->greeting("Hello {$notifiable->name},")
-            ->line('Use the code below to verify your email address.')
+            ->subject(__('Your :app email verification code', ['app' => $appName]))
+            ->greeting(__('Hello :name,', ['name' => $notifiable->name]))
+            ->line(__('Use the code below to verify your email address.'))
             ->line('')
             ->line("**{$this->code}**")
             ->line('')
-            ->line("This code expires in {$expires} minutes.")
-            ->line('If you did not create an account, you can safely ignore this email.')
-            ->salutation("— The {$appName} Team");
+            ->line(__('This code expires in :expires minutes.', ['expires' => $expires]))
+            ->line(__('If you did not create an account, you can safely ignore this email.'))
+            ->salutation(__('— The :app Team', ['app' => $appName]));
     }
 }

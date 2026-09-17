@@ -54,7 +54,7 @@ new #[Layout('layouts.accounts')] class extends Component
         $this->validate([
             'downloadPassword' => ['required', 'current_password'],
         ], [
-            'downloadPassword.current_password' => 'Incorrect password.',
+            'downloadPassword.current_password' => __('Incorrect password.'),
         ]);
 
         $userId = Auth::id();
@@ -62,7 +62,7 @@ new #[Layout('layouts.accounts')] class extends Component
 
         if (RateLimiter::tooManyAttempts($limiterKey, AccountDataExport::MAX_DOWNLOADS_PER_DAY)) {
             $hours = (int) ceil(RateLimiter::availableIn($limiterKey) / 3600);
-            $this->addError('downloadPassword', "Download limit reached (3/day). Try again in {$hours} hour(s).");
+            $this->addError('downloadPassword', __('Download limit reached (3/day). Try again in :hours hour(s).', ['hours' => $hours]));
             return;
         }
 

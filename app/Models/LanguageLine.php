@@ -34,6 +34,28 @@ class LanguageLine extends SpatieLanguageLine
         return "translations.{$this->scope}";
     }
 
+    /**
+     * `:token` placeholders (Laravel's __() substitution syntax) found in an
+     * arbitrary string — used to check a translated value hasn't dropped one
+     * a translator might not recognize as code rather than prose.
+     *
+     * @return array<int, string>
+     */
+    public static function extractPlaceholders(string $text): array
+    {
+        preg_match_all('/:[a-zA-Z_][a-zA-Z0-9_]*/', $text, $matches);
+
+        return array_values(array_unique($matches[0]));
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public function placeholders(): array
+    {
+        return self::extractPlaceholders($this->key);
+    }
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()

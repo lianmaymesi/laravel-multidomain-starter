@@ -45,8 +45,8 @@ new #[Layout('layouts.backoffice')] class extends Component
         $setting->save();
 
         session()->flash('status', $setting->maintenance_mode
-            ? "\"{$portal}\" is now under maintenance."
-            : "\"{$portal}\" is back online.");
+            ? __('":portal" is now under maintenance.', ['portal' => $portal])
+            : __('":portal" is back online.', ['portal' => $portal]));
     }
 
     public function saveMessage(string $portal): void
@@ -59,6 +59,6 @@ new #[Layout('layouts.backoffice')] class extends Component
         $setting->updated_by = auth()->id();
         $setting->save();
 
-        session()->flash('status', "Maintenance message for \"{$portal}\" saved.");
+        session()->flash('status', __('Maintenance message for ":portal" saved.', ['portal' => $portal]));
     }
 };

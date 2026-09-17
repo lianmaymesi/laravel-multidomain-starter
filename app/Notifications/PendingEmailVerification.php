@@ -23,17 +23,17 @@ class PendingEmailVerification extends Notification implements ShouldQueue
 
     public function toMail(object $notifiable): MailMessage
     {
-        $url     = route('auth.verify-email-change', ['token' => $this->token]);
+        $url = route('auth.verify-email-change', ['token' => $this->token]);
         $appName = config('app.name');
 
         return (new MailMessage)
-            ->subject("Verify your new email address – {$appName}")
-            ->greeting("Hello {$notifiable->name},")
-            ->line("You requested to change your email address to **{$this->pendingEmail}**.")
-            ->line('Click the button below to confirm. Your current email stays active until you verify the new one.')
-            ->action('Verify new email', $url)
-            ->line('This link expires in 48 hours.')
-            ->line('If you did not request this change, ignore this email — your current email remains unchanged.')
-            ->salutation("— The {$appName} Team");
+            ->subject(__('Verify your new email address – :app', ['app' => $appName]))
+            ->greeting(__('Hello :name,', ['name' => $notifiable->name]))
+            ->line(__('You requested to change your email address to **:email**.', ['email' => $this->pendingEmail]))
+            ->line(__('Click the button below to confirm. Your current email stays active until you verify the new one.'))
+            ->action(__('Verify new email'), $url)
+            ->line(__('This link expires in 48 hours.'))
+            ->line(__('If you did not request this change, ignore this email — your current email remains unchanged.'))
+            ->salutation(__('— The :app Team', ['app' => $appName]));
     }
 }

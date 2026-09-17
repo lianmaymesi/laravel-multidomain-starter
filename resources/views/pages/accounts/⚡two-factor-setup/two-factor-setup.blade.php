@@ -1,4 +1,4 @@
-@php $title = 'Two-Factor Authentication'; @endphp
+@php $title = __('Two-Factor Authentication'); @endphp
 
 <div class="space-y-8">
 
@@ -6,8 +6,8 @@
 
     {{-- Page heading --}}
     <div>
-        <flux:heading size="xl" class="text-zinc-900! dark:text-white!">Two-Factor Authentication</flux:heading>
-        <flux:text class="text-zinc-500! dark:text-white/50!">Add an extra layer of security to your account.</flux:text>
+        <flux:heading size="xl" class="text-zinc-900! dark:text-white!">{{ __('Two-Factor Authentication') }}</flux:heading>
+        <flux:text class="text-zinc-500! dark:text-white/50!">{{ __('Add an extra layer of security to your account.') }}</flux:text>
     </div>
 
     <div class="grid gap-6 lg:grid-cols-[1fr_auto]">
@@ -20,10 +20,10 @@
                 <div class="flex items-center gap-3">
                     <span
                         class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-500/20 text-xs font-semibold text-blue-600 dark:text-blue-400">1</span>
-                    <p class="text-sm font-medium text-zinc-800 dark:text-white/80">Scan with your authenticator app</p>
+                    <p class="text-sm font-medium text-zinc-800 dark:text-white/80">{{ __('Scan with your authenticator app') }}</p>
                 </div>
                 <p class="text-sm text-zinc-500 dark:text-white/45 ps-9">
-                    Open Google Authenticator, Authy, or any TOTP app and scan the QR code shown on the right.
+                    {{ __('Open Google Authenticator, Authy, or any TOTP app and scan the QR code shown on the right.') }}
                 </p>
 
                 {{-- QR code (visible on mobile, hidden on lg where it's in the right column) --}}
@@ -39,16 +39,16 @@
                 <div class="flex items-center gap-3">
                     <span
                         class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-500/20 text-xs font-semibold text-blue-600 dark:text-blue-400">2</span>
-                    <p class="text-sm font-medium text-zinc-800 dark:text-white/80">Enter the 6-digit code to confirm</p>
+                    <p class="text-sm font-medium text-zinc-800 dark:text-white/80">{{ __('Enter the 6-digit code to confirm') }}</p>
                 </div>
 
                 <form wire:submit="confirm" class="flex flex-col items-center gap-5 ps-9">
-                    <flux:otp wire:model="code" length="6" label="Authenticator code" label:sr-only :error:icon="false"
+                    <flux:otp wire:model="code" length="6" label="{{ __('Authenticator code') }}" label:sr-only :error:icon="false"
                         error:class="text-center" class="mx-auto" />
 
                     <flux:button variant="primary" type="submit" class="w-full py-3.5!">
-                        <span wire:loading.remove wire:target="confirm">Enable 2FA</span>
-                        <span wire:loading wire:target="confirm">Verifying…</span>
+                        <span wire:loading.remove wire:target="confirm">{{ __('Enable 2FA') }}</span>
+                        <span wire:loading wire:target="confirm">{{ __('Verifying…') }}</span>
                     </flux:button>
                 </form>
             </div>
@@ -57,7 +57,7 @@
             <p class="text-center text-xs text-zinc-400 dark:text-white/25">
                 <button wire:click="skip" type="button"
                     class="underline underline-offset-2 hover:text-zinc-500 dark:hover:text-white/50 transition-colors">
-                    Skip for now
+                    {{ __('Skip for now') }}
                 </button>
             </p>
 
@@ -82,8 +82,8 @@
                 <flux:icon.shield-check class="size-6 text-emerald-400" />
             </div>
             <div>
-                <flux:heading size="xl" class="text-zinc-900! dark:text-white!">2FA Enabled</flux:heading>
-                <flux:text class="text-zinc-500! dark:text-white/50!">Your account is now protected with two-factor authentication.
+                <flux:heading size="xl" class="text-zinc-900! dark:text-white!">{{ __('2FA Enabled') }}</flux:heading>
+                <flux:text class="text-zinc-500! dark:text-white/50!">{{ __('Your account is now protected with two-factor authentication.') }}
                 </flux:text>
             </div>
         </div>
@@ -91,9 +91,9 @@
         <div class="rounded-[1.75rem] border border-zinc-200 dark:border-white/[0.07] bg-zinc-50 dark:bg-white/3 p-6 space-y-4">
 
             <div>
-                <p class="text-sm font-semibold text-zinc-800 dark:text-white/80">Recovery Codes</p>
+                <p class="text-sm font-semibold text-zinc-800 dark:text-white/80">{{ __('Recovery Codes') }}</p>
                 <p class="text-sm text-zinc-500 dark:text-white/45 mt-0.5">
-                    Save these somewhere safe — each can only be used once.
+                    {{ __('Save these somewhere safe — each can only be used once.') }}
                 </p>
             </div>
 
@@ -108,15 +108,14 @@
             <div class="flex items-start gap-2.5 rounded-xl border border-amber-500/20 bg-amber-500/10 px-4 py-3">
                 <flux:icon.exclamation-triangle class="mt-0.5 size-4 shrink-0 text-amber-400" />
                 <p class="text-xs text-amber-400">
-                    Store these codes in a password manager. You won't be able to view them again after leaving this
-                    page.
+                    {{ __("Store these codes in a password manager. You won't be able to view them again after leaving this page.") }}
                 </p>
             </div>
 
         </div>
 
         <flux:button href="{{ auth()->user()?->redirect() }}" variant="primary" class="py-3.5!">
-            Continue to dashboard
+            {{ __('Continue to dashboard') }}
             <flux:icon.arrow-right class="ms-1 size-4 rtl:rotate-180" />
         </flux:button>
 
@@ -129,8 +128,8 @@
 
         {{-- Heading --}}
         <div>
-            <flux:heading size="xl" class="text-zinc-900! dark:text-white!">Two-Factor Authentication</flux:heading>
-            <flux:text class="text-zinc-500! dark:text-white/50!">Manage your two-factor authentication settings.</flux:text>
+            <flux:heading size="xl" class="text-zinc-900! dark:text-white!">{{ __('Two-Factor Authentication') }}</flux:heading>
+            <flux:text class="text-zinc-500! dark:text-white/50!">{{ __('Manage your two-factor authentication settings.') }}</flux:text>
         </div>
 
         {{-- Status --}}
@@ -139,8 +138,8 @@
                 <flux:icon.shield-check class="size-5 text-emerald-400" />
             </div>
             <div>
-                <p class="text-sm font-semibold text-zinc-800 dark:text-white/80">Status</p>
-                <p class="text-xs text-emerald-400 font-medium mt-0.5">Enabled — your account is protected</p>
+                <p class="text-sm font-semibold text-zinc-800 dark:text-white/80">{{ __('Status') }}</p>
+                <p class="text-xs text-emerald-400 font-medium mt-0.5">{{ __('Enabled — your account is protected') }}</p>
             </div>
         </div>
 
@@ -148,18 +147,18 @@
         <div class="rounded-[1.75rem] border border-zinc-200 dark:border-white/[0.07] bg-zinc-50 dark:bg-white/3 p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-semibold text-zinc-800 dark:text-white/80">Authenticator App</p>
+                    <p class="text-sm font-semibold text-zinc-800 dark:text-white/80">{{ __('Authenticator App') }}</p>
                     <p class="text-xs text-zinc-500 dark:text-white/40 mt-0.5">
-                        Connected
+                        {{ __('Connected') }}
                         @if (auth()->user()->two_factor_enabled_at)
-                        · Enabled {{ auth()->user()->two_factor_enabled_at->diffForHumans() }}
+                        · {{ __('Enabled :diff', ['diff' => auth()->user()->two_factor_enabled_at->diffForHumans()]) }}
                         @endif
                     </p>
                 </div>
                 <span
                     class="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/15 px-2.5 py-1 text-xs font-medium text-emerald-400">
                     <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span>
-                    Active
+                    {{ __('Active') }}
                 </span>
             </div>
         </div>
@@ -167,8 +166,8 @@
         {{-- Recovery Codes --}}
         <div class="rounded-[1.75rem] border border-zinc-200 dark:border-white/[0.07] bg-zinc-50 dark:bg-white/3 p-6 space-y-4">
             <div>
-                <p class="text-sm font-semibold text-zinc-800 dark:text-white/80">Recovery Codes</p>
-                <p class="text-xs text-zinc-500 dark:text-white/40 mt-0.5">Use these if you lose access to your authenticator app.</p>
+                <p class="text-sm font-semibold text-zinc-800 dark:text-white/80">{{ __('Recovery Codes') }}</p>
+                <p class="text-xs text-zinc-500 dark:text-white/40 mt-0.5">{{ __('Use these if you lose access to your authenticator app.') }}</p>
             </div>
 
             @if ($showRecoveryCodes && count($recoveryCodes))
@@ -182,47 +181,46 @@
 
             <div class="flex items-start gap-2.5 rounded-xl border border-amber-500/20 bg-amber-500/10 px-4 py-3">
                 <flux:icon.exclamation-triangle class="mt-0.5 size-4 shrink-0 text-amber-400" />
-                <p class="text-xs text-amber-400">Store these codes in a password manager. Each code can only be used
-                    once.</p>
+                <p class="text-xs text-amber-400">{{ __('Store these codes in a password manager. Each code can only be used once.') }}</p>
             </div>
             @endif
 
             <div class="flex flex-wrap gap-2">
                 @if ($showRecoveryCodes)
                 <flux:button icon="eye-slash" wire:click="hideRecoveryCodes" size="sm" variant="ghost">
-                    Hide codes
+                    {{ __('Hide codes') }}
                 </flux:button>
                 @else
                 <flux:button icon="eye" wire:click="viewRecoveryCodes" size="sm" variant="ghost">
-                    View recovery codes
+                    {{ __('View recovery codes') }}
                 </flux:button>
                 @endif
                 <flux:button icon="arrow-path" wire:click="regenerateRecoveryCodes"
-                    wire:confirm="Regenerate recovery codes? Your existing codes will stop working immediately."
+                    wire:confirm="{{ __('Regenerate recovery codes? Your existing codes will stop working immediately.') }}"
                     size="sm" variant="ghost">
-                    Regenerate codes
+                    {{ __('Regenerate codes') }}
                 </flux:button>
             </div>
         </div>
 
         {{-- Actions --}}
         <div class="rounded-[1.75rem] border border-zinc-200 dark:border-white/[0.07] bg-zinc-50 dark:bg-white/3 p-6 space-y-4">
-            <p class="text-sm font-semibold text-zinc-800 dark:text-white/80">Actions</p>
+            <p class="text-sm font-semibold text-zinc-800 dark:text-white/80">{{ __('Actions') }}</p>
 
             <div class="flex flex-wrap gap-2">
                 <flux:button icon="qr-code" wire:click="reconfigure" size="sm" variant="ghost">
-                    Reconfigure authenticator
+                    {{ __('Reconfigure authenticator') }}
                 </flux:button>
                 <flux:button wire:click="disable"
-                    wire:confirm="Disable two-factor authentication? Your account will be less secure." size="sm"
+                    wire:confirm="{{ __('Disable two-factor authentication? Your account will be less secure.') }}" size="sm"
                     variant="danger">
-                    Disable 2FA
+                    {{ __('Disable 2FA') }}
                 </flux:button>
             </div>
         </div>
 
         <flux:button href="{{ auth()->user()?->redirect() }}" variant="primary" class="py-3.5!">
-            Continue to dashboard
+            {{ __('Continue to dashboard') }}
             <flux:icon.arrow-right class="ms-1 size-4 rtl:rotate-180" />
         </flux:button>
 

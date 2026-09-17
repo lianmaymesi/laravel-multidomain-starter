@@ -1,14 +1,14 @@
-@php $title = 'Users'; @endphp
+@php $title = __('Users'); @endphp
 
 <div class="space-y-8">
 
     {{-- Header --}}
     <div class="flex items-center justify-between">
         <div>
-            <flux:heading size="xl">Users</flux:heading>
-            <flux:text class="mt-1 text-zinc-500 dark:text-white/50">Manage user accounts and assign roles.</flux:text>
+            <flux:heading size="xl">{{ __('Users') }}</flux:heading>
+            <flux:text class="mt-1 text-zinc-500 dark:text-white/50">{{ __('Manage user accounts and assign roles.') }}</flux:text>
         </div>
-        <flux:input wire:model.live.debounce.300ms="search" placeholder="Search users…" icon="magnifying-glass" class="max-w-xs" />
+        <flux:input wire:model.live.debounce.300ms="search" placeholder="{{ __('Search users…') }}" icon="magnifying-glass" class="max-w-xs" />
     </div>
 
     @if (session('status'))
@@ -20,10 +20,10 @@
     <flux:card>
         <flux:table :paginate="$this->users()">
             <flux:table.columns>
-                <flux:table.column>Name</flux:table.column>
-                <flux:table.column>Email</flux:table.column>
-                <flux:table.column>Portal</flux:table.column>
-                <flux:table.column>Roles</flux:table.column>
+                <flux:table.column>{{ __('Name') }}</flux:table.column>
+                <flux:table.column>{{ __('Email') }}</flux:table.column>
+                <flux:table.column>{{ __('Portal') }}</flux:table.column>
+                <flux:table.column>{{ __('Roles') }}</flux:table.column>
                 <flux:table.column></flux:table.column>
             </flux:table.columns>
 
@@ -56,7 +56,7 @@
                             @endcan
                             @can('users.assign-roles')
                             <flux:button size="xs" variant="ghost" icon="shield-check" wire:click="editRoles({{ $user->id }})">
-                                Roles
+                                {{ __('Roles') }}
                             </flux:button>
                             @endcan
                         </div>
@@ -64,7 +64,7 @@
                 </flux:table.row>
                 @empty
                 <flux:table.row>
-                    <flux:table.cell colspan="5" class="text-center text-zinc-500 dark:text-white/40">No users found.</flux:table.cell>
+                    <flux:table.cell colspan="5" class="text-center text-zinc-500 dark:text-white/40">{{ __('No users found.') }}</flux:table.cell>
                 </flux:table.row>
                 @endforelse
             </flux:table.rows>
@@ -75,20 +75,20 @@
     <flux:modal wire:model="showModal" class="md:w-96">
         <form wire:submit="save" class="space-y-6">
             <div>
-                <flux:heading size="lg">Roles for {{ $editingName }}</flux:heading>
+                <flux:heading size="lg">{{ __('Roles for :name', ['name' => $editingName]) }}</flux:heading>
             </div>
 
             <div class="max-h-64 space-y-2 overflow-y-auto rounded-lg border border-zinc-200 dark:border-white/10 p-3">
                 @forelse ($this->roles() as $role)
                 <flux:checkbox wire:model="selectedRoles" value="{{ $role->id }}" label="{{ $role->name }}" />
                 @empty
-                <flux:text class="text-sm text-zinc-500 dark:text-white/40">No roles yet — create one first.</flux:text>
+                <flux:text class="text-sm text-zinc-500 dark:text-white/40">{{ __('No roles yet — create one first.') }}</flux:text>
                 @endforelse
             </div>
 
             <div class="flex justify-end gap-2">
-                <flux:button type="button" variant="ghost" wire:click="$set('showModal', false)">Cancel</flux:button>
-                <flux:button type="submit" variant="primary">Save</flux:button>
+                <flux:button type="button" variant="ghost" wire:click="$set('showModal', false)">{{ __('Cancel') }}</flux:button>
+                <flux:button type="submit" variant="primary">{{ __('Save') }}</flux:button>
             </div>
         </form>
     </flux:modal>

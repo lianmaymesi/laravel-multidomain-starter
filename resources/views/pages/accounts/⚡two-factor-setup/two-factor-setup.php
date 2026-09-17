@@ -8,8 +8,8 @@ use Livewire\Component;
 
 new #[Layout('layouts.accounts')] class extends Component
 {
-    #[Validate('required', message: 'Code is required')]
-    #[Validate('digits:6', message: 'Code must be 6 digits')]
+    #[Validate('required')]
+    #[Validate('digits:6')]
     public string $code = '';
 
     public string $qrCodeSvg = '';
@@ -21,6 +21,14 @@ new #[Layout('layouts.accounts')] class extends Component
     public bool $showRecoveryCodes = false;
 
     public array $recoveryCodes = [];
+
+    protected function messages()
+    {
+        return [
+            'code.required' => __('Code is required'),
+            'code.digits' => __('Code must be 6 digits'),
+        ];
+    }
 
     public function mount(TwoFactorService $twoFactor): void
     {
@@ -45,7 +53,7 @@ new #[Layout('layouts.accounts')] class extends Component
         $user = Auth::user();
 
         if (! $twoFactor->confirm($user, $this->code)) {
-            $this->addError('code', 'Invalid code. Please scan the QR again and try.');
+            $this->addError('code', __('Invalid code. Please scan the QR again and try.'));
             return;
         }
 

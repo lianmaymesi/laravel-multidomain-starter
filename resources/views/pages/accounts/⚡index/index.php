@@ -151,7 +151,7 @@ new #[Layout('layouts.accounts')] class extends Component
 
         $user->notify(new PendingEmailVerification($token, $user->pending_email));
 
-        session()->flash('emailStatus', 'Verification email resent.');
+        session()->flash('emailStatus', __('Verification email resent.'));
     }
 
     // ── Phone ─────────────────────────────────────────────────────────
@@ -209,7 +209,7 @@ new #[Layout('layouts.accounts')] class extends Component
         $this->validate([
             'deletePassword' => ['required', 'current_password'],
         ], [
-            'deletePassword.current_password' => 'The password you entered is incorrect.',
+            'deletePassword.current_password' => __('The password you entered is incorrect.'),
         ]);
 
         app(AccountDeletionService::class)->request(Auth::user());

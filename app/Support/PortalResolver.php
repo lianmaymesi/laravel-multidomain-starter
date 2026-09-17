@@ -2,7 +2,7 @@
 
 namespace App\Support;
 
-use App\Models\LocaleSetting;
+use App\Models\AppSetting;
 use App\Services\LanguageService;
 use Illuminate\Http\Request;
 
@@ -46,8 +46,8 @@ class PortalResolver
         // routes/web.php puts the locale segment first when both apply
         // (example.com/ar/app/dashboard), so the portal segment shifts to
         // position 2 whenever the first segment is a locale, not a portal —
-        // only possible when URL mode is "path" (see LocaleSetting).
-        $offset = LocaleSetting::isPathMode() && in_array($request->segment(1), $this->languages->activeCodes(), true)
+        // only possible when URL mode is "path" (see AppSetting::isPathMode()).
+        $offset = AppSetting::isPathMode() && in_array($request->segment(1), $this->languages->activeCodes(), true)
             ? 2
             : 1;
 

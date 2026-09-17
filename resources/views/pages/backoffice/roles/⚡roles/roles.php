@@ -49,8 +49,8 @@ new #[Layout('layouts.backoffice')] class extends Component
      */
     private function guardMutable(Role $role): void
     {
-        abort_if($role->locked, 403, "\"{$role->name}\" is a system role and can't be modified.");
-        abort_if($role->isPortalRole() && ! $this->viewerIsSuperAdmin(), 403, "\"{$role->name}\" is a portal role and can't be modified.");
+        abort_if($role->locked, 403, __('":name" is a system role and can\'t be modified.', ['name' => $role->name]));
+        abort_if($role->isPortalRole() && ! $this->viewerIsSuperAdmin(), 403, __('":name" is a portal role and can\'t be modified.', ['name' => $role->name]));
     }
 
     public function create(): void
@@ -98,7 +98,7 @@ new #[Layout('layouts.backoffice')] class extends Component
 
         $this->showModal = false;
 
-        session()->flash('status', 'Role saved.');
+        session()->flash('status', __('Role saved.'));
     }
 
     public function confirmDelete(int $roleId): void
@@ -108,7 +108,7 @@ new #[Layout('layouts.backoffice')] class extends Component
         $role = Role::findOrFail($roleId);
 
         if ($role->locked || ($role->isPortalRole() && ! $this->viewerIsSuperAdmin())) {
-            session()->flash('error', "\"{$role->name}\" can't be deleted.");
+            session()->flash('error', __('":name" can\'t be deleted.', ['name' => $role->name]));
 
             return;
         }
@@ -128,6 +128,6 @@ new #[Layout('layouts.backoffice')] class extends Component
         $this->deletingId = null;
         $this->confirmingDelete = false;
 
-        session()->flash('status', 'Role deleted.');
+        session()->flash('status', __('Role deleted.'));
     }
 };

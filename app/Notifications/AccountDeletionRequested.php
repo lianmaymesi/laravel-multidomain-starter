@@ -21,18 +21,18 @@ class AccountDeletionRequested extends Notification implements ShouldQueue
 
     public function toMail(object $notifiable): MailMessage
     {
-        $appName  = config('app.name');
-        $date     = $this->request->scheduled_at->format('F j, Y');
-        $days     = AccountDeletionRequest::GRACE_PERIOD_DAYS;
+        $appName = config('app.name');
+        $date = $this->request->scheduled_at->format('F j, Y');
+        $days = AccountDeletionRequest::GRACE_PERIOD_DAYS;
 
         return (new MailMessage)
-            ->subject("Your {$appName} account is scheduled for deletion")
-            ->greeting("Hello {$notifiable->name},")
-            ->line("We received a request to permanently delete your {$appName} account.")
-            ->line("**Your account will be deleted on {$date}** (in {$days} days).")
-            ->line('During this period your account remains fully active. If this was a mistake, you can cancel the deletion from your Security settings.')
-            ->action('Cancel Deletion', route('account.security'))
-            ->line('If you did not request this, please contact support immediately.')
-            ->salutation("— The {$appName} Team");
+            ->subject(__('Your :app account is scheduled for deletion', ['app' => $appName]))
+            ->greeting(__('Hello :name,', ['name' => $notifiable->name]))
+            ->line(__('We received a request to permanently delete your :app account.', ['app' => $appName]))
+            ->line(__('**Your account will be deleted on :date** (in :days days).', ['date' => $date, 'days' => $days]))
+            ->line(__('During this period your account remains fully active. If this was a mistake, you can cancel the deletion from your Security settings.'))
+            ->action(__('Cancel Deletion'), route('account.security'))
+            ->line(__('If you did not request this, please contact support immediately.'))
+            ->salutation(__('— The :app Team', ['app' => $appName]));
     }
 }

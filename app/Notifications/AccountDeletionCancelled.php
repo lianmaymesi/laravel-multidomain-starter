@@ -21,12 +21,12 @@ class AccountDeletionCancelled extends Notification implements ShouldQueue
         $appName = config('app.name');
 
         return (new MailMessage)
-            ->subject("Your {$appName} account deletion has been cancelled")
-            ->greeting("Hello {$notifiable->name},")
-            ->line("Your account deletion request has been successfully cancelled.")
-            ->line('Your account is fully active and no data has been removed.')
-            ->action('Go to Security Settings', route('account.security'))
-            ->line('If you did not cancel this, please contact support immediately.')
-            ->salutation("— The {$appName} Team");
+            ->subject(__('Your :app account deletion has been cancelled', ['app' => $appName]))
+            ->greeting(__('Hello :name,', ['name' => $notifiable->name]))
+            ->line(__('Your account deletion request has been successfully cancelled.'))
+            ->line(__('Your account is fully active and no data has been removed.'))
+            ->action(__('Go to Security Settings'), route('account.security'))
+            ->line(__('If you did not cancel this, please contact support immediately.'))
+            ->salutation(__('— The :app Team', ['app' => $appName]));
     }
 }

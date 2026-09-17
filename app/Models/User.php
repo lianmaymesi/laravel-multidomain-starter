@@ -21,7 +21,7 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'email', 'password', 'country_code', 'phone', 'privilege', 'locale', 'two_factor_secret', 'two_factor_recovery_codes', 'pending_email', 'pending_email_token'])]
+#[Fillable(['name', 'email', 'password', 'country_code', 'phone', 'privilege', 'locale', 'timezone', 'two_factor_secret', 'two_factor_recovery_codes', 'pending_email', 'pending_email_token'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmail
 {

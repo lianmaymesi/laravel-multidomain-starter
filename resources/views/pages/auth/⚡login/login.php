@@ -31,7 +31,7 @@ new #[Layout('layouts.auth')] class extends Component
             RateLimiter::hit($this->throttleKey(), 300);
 
             throw ValidationException::withMessages([
-                'email' => 'These credentials do not match our records.',
+                'email' => __('These credentials do not match our records.'),
             ]);
         }
 
@@ -80,7 +80,7 @@ new #[Layout('layouts.auth')] class extends Component
         $seconds = RateLimiter::availableIn($this->throttleKey());
 
         throw ValidationException::withMessages([
-            'email' => "Too many login attempts. Please wait {$seconds} seconds.",
+            'email' => __('Too many login attempts. Please wait :seconds seconds.', ['seconds' => $seconds]),
         ]);
     }
 

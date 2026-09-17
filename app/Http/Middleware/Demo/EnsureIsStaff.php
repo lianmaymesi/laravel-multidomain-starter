@@ -17,13 +17,13 @@ class EnsureIsStaff
     {
         $user = $request->user();
 
-        if (!$user) {
+        if (! $user) {
             return redirect()->route('auth.login');
         }
 
-        if (!$user->isStaff()) {
+        if (! $user->isStaff()) {
             // Redirect end-users to their own panel
-            abort(403, 'You do not have permission to access this area.');
+            abort(403, __('You do not have permission to access this area.'));
         }
 
         return $next($request);

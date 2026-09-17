@@ -23,15 +23,15 @@ class AccountDataExportReady extends Notification implements ShouldQueue
     {
         $appName = config('app.name');
         $expires = $this->export->expires_at->format('F j, Y');
-        $ttl     = AccountDataExport::EXPORT_TTL_DAYS;
+        $ttl = AccountDataExport::EXPORT_TTL_DAYS;
 
         return (new MailMessage)
-            ->subject("Your {$appName} data export is ready")
-            ->greeting("Hello {$notifiable->name},")
-            ->line('Your data export has been generated and is ready to download.')
-            ->action('Download My Data', $this->export->downloadUrl())
-            ->line("This link expires on **{$expires}** ({$ttl} days). Download before then — it will not be regenerated automatically.")
-            ->line('The export contains your profile data and account history in CSV format.')
-            ->salutation("— The {$appName} Team");
+            ->subject(__('Your :app data export is ready', ['app' => $appName]))
+            ->greeting(__('Hello :name,', ['name' => $notifiable->name]))
+            ->line(__('Your data export has been generated and is ready to download.'))
+            ->action(__('Download My Data'), $this->export->downloadUrl())
+            ->line(__('This link expires on **:expires** (:ttl days). Download before then — it will not be regenerated automatically.', ['expires' => $expires, 'ttl' => $ttl]))
+            ->line(__('The export contains your profile data and account history in CSV format.'))
+            ->salutation(__('— The :app Team', ['app' => $appName]));
     }
 }

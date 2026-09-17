@@ -3,7 +3,10 @@
 namespace App\Providers;
 
 use App\Contracts\SmsService;
+use App\Models\User;
 use App\Services\Auth\TwilioSmsService;
+use App\Services\TimezoneService;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -31,6 +34,15 @@ class AppServiceProvider extends ServiceProvider
                 ->numbers()
                 ->symbols()
                 ->uncompromised();
+        });
+
+        // Converts a Carbon instance (stored/parsed in app.timezone = UTC)
+        // to the given user's timezone preference for display — never
+        // mutates config('app.timezone') itself, so storage/parsing is
+        // unaffected everywhere else.
+        Carbon::macro('forUser', function (?User $user = null) {
+            /** @var Carbon $this */
+            return $this->copy()->setTimezone(app(TimezoneService::class)->current($user));
         });
     }
 }

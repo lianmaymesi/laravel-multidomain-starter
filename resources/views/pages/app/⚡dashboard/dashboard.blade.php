@@ -1,12 +1,18 @@
-@php $title = 'Dashboard'; @endphp
+@php $title = __('Dashboard'); @endphp
 
 <div class="space-y-8">
 
     {{-- Header --}}
     <div class="flex items-center justify-between">
         <div>
-            <flux:heading size="xl">Dashboard</flux:heading>
-            <flux:text class="mt-1 text-zinc-500 dark:text-white/50">Welcome back{{ auth()->check() ? ', ' . auth()->user()->name : '' }} — here's what's happening today.</flux:text>
+            <flux:heading size="xl">{{ __('Dashboard') }}</flux:heading>
+            <flux:text class="mt-1 text-zinc-500 dark:text-white/50">
+                @if (auth()->check())
+                {{ __("Welcome back, :name — here's what's happening today.", ['name' => auth()->user()->name]) }}
+                @else
+                {{ __("Welcome back — here's what's happening today.") }}
+                @endif
+            </flux:text>
         </div>
     </div>
 
@@ -34,8 +40,8 @@
         <flux:card class="lg:col-span-2 space-y-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <flux:heading size="lg">Weekly Activity</flux:heading>
-                    <flux:text class="text-zinc-500 dark:text-white/50 text-sm">Sessions recorded over the last 7 days</flux:text>
+                    <flux:heading size="lg">{{ __('Weekly Activity') }}</flux:heading>
+                    <flux:text class="text-zinc-500 dark:text-white/50 text-sm">{{ __('Sessions recorded over the last 7 days') }}</flux:text>
                 </div>
                 <flux:badge color="blue" size="sm">+18.2%</flux:badge>
             </div>
@@ -56,7 +62,7 @@
 
         {{-- Recent activity --}}
         <flux:card class="space-y-5">
-            <flux:heading size="lg">Recent Activity</flux:heading>
+            <flux:heading size="lg">{{ __('Recent Activity') }}</flux:heading>
 
             <div class="space-y-4">
                 @foreach ($activity as $item)

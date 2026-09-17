@@ -1,4 +1,4 @@
-@php $title = 'Sign In'; @endphp
+@php $title = __('Sign In'); @endphp
 
 <div class="flex min-h-screen">
 
@@ -27,9 +27,9 @@
             <div>
                 <p class="mb-3 text-[10px] tracking-[0.35em] uppercase text-blue-300/50">Laravel Multidomain Starter</p>
                 <h2 class="text-5xl font-extrabold leading-[1.05] tracking-tighter text-white">
-                    Ship apps<br>
-                    <span class="text-blue-300">across</span><br>
-                    every domain.
+                    {{ __('Ship apps') }}<br>
+                    <span class="text-blue-300">{{ __('across') }}</span><br>
+                    {{ __('every domain.') }}
                 </h2>
                 <div class="mt-8 h-[3px] w-10 bg-blue-400"></div>
             </div>
@@ -49,10 +49,10 @@
             <div class="hidden lg:block"></div>
             <div class="flex items-center gap-2">
                 <div class="flex items-center gap-2 text-xs text-zinc-400 dark:text-white/35">
-                    No account?
+                    {{ __('No account?') }}
                     <flux:link href="{{ route('auth.register') }}" wire:navigate
                         class="font-medium! text-zinc-700! dark:text-white/70! hover:text-zinc-900! dark:hover:text-white!">
-                        Create one
+                        {{ __('Create one') }}
                     </flux:link>
                 </div>
                 <x-theme-switcher />
@@ -65,9 +65,9 @@
 
                 {{-- Heading block with left accent --}}
                 <div class="mb-7 border-s-[3px] border-blue-500 ps-4">
-                    <p class="mb-1 text-[10px] tracking-[0.3em] uppercase text-blue-500 dark:text-blue-400/55">Account
-                        access</p>
-                    <h1 class="text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">Welcome back</h1>
+                    <p class="mb-1 text-[10px] tracking-[0.3em] uppercase text-blue-500 dark:text-blue-400/55">{{ __('Account
+                        access') }}</p>
+                    <h1 class="text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">{{ __('Welcome back') }}</h1>
                 </div>
 
                 {{-- Deletion notice --}}
@@ -75,13 +75,13 @@
                 <div class="mb-5 border border-amber-500/20 bg-amber-500/6 p-4">
                     <div class="flex items-center gap-2">
                         <flux:icon.clock class="size-3.5 shrink-0 text-amber-400" />
-                        <p class="text-xs font-medium text-amber-300">Account deletion scheduled</p>
+                        <p class="text-xs font-medium text-amber-300">{{ __('Account deletion scheduled') }}</p>
                     </div>
                     <p class="mt-1.5 ps-5 text-xs leading-relaxed text-zinc-500 dark:text-white/45">
-                        Your account will be permanently deleted in
-                        <span class="text-zinc-700 dark:text-white/75">{{
-                            \App\Models\AccountDeletionRequest::GRACE_PERIOD_DAYS }} days</span>.
-                        To cancel, <span class="font-medium text-amber-300">sign back in</span>.
+                        {!! __('Your account will be permanently deleted in :days days. To cancel, :signin.', [
+                            'days' => '<span class="text-zinc-700 dark:text-white/75">'.\App\Models\AccountDeletionRequest::GRACE_PERIOD_DAYS.'</span>',
+                            'signin' => '<span class="font-medium text-amber-300">'.__('sign back in').'</span>',
+                        ]) !!}
                     </p>
                 </div>
                 @endif
@@ -90,17 +90,17 @@
                 <form wire:submit="login" class="space-y-4">
 
                     <flux:field>
-                        <flux:label>Email Address</flux:label>
-                        <flux:input type="email" placeholder="you@example.com" wire:model="email"
+                        <flux:label>{{ __('Email Address') }}</flux:label>
+                        <flux:input type="email" placeholder="{{ __('you@example.com') }}" wire:model="email"
                             autocomplete="email" />
                         <flux:error name="email" />
                     </flux:field>
 
                     <flux:field>
                         <div class="mb-1.5 flex items-center justify-between">
-                            <flux:label>Password</flux:label>
+                            <flux:label>{{ __('Password') }}</flux:label>
                             <flux:link href="{{ route('auth.forgot-password') }}" wire:navigate class="text-xs!">
-                                Forgot?
+                                {{ __('Forgot?') }}
                             </flux:link>
                         </div>
                         <flux:input type="password" placeholder="••••••••" wire:model="password"
@@ -108,10 +108,10 @@
                         <flux:error name="password" />
                     </flux:field>
 
-                    <flux:checkbox label="Remember me for 30 days" wire:model="remember" class="text-sm!" />
+                    <flux:checkbox label="{{ __('Remember me for 30 days') }}" wire:model="remember" class="text-sm!" />
 
                     <div class="pt-1">
-                        <flux:button type="submit" variant="primary" class="w-full">Sign In</flux:button>
+                        <flux:button type="submit" variant="primary" class="w-full">{{ __('Sign In') }}</flux:button>
                     </div>
 
                 </form>

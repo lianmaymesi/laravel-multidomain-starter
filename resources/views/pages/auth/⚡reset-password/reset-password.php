@@ -42,7 +42,7 @@ new #[Layout('layouts.auth')] class extends Component
         // Validate the token against `password_reset_tokens` exactly as
         // Laravel's own PasswordBroker does. Invalid / expired → bounce back.
         if (!$user || !Password::tokenExists($user, $token)) {
-            session()->flash('error', 'This password reset link is invalid or has expired.');
+            session()->flash('error', __('This password reset link is invalid or has expired.'));
             $this->redirect(route('auth.forgot-password'), navigate: true);
             return;
         }
@@ -59,13 +59,13 @@ new #[Layout('layouts.auth')] class extends Component
         $user = $this->resolveUser($this->email ?: null, $this->phone ?: null);
 
         if (!$user) {
-            $this->addError('password', 'Unable to locate the account. Please restart the reset flow.');
+            $this->addError('password', __('Unable to locate the account. Please restart the reset flow.'));
             return;
         }
 
         // Double-check the token is still valid (guards against concurrent requests)
         if (!Password::tokenExists($user, $this->token)) {
-            session()->flash('error', 'This reset link has already been used or has expired.');
+            session()->flash('error', __('This reset link has already been used or has expired.'));
             $this->redirect(route('auth.forgot-password'), navigate: true);
             return;
         }

@@ -71,7 +71,7 @@ new #[Layout('layouts.backoffice')] class extends Component
 
         $this->showModal = false;
 
-        session()->flash('status', 'Permission saved.');
+        session()->flash('status', __('Permission saved.'));
     }
 
     public function confirmDelete(int $permissionId): void
@@ -90,6 +90,6 @@ new #[Layout('layouts.backoffice')] class extends Component
         $this->deletingId = null;
         $this->confirmingDelete = false;
 
-        session()->flash('status', 'Permission deleted.');
+        session()->flash('status', __('Permission deleted.'));
     }
 };

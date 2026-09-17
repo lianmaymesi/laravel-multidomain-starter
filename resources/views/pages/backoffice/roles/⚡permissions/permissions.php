@@ -16,8 +16,8 @@ new #[Layout('layouts.backoffice')] class extends Component
     public function mount(Role $role): void
     {
         abort_unless(Gate::allows('roles.assign-permissions'), 403);
-        abort_if($role->locked, 403, "\"{$role->name}\" is a system role and can't be modified.");
-        abort_if($role->isPortalRole() && ! $this->viewerIsSuperAdmin(), 403, "\"{$role->name}\" is a portal role and can't be modified.");
+        abort_if($role->locked, 403, __('":name" is a system role and can\'t be modified.', ['name' => $role->name]));
+        abort_if($role->isPortalRole() && ! $this->viewerIsSuperAdmin(), 403, __('":name" is a portal role and can\'t be modified.', ['name' => $role->name]));
 
         $this->role = $role;
     }

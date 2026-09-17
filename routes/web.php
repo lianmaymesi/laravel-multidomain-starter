@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Accounts\DataExportController;
-use App\Models\LocaleSetting;
+use App\Models\AppSetting;
 use App\Services\LanguageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -51,7 +51,7 @@ Route::post('/logout', function (Request $request) {
 */
 $localeSegment = null;
 try {
-    if (LocaleSetting::isPathMode()) {
+    if (AppSetting::isPathMode()) {
         $languages = app(LanguageService::class);
         $requested = request()->segment(1);
 
@@ -60,7 +60,7 @@ try {
         }
     }
 } catch (Throwable $e) {
-    // languages/locale_settings tables not migrated yet — no prefix routing available.
+    // languages/app_settings tables not migrated yet — no prefix routing available.
 }
 
 $localized = function ($registrar, ?string $segment = null) use ($localeSegment) {

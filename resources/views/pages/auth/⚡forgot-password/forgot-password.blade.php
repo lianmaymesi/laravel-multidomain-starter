@@ -1,4 +1,4 @@
-@php $title = 'Forgot Password'; @endphp
+@php $title = __('Forgot Password'); @endphp
 
 <div class="flex min-h-screen flex-col bg-white dark:bg-zinc-950">
 
@@ -22,14 +22,14 @@
 
             {{-- Heading block --}}
             <div class="mb-6 border-s-[3px] border-blue-500 ps-4">
-                <p class="mb-1 text-[10px] tracking-[0.25em] uppercase text-blue-500 dark:text-blue-400/55">Password
-                    recovery</p>
-                <h1 class="text-2xl font-bold text-zinc-900 dark:text-white">Reset password</h1>
+                <p class="mb-1 text-[10px] tracking-[0.25em] uppercase text-blue-500 dark:text-blue-400/55">{{ __('Password
+                    recovery') }}</p>
+                <h1 class="text-2xl font-bold text-zinc-900 dark:text-white">{{ __('Reset password') }}</h1>
                 <p class="mt-1 text-sm text-zinc-500 dark:text-white/40">
                     @if (! $otpSent)
-                    Verify your identity to continue
+                    {{ __('Verify your identity to continue') }}
                     @else
-                    Enter the code we sent you
+                    {{ __('Enter the code we sent you') }}
                     @endif
                 </p>
             </div>
@@ -56,7 +56,7 @@
                         'text-zinc-500 dark:text-white/40 hover:text-zinc-600 dark:hover:text-white/65' => $activeTab
                         !== 'phone',
                         ])>
-                        Phone
+                        {{ __('Phone') }}
                     </button>
                     <button type="button" wire:click="switchTab('email')"
                         @class([ 'flex-1 py-2 text-sm font-medium transition-all'
@@ -64,7 +64,7 @@
                         'text-zinc-500 dark:text-white/40 hover:text-zinc-600 dark:hover:text-white/65' => $activeTab
                         !== 'email',
                         ])>
-                        Email
+                        {{ __('Email') }}
                     </button>
                 </div>
                 @endif
@@ -75,15 +75,15 @@
                         @if (config('multidomain.phone_country_mode') === 'multi')
                         <div class="w-24 shrink-0">
                             <flux:field>
-                                <flux:label>Code</flux:label>
+                                <flux:label>{{ __('Code') }}</flux:label>
                                 <flux:input wire:model="country_code" placeholder="+91" class="text-center" />
                             </flux:field>
                         </div>
                         @endif
                         <div class="flex-1">
                             <flux:field>
-                                <flux:label>Phone Number</flux:label>
-                                <flux:input wire:model="phone" placeholder="98765-43210" mask="99999-99999" />
+                                <flux:label>{{ __('Phone Number') }}</flux:label>
+                                <flux:input wire:model="phone" placeholder="{{ __('98765-43210') }}" mask="99999-99999" />
                             </flux:field>
                         </div>
                     </div>
@@ -93,13 +93,13 @@
                     <flux:error name="phone" />
                     @else
                     <flux:field>
-                        <flux:label>Email Address</flux:label>
-                        <flux:input wire:model="email" type="email" placeholder="you@example.com"
+                        <flux:label>{{ __('Email Address') }}</flux:label>
+                        <flux:input wire:model="email" type="email" placeholder="{{ __('you@example.com') }}"
                             autocomplete="email" />
                         <flux:error name="email" />
                     </flux:field>
                     @endif
-                    <flux:button type="submit" variant="primary" class="w-full">Send Code</flux:button>
+                    <flux:button type="submit" variant="primary" class="w-full">{{ __('Send Code') }}</flux:button>
                 </form>
 
                 {{-- ── Step 2: Verify OTP ── --}}
@@ -108,7 +108,7 @@
                 <div
                     class="flex items-center justify-between border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-white/3 px-4 py-3">
                     <div>
-                        <p class="mb-0.5 text-xs text-zinc-400 dark:text-white/35">Code sent to</p>
+                        <p class="mb-0.5 text-xs text-zinc-400 dark:text-white/35">{{ __('Code sent to') }}</p>
                         <p class="text-sm font-medium text-zinc-800 dark:text-white/85">
                             @if ($activeTab === 'phone')
                             {{ $country_code }}
@@ -122,14 +122,14 @@
                     <button type="button" wire:click="goBack"
                         class="flex items-center gap-1.5 border border-zinc-200 dark:border-white/10 bg-zinc-100 dark:bg-white/5 px-3 py-1.5 text-xs font-medium text-zinc-500 dark:text-white/50 transition hover:bg-zinc-100 dark:hover:bg-white/8 hover:text-zinc-800 dark:hover:text-white/80">
                         <flux:icon.arrow-left class="size-3.5 rtl:rotate-180" />
-                        Change
+                        {{ __('Change') }}
                     </button>
                 </div>
 
                 <form wire:submit="verifyOtp" class="flex flex-col items-center gap-5">
-                    <flux:otp wire:model="code" length="6" label="Verification Code" label:sr-only :error:icon="false"
+                    <flux:otp wire:model="code" length="6" label="{{ __('Verification Code') }}" label:sr-only :error:icon="false"
                         error:class="text-center" class="mx-auto" />
-                    <flux:button variant="primary" type="submit" class="w-full">Verify & Continue</flux:button>
+                    <flux:button variant="primary" type="submit" class="w-full">{{ __('Verify & Continue') }}</flux:button>
                 </form>
 
                 <div class="border-t border-zinc-200 dark:border-white/6 pt-4 text-center" x-data="{
@@ -146,7 +146,7 @@
 
                     <template x-if="countdown > 0">
                         <div class="flex items-center justify-center gap-3">
-                            <p class="text-sm text-zinc-500 dark:text-white/40">Resend in</p>
+                            <p class="text-sm text-zinc-500 dark:text-white/40">{{ __('Resend in') }}</p>
                             <div
                                 class="inline-flex h-8 w-8 items-center justify-center border border-zinc-200 dark:border-white/10 bg-zinc-100 dark:bg-white/5">
                                 <span
@@ -159,7 +159,7 @@
                     <template x-if="countdown <= 0">
                         <button wire:click="resend" wire:loading.attr="disabled"
                             class="text-sm font-medium text-blue-600 dark:text-blue-400 transition hover:text-blue-700 dark:hover:text-blue-300 disabled:opacity-50">
-                            Resend code
+                            {{ __('Resend code') }}
                         </button>
                     </template>
                 </div>
@@ -169,10 +169,10 @@
             </flux:card>
 
             <p class="mt-5 text-center text-xs text-zinc-400 dark:text-white/35">
-                Remembered it?
+                {{ __('Remembered it?') }}
                 <flux:link href="{{ route('auth.login') }}" wire:navigate
                     class="text-zinc-600! dark:text-white/60! hover:text-zinc-900! dark:hover:text-white!">
-                    Sign in
+                    {{ __('Sign in') }}
                 </flux:link>
             </p>
 

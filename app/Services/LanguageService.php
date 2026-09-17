@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\AppSetting;
 use App\Models\Language;
-use App\Models\LocaleSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
@@ -95,7 +95,7 @@ class LanguageService
      */
     public function switchUrl(Request $request, string $code): string
     {
-        if (LocaleSetting::isPathMode()) {
+        if (AppSetting::isPathMode()) {
             return $this->urlForLocale($request, $code);
         }
 

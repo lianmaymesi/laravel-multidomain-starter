@@ -1,10 +1,10 @@
-@php $title = 'Languages'; @endphp
+@php $title = __('Languages'); @endphp
 
 <div class="space-y-8">
 
     <div>
-        <flux:heading size="xl">Languages</flux:heading>
-        <flux:text class="mt-1 text-zinc-500 dark:text-white/50">Manage the languages visitors can switch between. Locale switching and translation UI stay hidden across every portal until at least two are active.</flux:text>
+        <flux:heading size="xl">{{ __('Languages') }}</flux:heading>
+        <flux:text class="mt-1 text-zinc-500 dark:text-white/50">{{ __('Manage the languages visitors can switch between. Locale switching and translation UI stay hidden across every portal until at least two are active.') }}</flux:text>
     </div>
 
     @if (session('status'))
@@ -33,7 +33,7 @@
                         <flux:heading size="lg">{{ $language->name }}</flux:heading>
                         <flux:text class="text-zinc-500 dark:text-white/50">{{ $language->native_name }}</flux:text>
                         @if ($language->is_primary)
-                        <flux:badge size="sm" color="blue">Primary</flux:badge>
+                        <flux:badge size="sm" color="blue">{{ __('Primary') }}</flux:badge>
                         @endif
                         <flux:badge size="sm" color="zinc">{{ strtoupper($language->code) }}</flux:badge>
                         <flux:badge size="sm" color="zinc">{{ strtoupper($language->direction) }}</flux:badge>
@@ -44,14 +44,14 @@
             <div class="flex items-center gap-3">
                 @can('languages.edit')
                 @unless ($language->is_primary)
-                <flux:button variant="ghost" size="sm" wire:click="makePrimary({{ $language->id }})">Make primary</flux:button>
+                <flux:button variant="ghost" size="sm" wire:click="makePrimary({{ $language->id }})">{{ __('Make primary') }}</flux:button>
                 @endunless
                 <flux:switch :checked="(bool) $language->is_active" wire:click="toggleActive({{ $language->id }})" />
                 @endcan
 
                 @can('languages.delete')
                 @unless ($language->is_primary)
-                <flux:button variant="ghost" size="sm" icon="trash" wire:click="delete({{ $language->id }})" wire:confirm="Remove this language?" />
+                <flux:button variant="ghost" size="sm" icon="trash" wire:click="delete({{ $language->id }})" wire:confirm="{{ __('Remove this language?') }}" />
                 @endunless
                 @endcan
             </div>
@@ -60,44 +60,44 @@
 
         @if ($this->languages()->isEmpty())
         <flux:card class="text-center text-zinc-500 dark:text-white/50">
-            No languages configured yet — the app is running on <code>{{ config('app.locale') }}</code> from config.
+            {!! __('No languages configured yet — the app is running on :locale from config.', ['locale' => '<code>'.config('app.locale').'</code>']) !!}
         </flux:card>
         @endif
     </div>
 
     @can('languages.create')
     <flux:card class="space-y-4">
-        <flux:heading size="lg">Add language</flux:heading>
+        <flux:heading size="lg">{{ __('Add language') }}</flux:heading>
 
         <form wire:submit="add" class="grid grid-cols-1 gap-4 sm:grid-cols-4 sm:items-end">
             <flux:field>
-                <flux:label>Code</flux:label>
-                <flux:input wire:model="code" placeholder="ar" maxlength="2" />
+                <flux:label>{{ __('Code') }}</flux:label>
+                <flux:input wire:model="code" placeholder="{{ __('ar') }}" maxlength="2" />
                 <flux:error name="code" />
             </flux:field>
 
             <flux:field>
-                <flux:label>Name</flux:label>
-                <flux:input wire:model="name" placeholder="Arabic" />
+                <flux:label>{{ __('Name') }}</flux:label>
+                <flux:input wire:model="name" placeholder="{{ __('Arabic') }}" />
                 <flux:error name="name" />
             </flux:field>
 
             <flux:field>
-                <flux:label>Native name</flux:label>
+                <flux:label>{{ __('Native name') }}</flux:label>
                 <flux:input wire:model="native_name" placeholder="العربية" />
                 <flux:error name="native_name" />
             </flux:field>
 
             <flux:field>
-                <flux:label>Direction</flux:label>
+                <flux:label>{{ __('Direction') }}</flux:label>
                 <flux:select wire:model="direction">
-                    <flux:select.option value="ltr">LTR</flux:select.option>
-                    <flux:select.option value="rtl">RTL</flux:select.option>
+                    <flux:select.option value="ltr">{{ __('LTR') }}</flux:select.option>
+                    <flux:select.option value="rtl">{{ __('RTL') }}</flux:select.option>
                 </flux:select>
             </flux:field>
 
             <div class="sm:col-span-4">
-                <flux:button type="submit" variant="primary">Add language</flux:button>
+                <flux:button type="submit" variant="primary">{{ __('Add language') }}</flux:button>
             </div>
         </form>
     </flux:card>

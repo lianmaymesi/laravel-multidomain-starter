@@ -81,7 +81,7 @@ new #[Layout('layouts.auth')] class extends Component
         if (!$user) {
             $this->otpSent = true;
             $this->resendCooldown = (int) config('multidomain.otp.resend_cooldown', 60);
-            session()->flash('status', 'If that account exists, a code has been sent.');
+            session()->flash('status', __('If that account exists, a code has been sent.'));
             return;
         }
 
@@ -96,7 +96,7 @@ new #[Layout('layouts.auth')] class extends Component
         $this->otpSent = true;
         $this->resendCooldown = (int) config('multidomain.otp.resend_cooldown', 60);
 
-        session()->flash('status', 'A reset code has been sent.');
+        session()->flash('status', __('A reset code has been sent.'));
     }
 
     public function verifyOtp(OtpService $otpService): void
@@ -164,7 +164,7 @@ new #[Layout('layouts.auth')] class extends Component
 
         $this->resendCooldown = (int) config('multidomain.otp.resend_cooldown', 60);
 
-        session()->flash('status', 'A new code has been sent.');
+        session()->flash('status', __('A new code has been sent.'));
     }
 
     public function goBack(): void

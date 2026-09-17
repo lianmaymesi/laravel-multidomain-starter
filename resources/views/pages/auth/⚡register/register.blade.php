@@ -23,11 +23,11 @@
 
             {{-- Tagline --}}
             <div>
-                <p class="mb-3 text-[10px] tracking-[0.35em] uppercase text-blue-300/50">Start building today</p>
+                <p class="mb-3 text-[10px] tracking-[0.35em] uppercase text-blue-300/50">{{ __('Start building today') }}</p>
                 <h2 class="text-5xl font-extrabold leading-[1.05] tracking-tighter text-white">
-                    Spin up<br>
-                    <span class="text-blue-300">your next</span><br>
-                    subdomain.
+                    {{ __('Spin up') }}<br>
+                    <span class="text-blue-300">{{ __('your next') }}</span><br>
+                    {{ __('subdomain.') }}
                 </h2>
                 <div class="mt-8 h-[3px] w-10 bg-blue-400"></div>
             </div>
@@ -47,10 +47,10 @@
             <div class="hidden lg:block"></div>
             <div class="flex items-center gap-2">
                 <div class="flex items-center gap-2 text-xs text-zinc-400 dark:text-white/35">
-                    Have account?
+                    {{ __('Have account?') }}
                     <flux:link href="{{ route('auth.login') }}" wire:navigate
                         class="font-medium! text-zinc-700! dark:text-white/70! hover:text-zinc-900! dark:hover:text-white!">
-                        Sign in
+                        {{ __('Sign in') }}
                     </flux:link>
                 </div>
                 <x-theme-switcher />
@@ -63,9 +63,9 @@
 
                 {{-- Heading block with left accent --}}
                 <div class="mb-7 border-s-[3px] border-blue-500 ps-4">
-                    <p class="mb-1 text-[10px] tracking-[0.3em] uppercase text-blue-500 dark:text-blue-400/55">New
-                        account</p>
-                    <h1 class="text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">Create account</h1>
+                    <p class="mb-1 text-[10px] tracking-[0.3em] uppercase text-blue-500 dark:text-blue-400/55">{{ __('New
+                        account') }}</p>
+                    <h1 class="text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">{{ __('Create account') }}</h1>
                 </div>
 
                 {{-- Form (no card — directly on bg) --}}
@@ -73,8 +73,8 @@
 
                     <div class="sm:col-span-2">
                         <flux:field>
-                            <flux:label>Full Name</flux:label>
-                            <flux:input type="text" placeholder="Peter Nelson" wire:model="name" />
+                            <flux:label>{{ __('Full Name') }}</flux:label>
+                            <flux:input type="text" placeholder="{{ __('Peter Nelson') }}" wire:model="name" />
                             <flux:error name="name" />
                         </flux:field>
                     </div>
@@ -82,9 +82,9 @@
                     @if (count(config('multidomain.registerable_portals', [])) > 0)
                     <div class="sm:col-span-2">
                         <flux:field>
-                            <flux:label>Select the user type</flux:label>
-                            <flux:select wire:model="userType" placeholder="Standard account">
-                                <flux:select.option value="">Standard account</flux:select.option>
+                            <flux:label>{{ __('Select the user type') }}</flux:label>
+                            <flux:select wire:model="userType" placeholder="{{ __('Standard account') }}">
+                                <flux:select.option value="">{{ __('Standard account') }}</flux:select.option>
                                 @foreach (config('multidomain.registerable_portals', []) as $key => $label)
                                 <flux:select.option value="{{ $key }}">{{ $label }}</flux:select.option>
                                 @endforeach
@@ -100,15 +100,15 @@
                             @if (config('multidomain.phone_country_mode') === 'multi')
                             <div class="w-24 shrink-0">
                                 <flux:field>
-                                    <flux:label>Code</flux:label>
+                                    <flux:label>{{ __('Code') }}</flux:label>
                                     <flux:input placeholder="+91" wire:model="country_code" class="text-center" />
                                 </flux:field>
                             </div>
                             @endif
                             <div class="flex-1">
                                 <flux:field>
-                                    <flux:label>Phone Number</flux:label>
-                                    <flux:input mask="99999-99999" placeholder="98765-43210" wire:model="phone" />
+                                    <flux:label>{{ __('Phone Number') }}</flux:label>
+                                    <flux:input mask="99999-99999" placeholder="{{ __('98765-43210') }}" wire:model="phone" />
                                 </flux:field>
                             </div>
                         </div>
@@ -119,16 +119,16 @@
 
                     <div class="sm:col-span-2">
                         <flux:field>
-                            <flux:label>Email Address</flux:label>
-                            <flux:input type="email" placeholder="you@example.com" wire:model="email" />
+                            <flux:label>{{ __('Email Address') }}</flux:label>
+                            <flux:input type="email" placeholder="{{ __('you@example.com') }}" wire:model="email" />
                             <flux:error name="email" />
                         </flux:field>
                     </div>
 
                     <div class="sm:col-span-2">
                         <flux:field>
-                            <flux:label>Password</flux:label>
-                            <flux:input type="password" placeholder="Choose a strong password" wire:model="password"
+                            <flux:label>{{ __('Password') }}</flux:label>
+                            <flux:input type="password" placeholder="{{ __('Choose a strong password') }}" wire:model="password"
                                 viewable />
                             <flux:error name="password" />
                         </flux:field>
@@ -136,15 +136,15 @@
 
                     <div class="sm:col-span-2">
                         <flux:field>
-                            <flux:label>Confirm Password</flux:label>
-                            <flux:input type="password" placeholder="Re-enter your password"
+                            <flux:label>{{ __('Confirm Password') }}</flux:label>
+                            <flux:input type="password" placeholder="{{ __('Re-enter your password') }}"
                                 wire:model="password_confirmation" viewable />
                             <flux:error name="password_confirmation" />
                         </flux:field>
                     </div>
 
                     <div class="pt-1 sm:col-span-2">
-                        <flux:button type="submit" variant="primary" class="w-full">Create Account</flux:button>
+                        <flux:button type="submit" variant="primary" class="w-full">{{ __('Create Account') }}</flux:button>
                     </div>
 
                 </form>

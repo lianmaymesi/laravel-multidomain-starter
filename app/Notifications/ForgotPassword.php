@@ -51,15 +51,15 @@ class ForgotPassword extends Notification implements ShouldQueue
         $expires = config('multidomain.otp.expires_minutes', 10);
 
         return (new MailMessage)
-            ->subject("Reset your password for {$appName}")
-            ->greeting("Hello {$notifiable->name},")
-            ->line('We received a request to reset your password.')
-            ->line('Use the code below to proceed with resetting your password:')
+            ->subject(__('Reset your password for :app', ['app' => $appName]))
+            ->greeting(__('Hello :name,', ['name' => $notifiable->name]))
+            ->line(__('We received a request to reset your password.'))
+            ->line(__('Use the code below to proceed with resetting your password:'))
             ->line('')
             ->line("**{$this->code}**")
             ->line('')
-            ->line("This code will expire in {$expires} minutes.")
-            ->line('If you did not request a password reset, you can safely ignore this email.')
-            ->salutation("— The {$appName} Team");
+            ->line(__('This code will expire in :expires minutes.', ['expires' => $expires]))
+            ->line(__('If you did not request a password reset, you can safely ignore this email.'))
+            ->salutation(__('— The :app Team', ['app' => $appName]));
     }
 }

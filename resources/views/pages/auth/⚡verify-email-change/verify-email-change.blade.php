@@ -1,4 +1,4 @@
-@php $title = 'Verify Email Change'; @endphp
+@php $title = __('Verify Email Change'); @endphp
 
 <div class="flex min-h-screen flex-col bg-white dark:bg-zinc-950">
 
@@ -21,9 +21,9 @@
 
             {{-- Heading block --}}
             <div class="mb-6 border-s-[3px] border-blue-500 ps-4">
-                <p class="mb-1 text-[10px] tracking-[0.25em] uppercase text-blue-500 dark:text-blue-400/55">Account
-                    security</p>
-                <h1 class="text-2xl font-bold text-zinc-900 dark:text-white">Email verification</h1>
+                <p class="mb-1 text-[10px] tracking-[0.25em] uppercase text-blue-500 dark:text-blue-400/55">{{ __('Account
+                    security') }}</p>
+                <h1 class="text-2xl font-bold text-zinc-900 dark:text-white">{{ __('Email verification') }}</h1>
             </div>
 
             <flux:card class="p-5!">
@@ -38,12 +38,11 @@
                         </div>
                     </div>
                     <div>
-                        <p class="text-base font-semibold text-zinc-900 dark:text-white">Email updated</p>
-                        <p class="mt-1 text-sm text-zinc-500 dark:text-white/50">Your email address has been verified
-                            and is now active.</p>
+                        <p class="text-base font-semibold text-zinc-900 dark:text-white">{{ __('Email updated') }}</p>
+                        <p class="mt-1 text-sm text-zinc-500 dark:text-white/50">{{ __('Your email address has been verified and is now active.') }}</p>
                     </div>
                     <flux:button href="{{ route('account.index') }}" variant="primary" class="w-full">
-                        Go to account
+                        {{ __('Go to account') }}
                         <flux:icon.arrow-right class="ms-1 size-4 rtl:rotate-180" />
                     </flux:button>
                 </div>
@@ -58,20 +57,20 @@
                         </div>
                     </div>
                     <div>
-                        <p class="text-base font-semibold text-zinc-900 dark:text-white">Link expired</p>
+                        <p class="text-base font-semibold text-zinc-900 dark:text-white">{{ __('Link expired') }}</p>
                         <p class="mt-1 text-sm text-zinc-500 dark:text-white/50">
-                            The verification link for
+                            {{ __('The verification link for') }}
                             @if ($pendingEmail)
                             <span class="text-zinc-700 dark:text-white/75">{{ $pendingEmail }}</span>
                             @endif
-                            has expired (links are valid for 48 hours).
+                            {{ __('has expired (links are valid for 48 hours).') }}
                         </p>
                     </div>
                     <p class="text-sm text-zinc-500 dark:text-white/40">
-                        Go back to your account and request a new verification link.
+                        {{ __('Go back to your account and request a new verification link.') }}
                     </p>
                     <flux:button href="{{ route('account.index') }}" variant="ghost" class="w-full">
-                        Back to account
+                        {{ __('Back to account') }}
                     </flux:button>
                 </div>
 
@@ -84,13 +83,13 @@
                         </div>
                     </div>
                     <div>
-                        <p class="text-base font-semibold text-zinc-900 dark:text-white">Invalid link</p>
+                        <p class="text-base font-semibold text-zinc-900 dark:text-white">{{ __('Invalid link') }}</p>
                         <p class="mt-1 text-sm text-zinc-500 dark:text-white/50">
-                            This verification link is invalid or has already been used.
+                            {{ __('This verification link is invalid or has already been used.') }}
                         </p>
                     </div>
                     <flux:button href="{{ route('account.index') }}" variant="ghost" class="w-full">
-                        Back to account
+                        {{ __('Back to account') }}
                     </flux:button>
                 </div>
 
