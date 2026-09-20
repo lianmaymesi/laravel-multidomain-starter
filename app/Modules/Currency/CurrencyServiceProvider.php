@@ -18,6 +18,21 @@ class CurrencyServiceProvider extends ModuleProvider
         return 'currency';
     }
 
+    protected function label(): string
+    {
+        return 'Currencies';
+    }
+
+    protected function description(): string
+    {
+        return 'Currencies, exchange rates and money formatting.';
+    }
+
+    protected function icon(): string
+    {
+        return 'banknotes';
+    }
+
     protected function permissions(): array
     {
         return ['currencies.view'];

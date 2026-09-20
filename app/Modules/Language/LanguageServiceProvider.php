@@ -21,6 +21,21 @@ class LanguageServiceProvider extends ModuleProvider
         return 'language';
     }
 
+    protected function label(): string
+    {
+        return 'Languages';
+    }
+
+    protected function description(): string
+    {
+        return 'Multiple languages, translations and locale switching.';
+    }
+
+    protected function icon(): string
+    {
+        return 'language';
+    }
+
     protected function permissions(): array
     {
         return [

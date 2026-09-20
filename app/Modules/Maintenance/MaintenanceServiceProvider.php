@@ -15,6 +15,21 @@ class MaintenanceServiceProvider extends ModuleProvider
         return 'maintenance';
     }
 
+    protected function label(): string
+    {
+        return 'Maintenance';
+    }
+
+    protected function description(): string
+    {
+        return 'Take individual portals offline behind a branded maintenance page.';
+    }
+
+    protected function icon(): string
+    {
+        return 'wrench';
+    }
+
     protected function permissions(): array
     {
         return ['maintenance.view', 'maintenance.update'];

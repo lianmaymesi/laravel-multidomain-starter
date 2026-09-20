@@ -15,6 +15,21 @@ class ActivityServiceProvider extends ModuleProvider
         return 'activity';
     }
 
+    protected function label(): string
+    {
+        return 'Activity log';
+    }
+
+    protected function description(): string
+    {
+        return 'Audit trail of who changed what, with comments and reactions.';
+    }
+
+    protected function icon(): string
+    {
+        return 'clock';
+    }
+
     protected function permissions(): array
     {
         return ['activity.view', 'activity.comment'];

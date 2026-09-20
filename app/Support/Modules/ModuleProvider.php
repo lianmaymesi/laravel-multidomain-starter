@@ -22,6 +22,12 @@ abstract class ModuleProvider extends ServiceProvider
 
     final public function register(): void
     {
+        Module::describe($this->module(), [
+            'label' => $this->label(),
+            'description' => $this->description(),
+            'icon' => $this->icon(),
+        ]);
+
         if (! $this->enabled()) {
             $this->registerDisabled();
 
@@ -52,6 +58,24 @@ abstract class ModuleProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->app->booted(fn () => $this->schedule($this->app->make(Schedule::class)));
         }
+    }
+
+    /** Name shown on the backoffice Modules page. Defaults to the module key, headlined. */
+    protected function label(): string
+    {
+        return str($this->module())->headline()->toString();
+    }
+
+    /** One line shown under the name on the Modules page. */
+    protected function description(): string
+    {
+        return '';
+    }
+
+    /** Flux icon name for the Modules page. */
+    protected function icon(): string
+    {
+        return 'puzzle-piece';
     }
 
     /**

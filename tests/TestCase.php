@@ -9,6 +9,10 @@ abstract class TestCase extends BaseTestCase
     /** @var array<int, string> */
     private array $moduleEnvKeys = [];
 
+    private ?string $sqliteFile = null;
+
+    private mixed $originalDatabase = null;
+
     /**
      * Boot a fresh application with the given feature modules switched off.
      *
@@ -54,6 +58,22 @@ abstract class TestCase extends BaseTestCase
         return $this;
     }
 
+    /**
+     * Point the next application boots at a throwaway SQLite file instead of
+     * the shared in-memory database, so a test can write to the database and
+     * then reboot the app to see what reading it *during boot* does — the
+     * in-memory connection is only restored after the app has booted.
+     * Call refreshApplication() afterwards; use it in tests that do not use
+     * RefreshDatabase.
+     */
+    protected function useSqliteFile(): void
+    {
+        $this->originalDatabase = $_SERVER['DB_DATABASE'] ?? ':memory:';
+        $this->sqliteFile = tempnam(sys_get_temp_dir(), 'modtest');
+
+        $_ENV['DB_DATABASE'] = $_SERVER['DB_DATABASE'] = $this->sqliteFile;
+    }
+
     protected function tearDown(): void
     {
         foreach ($this->moduleEnvKeys as $key) {
@@ -62,6 +82,15 @@ abstract class TestCase extends BaseTestCase
 
         $this->moduleEnvKeys = [];
 
+        if ($this->sqliteFile !== null) {
+            $_ENV['DB_DATABASE'] = $_SERVER['DB_DATABASE'] = $this->originalDatabase;
+        }
+
         parent::tearDown();
+
+        if ($this->sqliteFile !== null) {
+            @unlink($this->sqliteFile);
+            $this->sqliteFile = null;
+        }
     }
 }

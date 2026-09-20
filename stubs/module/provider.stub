@@ -13,6 +13,22 @@ class {{ Name }}ServiceProvider extends ModuleProvider
         return '{{ name }}';
     }
 
+    /** Shown on the backoffice Modules page (where admins can switch it on/off). */
+    protected function label(): string
+    {
+        return '{{ Title }}';
+    }
+
+    protected function description(): string
+    {
+        return 'Describe what the {{ Title }} module does.';
+    }
+
+    protected function icon(): string
+    {
+        return 'squares-2x2';
+    }
+
     /**
      * Permissions this module owns — always seeded, even while it is off.
      */

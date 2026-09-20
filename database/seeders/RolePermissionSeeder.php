@@ -23,6 +23,9 @@ class RolePermissionSeeder extends Seeder
         'permissions.create',
         'permissions.edit',
         'permissions.delete',
+
+        // Switching features on and off changes the whole app — Super Admin only.
+        'modules.manage',
     ];
 
     /**
@@ -30,6 +33,7 @@ class RolePermissionSeeder extends Seeder
      */
     private const PERMISSIONS = [
         'settings.edit',
+        'modules.manage',
         'roles.view',
         'roles.create',
         'roles.edit',

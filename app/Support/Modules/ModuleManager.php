@@ -9,6 +9,15 @@ class ModuleManager
     /** @var array<string, array<int, mixed>> */
     private array $contributions = [];
 
+    /** @var array<string, array{label: string, description: string, icon: string}> */
+    private array $meta = [];
+
+    /** @var array<string, bool> config/modules.php values before any runtime override */
+    private array $defaults = [];
+
+    /** @var array<string, bool> */
+    private array $overrides = [];
+
     public function __construct(private Repository $config) {}
 
     /**
@@ -30,6 +39,61 @@ class ModuleManager
     public function enabledNames(): array
     {
         return array_values(array_filter($this->names(), fn (string $module) => $this->enabled($module)));
+    }
+
+    /**
+     * Layer runtime overrides (the backoffice Modules page) over the
+     * config/modules.php defaults. Must run before any module provider
+     * registers — everything downstream just reads config('modules.*').
+     * Overrides for modules that no longer exist are ignored.
+     *
+     * @param  array<string, bool>  $overrides  module => enabled
+     */
+    public function applyOverrides(array $overrides): void
+    {
+        $this->defaults = array_map('boolval', $this->config->get('modules', []));
+        $this->overrides = array_intersect_key(array_map('boolval', $overrides), $this->defaults);
+
+        $this->config->set('modules', [...$this->defaults, ...$this->overrides]);
+    }
+
+    /** The config/modules.php value, ignoring any runtime override. */
+    public function defaultEnabled(string $module): bool
+    {
+        return $this->defaults[$module] ?? $this->enabled($module);
+    }
+
+    public function isOverridden(string $module): bool
+    {
+        return array_key_exists($module, $this->overrides);
+    }
+
+    /**
+     * Label/description/icon a module's provider declared, for the Modules page.
+     *
+     * @param  array{label?: string, description?: string, icon?: string}  $meta
+     */
+    public function describe(string $module, array $meta): void
+    {
+        $this->meta[$module] = [
+            'label' => $meta['label'] ?? str($module)->headline()->toString(),
+            'description' => $meta['description'] ?? '',
+            'icon' => $meta['icon'] ?? 'puzzle-piece',
+        ];
+    }
+
+    /**
+     * @return array{key: string, label: string, description: string, icon: string, enabled: bool, default: bool, overridden: bool}
+     */
+    public function info(string $module): array
+    {
+        return [
+            'key' => $module,
+            ...($this->meta[$module] ?? ['label' => str($module)->headline()->toString(), 'description' => '', 'icon' => 'puzzle-piece']),
+            'enabled' => $this->enabled($module),
+            'default' => $this->defaultEnabled($module),
+            'overridden' => $this->isOverridden($module),
+        ];
     }
 
     public function path(string $module, string $path = ''): string

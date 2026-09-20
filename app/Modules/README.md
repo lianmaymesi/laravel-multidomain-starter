@@ -5,6 +5,24 @@ one env var — no routes, nav entry, middleware or Livewire components, and no
 errors anywhere else. Its tables and data are left alone, so switching it back
 on restores everything with no reseed.
 
+## Switching modules on and off
+
+`config/modules.php` (fed by `MODULE_*` in `.env`) holds each module's default.
+**Backoffice → Modules** lets a Super Admin (`modules.manage`) override it at
+runtime: a switch per module, with a confirm when disabling, and *Reset to
+default* to drop the override.
+
+- Overrides live in the `module_settings` table and are read while the app boots,
+  before any module registers. A saved override wins over `.env`; the page shows
+  when a module differs from its default. Toggling a module back to its default
+  removes the row.
+- Modules register at boot, so a change applies from the **next request** — the
+  page reloads itself. If routes are cached (`route:cache`) the page clears that
+  cache so the change isn't pinned; re-run `route:cache` when you deploy.
+- Disabling never drops tables or data. Enabling restores everything as it was.
+- Unknown module names in `module_settings` are ignored, and a missing table (fresh
+  install, mid-`migrate`) just means the `.env` defaults apply.
+
 ## Add a module
 
 ```bash
@@ -26,7 +44,8 @@ app/Modules/Invoices/
 └── resources/views/livewire/⚡index/       Livewire page, referenced as `invoices::index`
 ```
 
-Turn it off with `MODULE_INVOICES=false` in `.env`.
+Turn it off with `MODULE_INVOICES=false` in `.env` — or at runtime from
+**Backoffice → Modules** (Super Admin only), see below.
 
 ## What the provider can do
 
@@ -36,6 +55,7 @@ while it is off; the last three always apply.
 
 | Hook | Use it for |
 |---|---|
+| `label()` / `description()` / `icon()` | name, one-liner and Flux icon shown on the Modules page (always applied) |
 | `registerModule()` | container bindings |
 | `registerDisabled()` | runs *instead* while the module is off — switch off behaviour that lives outside it (e.g. Activity turns spatie's logger off, since core models use its trait directly) |
 | `bootModule()` | middleware, Livewire namespace, listeners, nav/settings contributions |

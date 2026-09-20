@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\ModuleSetting;
 use App\Support\Modules\Module;
 use App\Support\Modules\ModuleManager;
 use App\Support\Modules\ModuleProvider;
@@ -18,6 +19,10 @@ class ModulesServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(ModuleManager::class);
+
+        // Runtime overrides from the backoffice Modules page, layered over
+        // config/modules.php. Has to happen here, before any module registers.
+        $this->app->make(ModuleManager::class)->applyOverrides(ModuleSetting::overrides());
 
         foreach (glob(app_path('Modules/*/*ServiceProvider.php')) ?: [] as $file) {
             $class = 'App\\Modules\\'.basename(dirname($file)).'\\'.basename($file, '.php');
