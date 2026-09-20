@@ -4,6 +4,7 @@ use App\Models\ModuleSetting;
 use App\Support\Modules\Module;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Schema;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -21,6 +22,15 @@ new #[Layout('layouts.backoffice')] class extends Component
     }
 
     /**
+     * Overrides are stored in module_settings. Until `php artisan migrate` has
+     * created it the page still lists modules, but can't change them.
+     */
+    public function migrated(): bool
+    {
+        return Schema::hasTable((new ModuleSetting)->getTable());
+    }
+
+    /**
      * @return array<int, array{key: string, label: string, description: string, icon: string, enabled: bool, default: bool, overridden: bool}>
      */
     public function modules(): array
@@ -31,6 +41,10 @@ new #[Layout('layouts.backoffice')] class extends Component
     public function toggle(string $module): void
     {
         $this->authorizeFor($module);
+
+        if (! $this->migrated()) {
+            return;
+        }
 
         $enabled = ! Module::enabled($module);
 
@@ -53,6 +67,10 @@ new #[Layout('layouts.backoffice')] class extends Component
     public function resetToDefault(string $module): void
     {
         $this->authorizeFor($module);
+
+        if (! $this->migrated()) {
+            return;
+        }
 
         ModuleSetting::where('module', $module)->first()?->delete();
 

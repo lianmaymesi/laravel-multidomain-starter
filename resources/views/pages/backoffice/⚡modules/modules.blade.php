@@ -7,6 +7,12 @@
         <flux:text class="mt-1 text-zinc-500 dark:text-white/50">{{ __('Switch optional features on or off. A disabled module disappears everywhere — its pages, menu entries and background work — but its data is kept, so turning it back on restores it as it was.') }}</flux:text>
     </div>
 
+    @unless ($this->migrated())
+    <div class="border border-amber-500/20 bg-amber-500/6 px-4 py-3 text-sm text-amber-400">
+        {!! __('Modules cannot be changed yet — the database is missing a table. Run :command, then reload this page.', ['command' => '<code>php artisan migrate</code>']) !!}
+    </div>
+    @endunless
+
     @if (session('status'))
     <div class="border border-emerald-500/20 bg-emerald-500/6 px-4 py-3 text-sm text-emerald-400">
         {{ session('status') }}
@@ -40,12 +46,13 @@
 
             <div class="flex items-center gap-3">
                 @if ($module['overridden'])
-                <flux:button type="button" variant="ghost" size="sm" wire:click="resetToDefault('{{ $module['key'] }}')">{{ __('Reset to default') }}</flux:button>
+                <flux:button type="button" variant="ghost" size="sm" :disabled="! $this->migrated()" wire:click="resetToDefault('{{ $module['key'] }}')">{{ __('Reset to default') }}</flux:button>
                 @endif
 
                 @if ($module['enabled'])
                 <flux:switch
                     :checked="true"
+                    :disabled="! $this->migrated()"
                     wire:click="toggle('{{ $module['key'] }}')"
                     wire:confirm="{{ __('Disable :module? Its pages and menu entries will disappear until it is enabled again. Data is kept.', ['module' => __($module['label'])]) }}"
                     aria-label="{{ __('Disable :module', ['module' => __($module['label'])]) }}"
@@ -53,6 +60,7 @@
                 @else
                 <flux:switch
                     :checked="false"
+                    :disabled="! $this->migrated()"
                     wire:click="toggle('{{ $module['key'] }}')"
                     aria-label="{{ __('Enable :module', ['module' => __($module['label'])]) }}"
                 />

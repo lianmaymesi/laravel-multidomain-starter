@@ -4,6 +4,7 @@ use App\Models\ModuleSetting;
 use App\Support\Modules\Module;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Schema;
 use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
@@ -121,4 +122,19 @@ it('shows an Enable switch without a confirm, plus Reset, for a disabled module'
         ->and($html)->toContain('Default: on')
         // One fewer confirm: the disabled module's switch turns it on.
         ->and(substr_count($html, 'wire:confirm='))->toBe(count(Module::names()) - 1);
+});
+
+it('explains what to do instead of erroring while the module_settings table is missing', function () {
+    Schema::drop('module_settings');
+
+    $component = Livewire::actingAs(superAdminActor())->test('pages::backoffice.modules');
+
+    $component->assertSee('php artisan migrate', false)
+        // The actions are inert rather than a 500.
+        ->call('toggle', 'currency')
+        ->assertNoRedirect()
+        ->call('resetToDefault', 'currency')
+        ->assertNoRedirect();
+
+    expect($component->html())->toContain('disabled');
 });
