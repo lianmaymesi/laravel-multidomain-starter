@@ -43,11 +43,20 @@
                 <flux:button type="button" variant="ghost" size="sm" wire:click="resetToDefault('{{ $module['key'] }}')">{{ __('Reset to default') }}</flux:button>
                 @endif
 
+                @if ($module['enabled'])
                 <flux:switch
-                    :checked="$module['enabled']"
+                    :checked="true"
                     wire:click="toggle('{{ $module['key'] }}')"
-                    @if ($module['enabled']) wire:confirm="{{ __('Disable :module? Its pages and menu entries will disappear until it is enabled again. Data is kept.', ['module' => __($module['label'])]) }}" @endif
+                    wire:confirm="{{ __('Disable :module? Its pages and menu entries will disappear until it is enabled again. Data is kept.', ['module' => __($module['label'])]) }}"
+                    aria-label="{{ __('Disable :module', ['module' => __($module['label'])]) }}"
                 />
+                @else
+                <flux:switch
+                    :checked="false"
+                    wire:click="toggle('{{ $module['key'] }}')"
+                    aria-label="{{ __('Enable :module', ['module' => __($module['label'])]) }}"
+                />
+                @endif
             </div>
         </flux:card>
         @endforeach

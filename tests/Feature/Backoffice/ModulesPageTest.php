@@ -95,3 +95,30 @@ it('shows the Modules link only to users who can manage modules', function () {
     $this->actingAs(superAdminActor())->get(route('backoffice.dashboard'))->assertOk()->assertSee(backofficeUrl('modules'));
     $this->actingAs(adminActor())->get(route('backoffice.dashboard'))->assertOk()->assertDontSee(backofficeUrl('modules'));
 });
+
+it('renders a working on/off switch for every module, with a confirm only when disabling', function () {
+    $html = Livewire::actingAs(superAdminActor())->test('pages::backoffice.modules')->html();
+    $count = count(Module::names());
+
+    expect(substr_count($html, '<ui-switch'))->toBe($count)
+        // Not swallowed into literal text by a malformed component tag.
+        ->and($html)->not->toContain(':checked=')
+        ->and(substr_count($html, "wire:click=\"toggle('"))->toBe($count)
+        // Every module is enabled here, so each switch asks before disabling.
+        ->and(substr_count($html, 'wire:confirm='))->toBe($count)
+        ->and($html)->toContain('Disable Currencies')
+        ->and($html)->not->toContain('Reset to default');
+});
+
+it('shows an Enable switch without a confirm, plus Reset, for a disabled module', function () {
+    Module::applyOverrides(['currency' => false]);
+
+    $html = Livewire::actingAs(superAdminActor())->test('pages::backoffice.modules')->html();
+
+    expect($html)->toContain('Enable Currencies')
+        ->and($html)->toContain('Reset to default')
+        ->and($html)->toContain('Disabled')
+        ->and($html)->toContain('Default: on')
+        // One fewer confirm: the disabled module's switch turns it on.
+        ->and(substr_count($html, 'wire:confirm='))->toBe(count(Module::names()) - 1);
+});
