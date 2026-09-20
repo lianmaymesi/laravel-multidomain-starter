@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Modules\Activity\Livewire;
 
-use App\Models\Activity;
-use App\Models\ActivityComment;
-use App\Models\ActivityCommentReaction;
+use App\Modules\Activity\Models\Activity;
+use App\Modules\Activity\Models\ActivityComment;
+use App\Modules\Activity\Models\ActivityCommentReaction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -264,6 +264,6 @@ class ActivityTimeline extends Component
 
     public function render()
     {
-        return view('livewire.activity-timeline');
+        return view('activity::timeline');
     }
 }

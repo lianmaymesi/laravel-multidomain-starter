@@ -1,8 +1,8 @@
 <?php
 
-use App\Models\Activity;
-use App\Models\ActivityComment;
-use App\Models\ActivityCommentReaction;
+use App\Modules\Activity\Models\Activity;
+use App\Modules\Activity\Models\ActivityComment;
+use App\Modules\Activity\Models\ActivityCommentReaction;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
@@ -89,7 +89,7 @@ it('logs a manual entry on both sides when a user\'s roles are synced', function
 
 it('blocks a staff user without activity.view from the activity log page', function () {
     Livewire::actingAs(staffUser())
-        ->test('pages::backoffice.activity')
+        ->test('activity::index')
         ->assertStatus(403);
 });
 

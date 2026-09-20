@@ -30,12 +30,14 @@ Turn it off with `MODULE_INVOICES=false` in `.env`.
 
 ## What the provider can do
 
-Override any of these on `ModuleProvider`. The first three run **only while
-the module is enabled**; the last three always apply.
+Override any of these on `ModuleProvider`. `registerModule`, `bootModule` and
+`schedule` run **only while the module is enabled**; `registerDisabled` runs only
+while it is off; the last three always apply.
 
 | Hook | Use it for |
 |---|---|
 | `registerModule()` | container bindings |
+| `registerDisabled()` | runs *instead* while the module is off — switch off behaviour that lives outside it (e.g. Activity turns spatie's logger off, since core models use its trait directly) |
 | `bootModule()` | middleware, Livewire namespace, listeners, nav/settings contributions |
 | `schedule(Schedule $s)` | scheduled jobs and commands |
 | `permissions()` | permission names to seed — **always** seeded, so roles keep them across a toggle |
@@ -99,6 +101,11 @@ naming a module whose middleware must run early or late.
 Toggles vs. feature flags: modules are the coarse, deploy-time outer gate (is
 this feature in the app at all). Runtime per-user/per-portal experiments *inside*
 an enabled module belong to feature flags, not here.
+
+Livewire: single/multi-file (⚡) components are addressed as `name::page` after
+`Livewire::addNamespace('name', viewPath: ...)`. A class-based component can't
+live in a `::` namespace — register it under a plain name with
+`Livewire::component('my-thing', MyThing::class)`.
 
 ## Testing a disabled module
 

@@ -29,8 +29,6 @@ class RolePermissionSeeder extends Seeder
      * @var array<int, string>
      */
     private const PERMISSIONS = [
-        'activity.view',
-        'activity.comment',
         'settings.edit',
         'roles.view',
         'roles.create',

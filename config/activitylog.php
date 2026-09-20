@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Activity;
+use App\Modules\Activity\Models\Activity;
 
 return [
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Modules\Activity\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Activitylog\Models\Activity as SpatieActivity;

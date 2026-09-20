@@ -25,4 +25,6 @@ return [
 
     'language' => (bool) env('MODULE_LANGUAGE', true),
 
+    'activity' => (bool) env('MODULE_ACTIVITY', true),
+
 ];

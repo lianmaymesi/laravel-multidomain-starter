@@ -23,6 +23,8 @@ abstract class ModuleProvider extends ServiceProvider
     final public function register(): void
     {
         if (! $this->enabled()) {
+            $this->registerDisabled();
+
             return;
         }
 
@@ -51,6 +53,13 @@ abstract class ModuleProvider extends ServiceProvider
             $this->app->booted(fn () => $this->schedule($this->app->make(Schedule::class)));
         }
     }
+
+    /**
+     * Runs INSTEAD of registerModule() while the module is off — for switching
+     * off behaviour that lives outside the module (e.g. a package or model
+     * trait in core that would otherwise keep acting on its own).
+     */
+    protected function registerDisabled(): void {}
 
     /** Bind services. Only runs while the module is enabled. */
     protected function registerModule(): void {}
