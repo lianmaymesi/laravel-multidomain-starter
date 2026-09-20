@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Middleware\CheckMaintenance;
 use App\Http\Middleware\Demo\EnsureEmailVerificationNotExpired;
 use App\Http\Middleware\Demo\EnsureIsStaff;
 use App\Http\Middleware\Demo\EnsurePhoneIsVerified;
@@ -20,9 +19,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Feature modules (e.g. CheckMaintenance) add their own web-group
+        // middleware from their service provider — only while enabled.
         $middleware->web(append: [
             SetLocale::class,
-            CheckMaintenance::class,
         ]);
 
         $middleware->alias([

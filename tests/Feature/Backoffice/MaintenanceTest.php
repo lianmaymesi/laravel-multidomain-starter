@@ -12,7 +12,7 @@ beforeEach(function () {
 
 it('excludes backoffice, account, auth, and api from the per-portal toggle list', function () {
     $portals = Livewire::actingAs(superAdminActor())
-        ->test('pages::backoffice.maintenance')
+        ->test('maintenance::index')
         ->instance()
         ->portals();
 
@@ -22,7 +22,7 @@ it('excludes backoffice, account, auth, and api from the per-portal toggle list'
 
 it('refuses to toggle a portal outside the manageable list', function () {
     Livewire::actingAs(superAdminActor())
-        ->test('pages::backoffice.maintenance')
+        ->test('maintenance::index')
         ->call('toggle', 'account')
         ->assertStatus(403);
 });

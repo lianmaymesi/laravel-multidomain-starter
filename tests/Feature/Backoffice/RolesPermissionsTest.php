@@ -26,7 +26,7 @@ it('blocks a staff user with no permissions from every access control page', fun
     Livewire::actingAs($user)->test('pages::backoffice.roles')->assertStatus(403);
     Livewire::actingAs($user)->test('pages::backoffice.permissions')->assertStatus(403);
     Livewire::actingAs($user)->test('pages::backoffice.users')->assertStatus(403);
-    Livewire::actingAs($user)->test('pages::backoffice.maintenance')->assertStatus(403);
+    Livewire::actingAs($user)->test('maintenance::index')->assertStatus(403);
 });
 
 it('hides Super Admin from the roles list for non-Super-Admin viewers', function () {

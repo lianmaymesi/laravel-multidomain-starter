@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Modules\Maintenance\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Cache;
@@ -11,6 +12,9 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class PortalSetting extends Model
 {
     use LogsActivity;
+
+    /** Attribute the activity timeline shows as this record's label. */
+    public const ACTIVITY_LABEL = 'portal';
 
     protected $fillable = [
         'portal',

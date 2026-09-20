@@ -5,7 +5,6 @@ namespace App\Livewire;
 use App\Models\Activity;
 use App\Models\ActivityComment;
 use App\Models\ActivityCommentReaction;
-use App\Models\PortalSetting;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -151,10 +150,12 @@ class ActivityTimeline extends Component
      */
     public function recordLabel(Activity $activity): string
     {
-        $identifierAttribute = match ($activity->subject_type) {
-            PortalSetting::class => 'portal',
-            default => 'name',
-        };
+        // Subjects opt in via an ACTIVITY_LABEL constant, so this class never
+        // needs to reference a model that lives in a (possibly disabled) module.
+        $subjectType = (string) $activity->subject_type;
+        $identifierAttribute = class_exists($subjectType) && defined("{$subjectType}::ACTIVITY_LABEL")
+            ? constant("{$subjectType}::ACTIVITY_LABEL")
+            : 'name';
 
         if ($activity->subject) {
             return (string) ($activity->subject->{$identifierAttribute} ?? "#{$activity->subject_id}");

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Modules\Maintenance\Http\Middleware;
 
-use App\Models\PortalSetting;
+use App\Modules\Maintenance\Models\PortalSetting;
 use App\Support\PortalResolver;
 use Closure;
 use Illuminate\Http\Request;

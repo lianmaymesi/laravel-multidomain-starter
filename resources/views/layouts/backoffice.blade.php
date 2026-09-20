@@ -57,8 +57,9 @@
                 ['label' => __('Roles'), 'route' => 'backoffice.roles.index'],
                 ['label' => __('Permissions'), 'route' => 'backoffice.permissions.index'],
                 ['label' => __('Users'), 'route' => 'backoffice.users.index'],
-                ['label' => __('Maintenance'), 'route' => 'backoffice.maintenance.index'],
+                ['label' => __('Maintenance'), 'route' => 'backoffice.maintenance.index', 'module' => 'maintenance'],
                 ];
+                $mobileItems = array_filter($mobileItems, fn ($item) => ! isset($item['module']) || \App\Support\Modules\Module::enabled($item['module']));
                 @endphp
                 @foreach ($mobileItems as $item)
                 @php $active = request()->routeIs($item['route']); @endphp
@@ -134,12 +135,20 @@
                     </a>
                     @endcan
 
-                    @canany(['maintenance.view', 'activity.view', 'languages.edit'])
+                    @php
+                    $systemPermissions = array_values(array_filter([
+                        \App\Support\Modules\Module::enabled('maintenance') ? 'maintenance.view' : null,
+                        'activity.view',
+                        'languages.edit',
+                    ]));
+                    @endphp
+                    @canany($systemPermissions)
                     <div class="mt-4 mb-1 px-4 text-[10px] font-medium tracking-[0.12em] uppercase text-zinc-300 dark:text-white/20">
                         {{ __('System') }}
                     </div>
                     @endcanany
 
+                    @module('maintenance')
                     @can('maintenance.view')
                     @php $maintenanceActive = request()->routeIs('backoffice.maintenance.index'); @endphp
                     <a href="{{ route('backoffice.maintenance.index') }}" wire:navigate
@@ -150,6 +159,7 @@
                         {{ __('Maintenance') }}
                     </a>
                     @endcan
+                    @endmodule
 
                     @can('activity.view')
                     @php $activityActive = request()->routeIs('backoffice.activity.index'); @endphp

@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\PortalSetting;
+use App\Modules\Maintenance\Models\PortalSetting;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Layout;
