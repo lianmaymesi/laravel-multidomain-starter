@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Services;
+namespace App\Modules\Currency\Services;
 
-use App\Models\Currency;
+use App\Contracts\Currencies;
+use App\Modules\Currency\Models\Currency;
 use Illuminate\Support\Collection;
 
-class CurrencyService
+class CurrencyService implements Currencies
 {
     /**
      * @return Collection<int, Currency>

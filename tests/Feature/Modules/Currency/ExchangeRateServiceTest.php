@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\Currency;
-use App\Services\ExchangeRateService;
+use App\Modules\Currency\Models\Currency;
+use App\Modules\Currency\Services\ExchangeRateService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace Database\Seeders;
+namespace App\Modules\Currency\Seeders;
 
-use App\Models\Currency;
+use App\Modules\Currency\Models\Currency;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 

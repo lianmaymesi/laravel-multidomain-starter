@@ -10,7 +10,6 @@ Route::livewire('permissions', 'pages::backoffice.permissions')->name('permissio
 Route::livewire('users', 'pages::backoffice.users')->name('users.index');
 Route::livewire('activity', 'pages::backoffice.activity')->name('activity.index');
 Route::livewire('languages', 'pages::backoffice.languages')->name('languages.index');
-Route::livewire('currencies', 'pages::backoffice.currencies')->name('currencies.index');
 Route::livewire('translations/{scope?}', 'pages::backoffice.translations')->name('translations.index');
 Route::livewire('settings', 'pages::backoffice.settings')->name('settings.index');
 

@@ -1,7 +1,7 @@
 <?php
 
 use App\Casts\MoneyCast;
-use App\Models\Currency;
+use App\Modules\Currency\Models\Currency;
 use App\Support\Money;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

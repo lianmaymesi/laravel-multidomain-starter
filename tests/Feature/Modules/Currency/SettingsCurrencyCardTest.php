@@ -1,8 +1,8 @@
 <?php
 
-use App\Models\Currency;
+use App\Modules\Currency\Models\Currency;
 use App\Models\User;
-use Database\Seeders\CurrencySeeder;
+use App\Modules\Currency\Seeders\CurrencySeeder;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
@@ -36,7 +36,7 @@ it('adding a currency from the picker stages it as a tag without touching the da
     $staff = settingsCurrencyStaff();
 
     Livewire::actingAs($staff)
-        ->test('pages::backoffice.settings')
+        ->test('currency::settings-card')
         ->set('addCurrencyCode', 'EUR')
         ->call('addCurrency')
         ->assertSet('activeCurrencyCodes', ['USD', 'EUR']);
@@ -48,17 +48,16 @@ it('removing a tag does not allow removing the primary currency', function () {
     $staff = settingsCurrencyStaff();
 
     Livewire::actingAs($staff)
-        ->test('pages::backoffice.settings')
+        ->test('currency::settings-card')
         ->call('removeCurrency', 'USD')
         ->assertSet('activeCurrencyCodes', ['USD']);
 });
 
-it('saving persists added currencies and the chosen primary in one global save', function () {
+it('saving persists added currencies and the chosen primary', function () {
     $staff = settingsCurrencyStaff();
 
     Livewire::actingAs($staff)
-        ->test('pages::backoffice.settings')
-        ->set('values.default_timezone', 'UTC')
+        ->test('currency::settings-card')
         ->set('addCurrencyCode', 'EUR')
         ->call('addCurrency')
         ->set('primaryCurrency', 'EUR')

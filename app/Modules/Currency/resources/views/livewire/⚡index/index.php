@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Currency;
+use App\Modules\Currency\Models\Currency;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Layout;
 use Livewire\Component;

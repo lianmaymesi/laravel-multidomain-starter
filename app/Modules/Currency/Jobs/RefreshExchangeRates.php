@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Modules\Currency\Jobs;
 
-use App\Services\ExchangeRateService;
+use App\Modules\Currency\Services\ExchangeRateService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services;
+namespace App\Modules\Currency\Services;
 
-use App\Models\Currency;
+use App\Modules\Currency\Models\Currency;
 use Illuminate\Support\Facades\Http;
 
 class ExchangeRateService

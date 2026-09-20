@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Contracts\Currencies;
 use App\Contracts\SmsService;
 use App\Models\User;
 use App\Services\Auth\TwilioSmsService;
 use App\Services\TimezoneService;
+use App\Support\NullCurrencies;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
@@ -20,6 +22,10 @@ class AppServiceProvider extends ServiceProvider
         // Twilio is the starter kit's default SmsService — swap the bound
         // concrete class here to use a different provider.
         $this->app->bind(SmsService::class, TwilioSmsService::class);
+
+        // Core money formatting works without the Currency module; when it is
+        // enabled its provider rebinds this to the database-backed service.
+        $this->app->bind(Currencies::class, NullCurrencies::class);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace App\Support;
 
-use App\Services\CurrencyService;
+use App\Contracts\Currencies;
 
 /**
  * A read-only snapshot of an integer minor-units amount (cents/paisa/halala)
@@ -20,7 +20,7 @@ final class Money
 
     public function format(): string
     {
-        return app(CurrencyService::class)->format($this->minorUnits, $this->currencyCode);
+        return app(Currencies::class)->format($this->minorUnits, $this->currencyCode);
     }
 
     /**
@@ -30,7 +30,7 @@ final class Money
     public function convertTo(string $currencyCode): self
     {
         return new self(
-            app(CurrencyService::class)->convert($this->minorUnits, $this->currencyCode, $currencyCode),
+            app(Currencies::class)->convert($this->minorUnits, $this->currencyCode, $currencyCode),
             $currencyCode,
         );
     }

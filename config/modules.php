@@ -21,4 +21,6 @@ return [
 
     'maintenance' => (bool) env('MODULE_MAINTENANCE', true),
 
+    'currency' => (bool) env('MODULE_CURRENCY', true),
+
 ];
