@@ -2,16 +2,18 @@
 
 namespace App\Support\Modules;
 
+use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\ServiceProvider;
 use ReflectionClass;
 
 /**
- * Base class for a module's service provider. Providers are registered
- * unconditionally in bootstrap/providers.php — the on/off guard lives here,
+ * Base class for a module's service provider. Providers are discovered
+ * automatically (see ModulesServiceProvider) — the on/off guard lives here,
  * so a disabled module contributes nothing to the container, router or views.
  *
- * Migrations are the one exception: they always load, so the schema exists
- * even while the module is off and enabling it later needs no extra step.
+ * Two things are deliberately NOT gated, so the schema and data survive a
+ * disable/enable cycle and enabling later needs no extra step: migrations,
+ * and the permission/seeder lists.
  */
 abstract class ModuleProvider extends ServiceProvider
 {
@@ -35,18 +37,49 @@ abstract class ModuleProvider extends ServiceProvider
     {
         $this->loadMigrationsFrom($this->modulePath('database/migrations'));
 
+        Module::contribute('permissions', $this->permissions());
+        Module::contribute('database.seeders', $this->seeders());
+
         if (! $this->enabled()) {
             return;
         }
 
         $this->bootModule();
+
+        if ($this->app->runningInConsole()) {
+            $this->app->booted(fn () => $this->schedule($this->app->make(Schedule::class)));
+        }
     }
 
     /** Bind services. Only runs while the module is enabled. */
     protected function registerModule(): void {}
 
-    /** Middleware, Livewire namespaces, listeners. Only runs while enabled. */
+    /** Middleware, Livewire namespaces, listeners, nav items. Only runs while enabled. */
     protected function bootModule(): void {}
+
+    /** Scheduled jobs/commands. Only runs while enabled. */
+    protected function schedule(Schedule $schedule): void {}
+
+    /**
+     * Permission names this module owns, e.g. ['billing.view'].
+     * Always seeded, even while disabled, so roles keep them across a toggle.
+     *
+     * @return array<int, string>
+     */
+    protected function permissions(): array
+    {
+        return [];
+    }
+
+    /**
+     * Seeder classes DatabaseSeeder should run for this module.
+     *
+     * @return array<int, class-string>
+     */
+    protected function seeders(): array
+    {
+        return [];
+    }
 
     protected function enabled(): bool
     {

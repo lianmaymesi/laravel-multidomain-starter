@@ -14,11 +14,6 @@ beforeEach(function () {
     $this->seed(RolePermissionSeeder::class);
 });
 
-function backofficeUrl(string $path = ''): string
-{
-    return rtrim(route('backoffice.dashboard'), '/').'/'.ltrim($path, '/');
-}
-
 it('wires up routes, middleware and config when the maintenance module is enabled', function () {
     expect(Module::enabled('maintenance'))->toBeTrue()
         ->and(Route::has('backoffice.maintenance.index'))->toBeTrue()

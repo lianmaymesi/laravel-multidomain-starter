@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Facade;
  * @method static array<int, string> enabledNames()
  * @method static string path(string $module, string $path = '')
  * @method static void routes(string $portal)
+ * @method static void contribute(string $point, array $items)
+ * @method static array<int, mixed> contributions(string $point)
  *
  * @see ModuleManager
  */

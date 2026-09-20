@@ -6,6 +6,9 @@ use Illuminate\Contracts\Config\Repository;
 
 class ModuleManager
 {
+    /** @var array<string, array<int, mixed>> */
+    private array $contributions = [];
+
     public function __construct(private Repository $config) {}
 
     /**
@@ -51,5 +54,30 @@ class ModuleManager
                 include $file;
             }
         }
+    }
+
+    /**
+     * Named extension points, so a module can plug into core UI or
+     * bootstrapping without core ever referencing the module:
+     *
+     *   backoffice.nav             sidebar links   [label, route, icon, permission, order, mobile]
+     *   backoffice.settings.cards  Settings page   [component, permission]
+     *   permissions                permission names to seed
+     *   database.seeders           seeder classes DatabaseSeeder should call
+     *
+     * A disabled module contributes nothing, so core just loops over
+     * whatever is there — no Module::enabled() checks needed at the call site.
+     *
+     * @param  array<int, mixed>  $items
+     */
+    public function contribute(string $point, array $items): void
+    {
+        $this->contributions[$point] = [...($this->contributions[$point] ?? []), ...array_values($items)];
+    }
+
+    /** @return array<int, mixed> */
+    public function contributions(string $point): array
+    {
+        return $this->contributions[$point] ?? [];
     }
 }

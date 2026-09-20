@@ -1,0 +1,48 @@
+<?php
+
+namespace App\Modules\{{ Name }};
+
+use App\Support\Modules\Module;
+use App\Support\Modules\ModuleProvider;
+use Livewire\Livewire;
+
+class {{ Name }}ServiceProvider extends ModuleProvider
+{
+    protected function module(): string
+    {
+        return '{{ name }}';
+    }
+
+    /**
+     * Permissions this module owns — always seeded, even while it is off.
+     */
+    protected function permissions(): array
+    {
+        return ['{{ name }}.view'];
+    }
+
+    /**
+     * Runs only while the module is enabled. Other hooks you can override:
+     *
+     *   registerModule()  bind services into the container
+     *   schedule($s)      scheduled jobs/commands
+     *   seeders()         seeder classes DatabaseSeeder should call
+     *
+     * Cross-module talk goes through events, never a direct call into another
+     * module's classes — see app/Modules/README.md.
+     */
+    protected function bootModule(): void
+    {
+        Livewire::addNamespace('{{ name }}', viewPath: $this->modulePath('resources/views/livewire'));
+
+        // Sidebar link in the backoffice "System" group. Add 'mobile' => true
+        // to show it in the mobile bar too.
+        Module::contribute('backoffice.nav', [[
+            'label' => '{{ Title }}',
+            'route' => 'backoffice.{{ name }}.index',
+            'icon' => 'squares-2x2',
+            'permission' => '{{ name }}.view',
+            'order' => 100,
+        ]]);
+    }
+}

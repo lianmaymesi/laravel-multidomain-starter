@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
+use App\Support\Modules\Module;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -20,7 +20,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolePermissionSeeder::class,
             AdminUserSeeder::class,
-            CurrencySeeder::class,
+
+            // Each module lists its own seeders (ModuleProvider::seeders()).
+            ...Module::contributions('database.seeders'),
         ]);
     }
 }

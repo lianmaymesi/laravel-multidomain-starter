@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Permission;
 use App\Models\Role;
+use App\Support\Modules\Module;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -39,8 +40,6 @@ class RolePermissionSeeder extends Seeder
     private const PERMISSIONS = [
         'activity.view',
         'activity.comment',
-        'maintenance.view',
-        'maintenance.update',
         'settings.edit',
         'roles.view',
         'roles.create',
@@ -57,7 +56,6 @@ class RolePermissionSeeder extends Seeder
         'languages.create',
         'languages.edit',
         'languages.delete',
-        'currencies.view',
         'translations.landing',
         'translations.portal',
         'translations.common',
@@ -68,7 +66,9 @@ class RolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        foreach (self::PERMISSIONS as $permission) {
+        // Feature modules declare their own permissions (ModuleProvider::permissions()),
+        // seeded even while a module is off so roles keep them across a toggle.
+        foreach ([...self::PERMISSIONS, ...Module::contributions('permissions')] as $permission) {
             Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web']);
         }
 
