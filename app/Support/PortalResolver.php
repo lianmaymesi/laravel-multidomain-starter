@@ -2,13 +2,13 @@
 
 namespace App\Support;
 
+use App\Contracts\Languages;
 use App\Models\AppSetting;
-use App\Services\LanguageService;
 use Illuminate\Http\Request;
 
 class PortalResolver
 {
-    public function __construct(private LanguageService $languages) {}
+    public function __construct(private Languages $languages) {}
 
     /**
      * Resolve which portal a request belongs to.

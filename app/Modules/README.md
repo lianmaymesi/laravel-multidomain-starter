@@ -30,8 +30,8 @@ Turn it off with `MODULE_INVOICES=false` in `.env`.
 
 ## What the provider can do
 
-Override any of these on `ModuleProvider`. All but the last two run **only while
-the module is enabled**.
+Override any of these on `ModuleProvider`. The first three run **only while
+the module is enabled**; the last three always apply.
 
 | Hook | Use it for |
 |---|---|
@@ -39,6 +39,7 @@ the module is enabled**.
 | `bootModule()` | middleware, Livewire namespace, listeners, nav/settings contributions |
 | `schedule(Schedule $s)` | scheduled jobs and commands |
 | `permissions()` | permission names to seed — **always** seeded, so roles keep them across a toggle |
+| `superAdminOnlyPermissions()` | subset of the above Admin is never granted — **always** listed |
 | `seeders()` | seeder classes `DatabaseSeeder` should run — **always** listed |
 
 Migrations always load for the same reason: the schema must exist so enabling
@@ -59,9 +60,11 @@ Module::contribute('backoffice.nav', [[
 
 | Point | Read by | Item shape |
 |---|---|---|
-| `backoffice.nav` | backoffice layout sidebar | `label, route, icon, permission, order, mobile, active` |
-| `backoffice.settings.cards` | Settings page | `component, permission, order` |
+| `backoffice.nav` | backoffice layout sidebar | `label, route, icon, permission (string or any-of array), visible (closure), order, mobile, active` |
+| `backoffice.settings.cards` | Settings page | `component, permission, order` — a Livewire component with its own Save button |
+| `settings.fields` | `SettingsRegistry` (generic Settings form) | closure returning a `SettingField` (closure so labels translate per request) |
 | `permissions` | `RolePermissionSeeder` | permission name (use `permissions()` instead) |
+| `permissions.super-admin-only` | `RolePermissionSeeder` | names Admin must never get (use `superAdminOnlyPermissions()`) |
 | `database.seeders` | `DatabaseSeeder` | seeder class (use `seeders()` instead) |
 
 Routes: each portal route file ends with `Module::routes('<portal>')`, which
@@ -80,9 +83,18 @@ domain, prefix, name and middleware group.
    null-object fallback.** Example: `App\Contracts\Currencies` is bound to
    `NullCurrencies` by default and rebound to the real service by the Currency
    module, so `Money::format()` works either way.
-4. **Don't drop tables on disable.** Toggling is a runtime switch, not an uninstall.
-5. **Every module ships a "disabling breaks nothing" test** — `make:module`
+4. **Blade: a module's anonymous component can't be written `<x-module::name />`
+   in a core view** — Blade resolves that tag at compile time and fails when the
+   module is off. Guard and resolve at runtime instead:
+   `@module('x')<x-dynamic-component component="x::name" />@endmodule`.
+5. **Don't drop tables on disable.** Toggling is a runtime switch, not an uninstall.
+6. **Every module ships a "disabling breaks nothing" test** — `make:module`
    generates one; extend it for whatever else your module touches.
+
+Middleware a module pushes onto the `web` group runs in provider boot order,
+which is alphabetical by module folder — e.g. `Language` (sets the locale) runs
+before `Maintenance` (renders a page in that locale). Keep that in mind when
+naming a module whose middleware must run early or late.
 
 Toggles vs. feature flags: modules are the coarse, deploy-time outer gate (is
 this feature in the app at all). Runtime per-user/per-portal experiments *inside*

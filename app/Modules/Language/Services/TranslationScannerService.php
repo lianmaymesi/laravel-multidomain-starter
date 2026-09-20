@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services;
+namespace App\Modules\Language\Services;
 
-use App\Models\LanguageLine;
+use App\Modules\Language\Models\LanguageLine;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Modules\Language\Services;
 
 use App\Models\AppSetting;
 use Illuminate\Support\Facades\Http;

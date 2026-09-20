@@ -1,8 +1,8 @@
 <?php
 
+use App\Contracts\Languages;
 use App\Http\Controllers\Accounts\DataExportController;
 use App\Models\AppSetting;
-use App\Services\LanguageService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -52,7 +52,7 @@ Route::post('/logout', function (Request $request) {
 $localeSegment = null;
 try {
     if (AppSetting::isPathMode()) {
-        $languages = app(LanguageService::class);
+        $languages = app(Languages::class);
         $requested = request()->segment(1);
 
         if (is_string($requested) && $requested !== $languages->primaryCode() && in_array($requested, $languages->activeCodes(), true)) {

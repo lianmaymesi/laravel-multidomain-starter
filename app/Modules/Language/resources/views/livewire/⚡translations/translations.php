@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\LanguageLine;
-use App\Services\GoogleTranslateService;
-use App\Services\LanguageService;
-use App\Services\TranslationScannerService;
+use App\Modules\Language\Models\LanguageLine;
+use App\Modules\Language\Services\GoogleTranslateService;
+use App\Modules\Language\Services\LanguageService;
+use App\Modules\Language\Services\TranslationScannerService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Layout;

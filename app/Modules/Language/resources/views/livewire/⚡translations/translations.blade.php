@@ -47,7 +47,7 @@
     <div class="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-200 dark:border-white/6">
         <div class="flex gap-1">
             @foreach ($this->allowedScopes() as $scopeOption)
-            <a href="{{ route('backoffice.translations.index', $scopeOption === \App\Models\LanguageLine::SCOPE_LANDING ? [] : ['scope' => $scopeOption]) }}" wire:navigate
+            <a href="{{ route('backoffice.translations.index', $scopeOption === \App\Modules\Language\Models\LanguageLine::SCOPE_LANDING ? [] : ['scope' => $scopeOption]) }}" wire:navigate
                 class="flex items-center gap-2 border-b-2 px-4 py-2 text-sm font-medium capitalize transition-colors
                     {{ $scope === $scopeOption ? 'border-blue-400 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:text-zinc-700 dark:hover:text-white/70' }}">
                 {{ $scopeOption }}

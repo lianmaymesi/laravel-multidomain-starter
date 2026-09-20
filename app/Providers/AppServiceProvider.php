@@ -3,11 +3,13 @@
 namespace App\Providers;
 
 use App\Contracts\Currencies;
+use App\Contracts\Languages;
 use App\Contracts\SmsService;
 use App\Models\User;
 use App\Services\Auth\TwilioSmsService;
 use App\Services\TimezoneService;
 use App\Support\NullCurrencies;
+use App\Support\NullLanguages;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
@@ -26,6 +28,10 @@ class AppServiceProvider extends ServiceProvider
         // Core money formatting works without the Currency module; when it is
         // enabled its provider rebinds this to the database-backed service.
         $this->app->bind(Currencies::class, NullCurrencies::class);
+
+        // Same idea for languages: one locale, no prefix, LTR until the Language
+        // module is enabled and rebinds this.
+        $this->app->bind(Languages::class, NullLanguages::class);
     }
 
     /**

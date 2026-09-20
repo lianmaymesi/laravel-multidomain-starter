@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Language;
+use App\Modules\Language\Models\Language;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;

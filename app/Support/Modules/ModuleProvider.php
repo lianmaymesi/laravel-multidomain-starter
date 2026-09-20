@@ -11,7 +11,7 @@ use ReflectionClass;
  * automatically (see ModulesServiceProvider) — the on/off guard lives here,
  * so a disabled module contributes nothing to the container, router or views.
  *
- * Two things are deliberately NOT gated, so the schema and data survive a
+ * Some things are deliberately NOT gated, so the schema and data survive a
  * disable/enable cycle and enabling later needs no extra step: migrations,
  * and the permission/seeder lists.
  */
@@ -38,6 +38,7 @@ abstract class ModuleProvider extends ServiceProvider
         $this->loadMigrationsFrom($this->modulePath('database/migrations'));
 
         Module::contribute('permissions', $this->permissions());
+        Module::contribute('permissions.super-admin-only', $this->superAdminOnlyPermissions());
         Module::contribute('database.seeders', $this->seeders());
 
         if (! $this->enabled()) {
@@ -67,6 +68,17 @@ abstract class ModuleProvider extends ServiceProvider
      * @return array<int, string>
      */
     protected function permissions(): array
+    {
+        return [];
+    }
+
+    /**
+     * Subset of permissions() that Admin is never granted — reserved for
+     * Super Admin.
+     *
+     * @return array<int, string>
+     */
+    protected function superAdminOnlyPermissions(): array
     {
         return [];
     }

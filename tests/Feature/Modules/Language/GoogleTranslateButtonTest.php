@@ -1,8 +1,8 @@
 <?php
 
 use App\Models\AppSetting;
-use App\Models\Language;
-use App\Models\LanguageLine;
+use App\Modules\Language\Models\Language;
+use App\Modules\Language\Models\LanguageLine;
 use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -28,7 +28,7 @@ it('hides the Google Translate button until a key is configured', function () {
     $staff = translateButtonStaff();
 
     Livewire::actingAs($staff)
-        ->test('pages::backoffice.translations', ['scope' => 'common'])
+        ->test('language::translations', ['scope' => 'common'])
         ->assertSet('editingLocale', 'en')
         ->call('setEditingLocale', 'ar')
         ->assertSee('Sync now')
@@ -55,7 +55,7 @@ it('translates missing strings and skips ones that drop a required placeholder',
     ]);
 
     Livewire::actingAs($staff)
-        ->test('pages::backoffice.translations', ['scope' => 'common'])
+        ->test('language::translations', ['scope' => 'common'])
         ->call('setEditingLocale', 'ar')
         ->call('translateWithGoogle')
         ->assertSet('editingLocale', 'ar');

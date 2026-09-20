@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app(App\Services\LanguageService::class)->currentDirection() }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app(App\Contracts\Languages::class)->currentDirection() }}">
 
 <head>
     <meta charset="utf-8">
@@ -61,7 +61,7 @@
 
                 // Module nav items opt in to the mobile bar with 'mobile' => true.
                 foreach (\App\Support\Modules\Module::contributions('backoffice.nav') as $item) {
-                    if (($item['mobile'] ?? false) && (! isset($item['permission']) || Gate::allows($item['permission']))) {
+                    if (($item['mobile'] ?? false) && (! isset($item['visible']) || $item['visible']()) && (! isset($item['permission']) || Gate::any((array) $item['permission']))) {
                         $mobileItems[] = ['label' => __($item['label']), 'route' => $item['route']];
                     }
                 }
@@ -145,7 +145,9 @@
                         there's no per-module check to keep in sync here. --}}
                     @php
                     $moduleNav = collect(\App\Support\Modules\Module::contributions('backoffice.nav'))
-                        ->filter(fn ($item) => Route::has($item['route']) && (! isset($item['permission']) || Gate::allows($item['permission'])))
+                        ->filter(fn ($item) => Route::has($item['route'])
+                            && (! isset($item['visible']) || $item['visible']())
+                            && (! isset($item['permission']) || Gate::any((array) $item['permission'])))
                         ->sortBy(fn ($item) => $item['order'] ?? 100);
                     @endphp
                     @if ($moduleNav->isNotEmpty() || Gate::any(['activity.view', 'languages.edit']))
@@ -176,17 +178,6 @@
                     </a>
                     @endcan
 
-                    @can('languages.view')
-                    @php $languagesActive = request()->routeIs('backoffice.languages.index'); @endphp
-                    <a href="{{ route('backoffice.languages.index') }}" wire:navigate
-                        class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
-                            {{ $languagesActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
-                        <flux:icon.language
-                            class="size-4 shrink-0 {{ $languagesActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        {{ __('Languages') }}
-                    </a>
-                    @endcan
-
                     @can('languages.edit')
                     @php $settingsActive = request()->routeIs('backoffice.settings.index'); @endphp
                     <a href="{{ route('backoffice.settings.index') }}" wire:navigate
@@ -198,21 +189,6 @@
                     </a>
                     @endcan
 
-                    {{-- Nothing to translate with a single active language, so this
-                        stays hidden until there's a second one — same rule the
-                        locale switcher itself follows. --}}
-                    @if (app(App\Services\LanguageService::class)->isMultiLanguageEnabled())
-                    @canany(['translations.landing', 'translations.portal', 'translations.common'])
-                    @php $translationsActive = request()->routeIs('backoffice.translations.index'); @endphp
-                    <a href="{{ route('backoffice.translations.index') }}" wire:navigate
-                        class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
-                            {{ $translationsActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
-                        <flux:icon.chat-bubble-left-right
-                            class="size-4 shrink-0 {{ $translationsActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        {{ __('Translations') }}
-                    </a>
-                    @endcanany
-                    @endif
 
                 </nav>
 

@@ -23,4 +23,6 @@ return [
 
     'currency' => (bool) env('MODULE_CURRENCY', true),
 
+    'language' => (bool) env('MODULE_LANGUAGE', true),
+
 ];

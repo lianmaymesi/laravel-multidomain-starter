@@ -14,7 +14,7 @@
     path-prefixed or `?lang=`, whichever URL mode is active (see backoffice
     Languages page) — and updates the current session.
 --}}
-@php $languages = app(App\Services\LanguageService::class); @endphp
+@php $languages = app(App\Modules\Language\Services\LanguageService::class); @endphp
 
 @if ($languages->isMultiLanguageEnabled())
 <flux:dropdown position="bottom" align="end">

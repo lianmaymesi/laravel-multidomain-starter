@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\AppSetting;
-use App\Services\GoogleTranslateService;
+use App\Modules\Language\Services\GoogleTranslateService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 

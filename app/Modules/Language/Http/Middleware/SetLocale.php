@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Middleware;
+namespace App\Modules\Language\Http\Middleware;
 
 use App\Models\AppSetting;
-use App\Services\LanguageService;
+use App\Modules\Language\Services\LanguageService;
 use App\Support\PortalResolver;
 use Closure;
 use Illuminate\Http\Request;

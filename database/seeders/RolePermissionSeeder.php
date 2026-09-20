@@ -23,15 +23,6 @@ class RolePermissionSeeder extends Seeder
         'permissions.create',
         'permissions.edit',
         'permissions.delete',
-        'languages.view',
-        'languages.create',
-        'languages.edit',
-        'languages.delete',
-
-        // "common" strings are reused across every portal including landing
-        // — letting an Admin holding just one scope permission edit them
-        // would leak into wording they weren't granted control over.
-        'translations.common',
     ];
 
     /**
@@ -52,13 +43,6 @@ class RolePermissionSeeder extends Seeder
         'permissions.delete',
         'users.view',
         'users.assign-roles',
-        'languages.view',
-        'languages.create',
-        'languages.edit',
-        'languages.delete',
-        'translations.landing',
-        'translations.portal',
-        'translations.common',
     ];
 
     /**
@@ -86,7 +70,7 @@ class RolePermissionSeeder extends Seeder
         $admin->forceFill(['name' => 'Admin', 'locked' => true])->save();
         $admin->syncPermissions(
             Permission::where('guard_name', 'web')
-                ->whereNotIn('name', self::ADMIN_EXCLUDED_PERMISSIONS)
+                ->whereNotIn('name', [...self::ADMIN_EXCLUDED_PERMISSIONS, ...Module::contributions('permissions.super-admin-only')])
                 ->get(),
         );
     }

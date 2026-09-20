@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Services;
+namespace App\Modules\Language\Services;
 
+use App\Contracts\Languages;
 use App\Models\AppSetting;
-use App\Models\Language;
+use App\Modules\Language\Models\Language;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
-class LanguageService
+class LanguageService implements Languages
 {
     /**
      * @return Collection<int, Language>
