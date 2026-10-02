@@ -1,0 +1,55 @@
+name: Set up the app
+description: PHP, cached Composer dependencies, optional Flux Pro credentials, and a .env with an app key.
+
+inputs:
+  php-version:
+    description: PHP version
+    default: "8.4"
+  coverage:
+    description: Coverage driver for setup-php (none, pcov, xdebug)
+    default: none
+  flux-username:
+    description: Flux Pro license email (only needed once livewire/flux-pro is required)
+    default: ""
+  flux-license-key:
+    description: Flux Pro license key
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ inputs.php-version }}
+        coverage: ${{ inputs.coverage }}
+        tools: composer:v2
+
+    - name: Locate Composer cache
+      id: composer-cache
+      shell: bash
+      run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+    - name: Cache Composer downloads
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.composer-cache.outputs.dir }}
+        key: composer-${{ runner.os }}-php${{ inputs.php-version }}-${{ hashFiles('composer.lock') }}
+        restore-keys: composer-${{ runner.os }}-php${{ inputs.php-version }}-
+
+    # livewire/flux-pro comes from Flux's private Composer repository. Skipped
+    # when the secrets aren't set (e.g. before Flux Pro is required).
+    - name: Flux Pro credentials
+      if: inputs.flux-username != '' && inputs.flux-license-key != ''
+      shell: bash
+      run: composer config http-basic.composer.fluxui.dev "${{ inputs.flux-username }}" "${{ inputs.flux-license-key }}"
+
+    - name: Install Composer dependencies
+      shell: bash
+      run: composer install --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+    - name: Prepare .env
+      shell: bash
+      run: |
+        php -r "file_exists('.env') || copy('.env.example', '.env');"
+        php artisan key:generate --ansi
