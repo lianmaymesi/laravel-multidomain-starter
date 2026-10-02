@@ -84,6 +84,7 @@ Module::contribute('backoffice.nav', [[
 |---|---|---|
 | `backoffice.nav` | backoffice layout sidebar | `label, route, icon, permission (string or any-of array), visible (closure), order, mobile, active` |
 | `backoffice.settings.cards` | Settings page | `component, permission, order` — a Livewire component with its own Save button |
+| `health.checks` | `/health`, `health:check`, System health page | class implementing `App\Support\Health\Check` |
 | `settings.fields` | `SettingsRegistry` (generic Settings form) | closure returning a `SettingField` (closure so labels translate per request) |
 | `permissions` | `RolePermissionSeeder` | permission name (use `permissions()` instead) |
 | `permissions.super-admin-only` | `RolePermissionSeeder` | names Admin must never get (use `superAdminOnlyPermissions()`) |
