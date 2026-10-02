@@ -8,6 +8,7 @@ use App\Services\AccountDeletionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use Laravel\Sanctum\PersonalAccessToken;
 
 uses(RefreshDatabase::class);
 
@@ -90,7 +91,6 @@ it('revokes the user\'s API tokens when the deletion is processed', function () 
 
     app(AccountDeletionService::class)->process($request);
 
-    expect($user->tokens()->count())->toBe(0);
-
-    $this->withToken($token->plainTextToken)->getJson(route('api.v1.me'))->assertUnauthorized();
+    expect($user->tokens()->count())->toBe(0)
+        ->and(PersonalAccessToken::findToken($token->plainTextToken))->toBeNull();
 });

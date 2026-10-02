@@ -27,4 +27,7 @@ return [
 
     'activity' => (bool) env('MODULE_ACTIVITY', true),
 
+    // Off by default: not every app needs a public API.
+    'api' => (bool) env('MODULE_API', false),
+
 ];

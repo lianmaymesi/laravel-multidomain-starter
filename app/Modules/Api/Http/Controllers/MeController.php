@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Modules\Api\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\UserResource;
+use App\Modules\Api\Http\Resources\UserResource;
 use DateTimeInterface;
 use Illuminate\Http\Request;
 use Laravel\Sanctum\PersonalAccessToken;

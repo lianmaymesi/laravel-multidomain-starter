@@ -1,12 +1,17 @@
 <?php
 
 use App\Models\User;
-use App\Support\Api;
+use App\Modules\Api\Services\TokenIssuer;
+use App\Modules\Api\Support\Api;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Laravel\Sanctum\Sanctum;
 
 uses(RefreshDatabase::class);
+
+beforeEach(function () {
+    $this->enableModules('api');
+});
 
 it('answers on the api subdomain under the version prefix', function () {
     expect(parse_url(route('api.v1.index'), PHP_URL_HOST))->toBe(config('multidomain.sub_domains.api'))
@@ -31,31 +36,39 @@ it('answers unknown API routes with JSON, not the HTML error page', function () 
 
 it('returns the token\'s user and abilities from /me', function () {
     $user = User::factory()->create(['name' => 'Ada']);
-    $token = $user->createToken('script', ['read']);
+    // Admin-issued, so the default policy (nobody self-serves) doesn't block it.
+    $token = app(TokenIssuer::class)->issueFor($user, User::factory()->create(), 'script', ['profile:read'], 30);
 
     $this->withToken($token->plainTextToken)
         ->getJson(route('api.v1.me'))
         ->assertOk()
         ->assertJsonPath('data.name', 'Ada')
-        ->assertJsonPath('data.email', $user->email)
         ->assertJsonMissingPath('data.password')
         ->assertJsonPath('token.name', 'script')
-        ->assertJsonPath('token.abilities', ['read']);
+        ->assertJsonPath('token.abilities', ['profile:read']);
 });
 
-it('enforces token abilities', function () {
-    Sanctum::actingAs(User::factory()->create(), ['write']);
-
+it('enforces token abilities, with * granting everything', function () {
+    Sanctum::actingAs(User::factory()->create(), ['languages:read']);
     $this->getJson(route('api.v1.me'))->assertForbidden();
+
+    Sanctum::actingAs(User::factory()->create(), ['*']);
+    $this->getJson(route('api.v1.me'))->assertOk();
+});
+
+it('never authenticates the API with a portal session', function () {
+    $this->actingAs(User::factory()->create(), 'web');
+
+    $this->getJson(route('api.v1.me'))->assertUnauthorized();
 });
 
 it('rejects expired and revoked tokens', function () {
     $user = User::factory()->create();
 
-    $expired = $user->createToken('old', ['read'], now()->subDay());
+    $expired = $user->createToken('old', ['profile:read'], now()->subDay());
     $this->withToken($expired->plainTextToken)->getJson(route('api.v1.me'))->assertUnauthorized();
 
-    $revoked = $user->createToken('gone', ['read']);
+    $revoked = $user->createToken('gone', ['profile:read']);
     $revoked->accessToken->delete();
     $this->app['auth']->forgetGuards();
     $this->withToken($revoked->plainTextToken)->getJson(route('api.v1.me'))->assertUnauthorized();
@@ -63,7 +76,7 @@ it('rejects expired and revoked tokens', function () {
 
 it('rate-limits per user', function () {
     config(['api.rate_limit' => 2]);
-    Sanctum::actingAs(User::factory()->create(), ['read']);
+    Sanctum::actingAs(User::factory()->create(), ['profile:read']);
 
     $this->getJson(route('api.v1.me'))->assertOk();
     $this->getJson(route('api.v1.me'))->assertOk();

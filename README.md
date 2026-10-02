@@ -19,32 +19,23 @@ Set `APP_MAIN_DOMAIN` in `.env` to your local dev domain (e.g. `yourapp.test` vi
 
 Set `APP_SINGLE_DOMAIN=true` to run everything on one domain instead — see the docs for details.
 
-## API
+## API (optional module)
 
-A versioned, token-authenticated JSON API (Laravel Sanctum) on the `api` subdomain, e.g. `https://api.yourapp.test/v1` (or `/api/v1` in single-domain mode).
+A versioned, token-authenticated JSON API (Laravel Sanctum) on the `api` subdomain, e.g. `https://api.yourapp.test/v1`. It is **off by default**, since not every app needs one. Turn it on with `MODULE_API=true` or on Backoffice → Modules.
 
-1. **Get a token:** Account → **API tokens**. Name it, pick abilities (`read`, `write`) and an expiry. The token is shown once.
-2. **Call the API:**
+- **Super Admin decides who gets API access** on Backoffice → **API Access**:
+  - who may create their own tokens: nobody (default), backoffice staff, everyone, or specific roles, plus which abilities, the longest lifetime and how many tokens per user
+  - issue tokens to any user (integrations, partners) with any ability, including full access
+  - see, search and revoke every token, or revoke them all at once
+- **Users** see Account → **API tokens** only when the policy includes them, or when an admin issued them a token.
+- **Enforced on every request:** tightening the policy disables affected self-made tokens immediately. A token never grants more than its user's permissions.
 
-   ```bash
-   curl https://api.yourapp.test/v1/me -H "Authorization: Bearer <token>"
-   curl https://api.yourapp.test/v1/languages -H "Authorization: Bearer <token>"
-   ```
+```bash
+curl https://api.yourapp.test/v1/me        -H "Authorization: Bearer <token>"
+curl https://api.yourapp.test/v1/languages -H "Authorization: Bearer <token>"
+```
 
-| Endpoint | Ability | Permission |
-|---|---|---|
-| `GET /v1` | none (public) | — |
-| `GET /v1/me` | `read` | — |
-| `GET /v1/languages`, `GET /v1/languages/{code}` | `read` | `languages.view` |
-| `POST /v1/languages`, `PATCH /v1/languages/{code}` | `write` | `languages.create` / `languages.edit` |
-| `DELETE /v1/languages/{code}` | `write` | `languages.delete` |
-
-- **Tokens never grant more than their user.** Abilities only narrow down what a token may do.
-- **Errors are always JSON:** 401, 403, 404 and 422 (with field errors).
-- **Rate limit:** `API_RATE_LIMIT` requests per minute (default 60), answered with 429 and `Retry-After`.
-- **Disabled modules:** a module's endpoints disappear (404).
-- **Account deletion** revokes the account's tokens.
-- **Session auth never applies to the API.**
+Endpoints, abilities and how modules add their own: [app/Modules/Api/README.md](app/Modules/Api/README.md).
 
 ## License
 

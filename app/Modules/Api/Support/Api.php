@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Support;
+namespace App\Modules\Api\Support;
 
 use Illuminate\Http\Request;
 
@@ -9,7 +9,7 @@ class Api
     /** Path prefix: "v1", or "api/v1" in single-domain mode. */
     public static function prefix(): string
     {
-        return (config('multidomain.single_domain') ? 'api/' : '').config('api.version');
+        return (config('multidomain.single_domain') ? 'api/' : '').config('api.version', 'v1');
     }
 
     /**

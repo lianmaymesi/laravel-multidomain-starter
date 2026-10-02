@@ -8,13 +8,14 @@ use Laravel\Sanctum\Sanctum;
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
+    $this->enableModules('api');
     $this->seed(RolePermissionSeeder::class);
 
     Language::create(['code' => 'en', 'name' => 'English', 'native_name' => 'English', 'direction' => 'ltr', 'is_primary' => true, 'is_active' => true, 'order' => 1]);
     Language::create(['code' => 'ar', 'name' => 'Arabic', 'native_name' => 'العربية', 'direction' => 'rtl', 'is_primary' => false, 'is_active' => false, 'order' => 2]);
 });
 
-function apiAs($user, array $abilities = ['read', 'write']): void
+function apiAs($user, array $abilities = ['languages:read', 'languages:write']): void
 {
     Sanctum::actingAs($user, $abilities);
 }
@@ -22,7 +23,7 @@ function apiAs($user, array $abilities = ['read', 'write']): void
 // ── Read ─────────────────────────────────────────────────────────────
 
 it('lists languages in order, paginated, as resources', function () {
-    apiAs(superAdminActor(), ['read']);
+    apiAs(superAdminActor(), ['languages:read']);
 
     $this->getJson(route('api.v1.languages.index', ['per_page' => 1]))
         ->assertOk()
@@ -34,14 +35,14 @@ it('lists languages in order, paginated, as resources', function () {
 });
 
 it('filters by active and caps the page size', function () {
-    apiAs(superAdminActor(), ['read']);
+    apiAs(superAdminActor(), ['languages:read']);
 
     $this->getJson(route('api.v1.languages.index', ['active' => 0]))->assertJsonCount(1, 'data')->assertJsonPath('data.0.code', 'ar');
     $this->getJson(route('api.v1.languages.index', ['per_page' => 5000]))->assertJsonPath('meta.per_page', 100);
 });
 
 it('shows one language by code, and 404s an unknown one in JSON', function () {
-    apiAs(superAdminActor(), ['read']);
+    apiAs(superAdminActor(), ['languages:read']);
 
     $this->getJson(route('api.v1.languages.show', 'ar'))->assertOk()->assertJsonPath('data.direction', 'rtl');
     $this->getJson(route('api.v1.languages.show', 'xx'))->assertNotFound()->assertJsonStructure(['message']);
@@ -109,8 +110,8 @@ it('deletes a language', function () {
 
 // ── Authorization ────────────────────────────────────────────────────
 
-it('needs the write ability to change anything', function () {
-    apiAs(superAdminActor(), ['read']);
+it('needs languages:write to change anything', function () {
+    apiAs(superAdminActor(), ['languages:read']);
 
     $this->postJson(route('api.v1.languages.store'), ['code' => 'fr', 'name' => 'French', 'native_name' => 'Français', 'direction' => 'ltr'])->assertForbidden();
     $this->patchJson(route('api.v1.languages.update', 'ar'), ['name' => 'x'])->assertForbidden();
@@ -135,7 +136,7 @@ it('never lets a token do more than its user may', function () {
 });
 
 it('404s every language route while the module is off', function () {
-    $this->disableModules('language');
+    $this->disableModules('language')->enableModules('api');
     $this->seed(RolePermissionSeeder::class);
     apiAs(superAdminActor());
 
@@ -145,5 +146,6 @@ it('404s every language route while the module is off', function () {
     $this->postJson("http://{$host}/v1/languages", [])->assertNotFound();
 
     // The rest of the API keeps working.
+    apiAs(superAdminActor(), ['profile:read']);
     $this->getJson(route('api.v1.me'))->assertOk();
 });

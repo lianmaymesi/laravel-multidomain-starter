@@ -29,8 +29,12 @@
         </div>
         @endif
 
-        <form wire:submit="create" class="rounded-[1.75rem] border border-zinc-200 dark:border-white/[0.07] bg-zinc-50 dark:bg-white/3 px-6 py-5 space-y-5">
-            <flux:heading size="sm">{{ __('Create a token') }}</flux:heading>
+        @if ($this->canCreate())
+        <form wire:submit="create" class="rounded-[1.75rem] border border-zinc-200 dark:border-white/[0.07] bg-zinc-50 dark:bg-white/3 px-6 py-5 space-y-5" data-create-form>
+            <div class="flex items-center justify-between gap-4">
+                <flux:heading size="sm">{{ __('Create a token') }}</flux:heading>
+                <flux:text class="text-xs text-zinc-400 dark:text-white/35">{{ trans_choice(':count token left|:count tokens left', $this->remaining()) }}</flux:text>
+            </div>
 
             <flux:input wire:model="name" :label="__('Name')" :placeholder="__('e.g. Mobile app, Zapier')" class="max-w-sm" />
 
@@ -40,14 +44,20 @@
                 @endforeach
             </flux:checkbox.group>
 
-            <flux:select wire:model="expiresIn" :label="__('Expires')" class="max-w-48">
-                @foreach (config('api.token_expiry_days') as $days)
-                <flux:select.option :value="(string) ($days ?? '')">{{ $days ? trans_choice(':count day|:count days', $days) : __('Never') }}</flux:select.option>
+            <flux:select wire:model="expiresIn" :label="__('Expires after')" class="max-w-48">
+                @foreach ($this->expiryOptions() as $value => $label)
+                <flux:select.option :value="$value">{{ $label }}</flux:select.option>
                 @endforeach
             </flux:select>
+            <flux:error name="expiresIn" />
 
-            <flux:button type="submit" variant="primary" size="sm">{{ __('Create token') }}</flux:button>
+            <flux:button type="submit" variant="primary" size="sm" :disabled="$this->remaining() === 0">{{ __('Create token') }}</flux:button>
         </form>
+        @else
+        <div class="rounded-[1.75rem] border border-zinc-200 dark:border-white/[0.07] px-6 py-4 text-sm text-zinc-500 dark:text-white/40" data-self-service-off>
+            {{ __('Creating tokens yourself isn\'t enabled for your account. The tokens below were issued to you by an administrator.') }}
+        </div>
+        @endif
     </section>
 
     <section class="space-y-4">
@@ -57,7 +67,12 @@
             @forelse ($this->tokens() as $token)
             <div class="flex flex-wrap items-center justify-between gap-4 px-6 py-4" wire:key="token-{{ $token->id }}" data-token="{{ $token->id }}">
                 <div class="min-w-0">
-                    <p class="text-sm font-medium text-zinc-800 dark:text-white/80">{{ $token->name }}</p>
+                    <p class="text-sm font-medium text-zinc-800 dark:text-white/80">
+                        {{ $token->name }}
+                        @if ($token->issued_by && $token->issued_by !== $token->tokenable_id)
+                        <flux:badge size="sm" color="blue" class="ms-1">{{ __('Issued by :name', ['name' => $token->issuer?->name ?? __('an administrator')]) }}</flux:badge>
+                        @endif
+                    </p>
                     <p class="text-xs text-zinc-400 dark:text-white/35">
                         {{ implode(', ', $token->abilities) }}
                         · {{ $token->last_used_at ? __('last used :when', ['when' => $token->last_used_at->diffForHumans()]) : __('never used') }}
