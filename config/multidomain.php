@@ -148,4 +148,23 @@ return [
         'resend_max_attempts' => 3,
         'resend_lockout_seconds' => 60 * 60 * 24,
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | First-Run Setup (php artisan app:setup)
+    |--------------------------------------------------------------------------
+    |
+    | The Super Admin account, and the shared password for --demo accounts.
+    | Leave a password empty to have one generated and printed once. Read
+    | through config (not env() in the seeders) so it still works after
+    | `php artisan config:cache`.
+    |
+    */
+
+    'setup' => [
+        'admin_name' => env('ADMIN_NAME') ?: 'Admin',
+        'admin_email' => env('ADMIN_EMAIL') ?: 'admin@example.com',
+        'admin_password' => env('ADMIN_PASSWORD') ?: null,
+        'demo_password' => env('DEMO_PASSWORD') ?: null,
+    ],
 ];
