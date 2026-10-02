@@ -17,6 +17,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
@@ -26,7 +27,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use Anonymizable, HasFactory, HasRoles, LogsActivity, MustVerifyPhone, Notifiable;
+    use Anonymizable, HasApiTokens, HasFactory, HasRoles, LogsActivity, MustVerifyPhone, Notifiable;
 
     /**
      * Only these are ever written to the activity log — password hash,

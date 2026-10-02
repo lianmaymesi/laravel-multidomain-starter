@@ -48,7 +48,7 @@
                 ['label' => __('2FA'), 'route' => 'account.two-factor-setup'],
                 ['label' => __('Export'), 'route' => 'account.export'],
                 ['label' => __('Settings'), 'route' => 'account.settings'],
-                ['label' => __('Settings'), 'route' => 'account.settings'],
+                ['label' => __('API tokens'), 'route' => 'account.api-tokens'],
                 ];
                 @endphp
                 @foreach ($mobileItems as $item)
@@ -141,6 +141,15 @@
                         <span class="ms-auto text-[10px] text-zinc-300 dark:text-white/20">{{ __('Soon') }}</span>
                     </span>
                     @endif
+
+                    @php $tokensActive = request()->routeIs('account.api-tokens'); @endphp
+                    <a href="{{ route('account.api-tokens') }}" wire:navigate
+                        class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
+                                {{ $tokensActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
+                        <flux:icon.key
+                            class="size-4 shrink-0 {{ $tokensActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
+                        {{ __('API tokens') }}
+                    </a>
 
                 </nav>
 

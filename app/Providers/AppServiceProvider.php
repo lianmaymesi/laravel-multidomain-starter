@@ -10,7 +10,10 @@ use App\Services\Auth\TwilioSmsService;
 use App\Services\TimezoneService;
 use App\Support\NullCurrencies;
 use App\Support\NullLanguages;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -39,6 +42,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // The API's rate limit (config/api.php), per token's user or per IP.
+        RateLimiter::for('api', fn (Request $request) => Limit::perMinute((int) config('api.rate_limit', 60))
+            ->by($request->user()?->getAuthIdentifier() ?? $request->ip()));
         Password::defaults(function () {
             return Password::min(8)
                 ->letters()

@@ -22,7 +22,7 @@ class AccountDeletionService
         $request = $user->deletionRequest()->create([
             'requested_at' => $now,
             'scheduled_at' => $now->copy()->addDays(AccountDeletionRequest::GRACE_PERIOD_DAYS),
-            'status'       => 'pending',
+            'status' => 'pending',
         ]);
 
         // Revoke all active sessions immediately on deletion request
@@ -54,6 +54,9 @@ class AccountDeletionService
 
         // Delete OTPs
         $user->otps()->delete();
+
+        // Revoke API tokens — the anonymized row stays, its tokens must not
+        $user->tokens()->delete();
 
         // Anonymize user — keeps the row for audit/FK integrity
         $user->anonymize();

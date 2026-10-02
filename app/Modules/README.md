@@ -93,6 +93,13 @@ Routes: each portal route file ends with `Module::routes('<portal>')`, which
 includes every enabled module's `routes/<portal>.php` inside that portal's
 domain, prefix, name and middleware group.
 
+The API works the same way: a module's `routes/api.php` is included inside the
+authenticated `/v1` group (Sanctum token required, JSON, rate-limited), so a
+disabled module's endpoints simply 404. Add `->middleware('ability:read')` or
+`ability:write` to each route, and check the user's permission in the
+controller or form request: a token never grants more than its user has. See
+the Language module's `routes/api.php` for a complete example.
+
 ## Rules that keep modules removable
 
 1. **Never call into a module from outside it without a guard.** Use
