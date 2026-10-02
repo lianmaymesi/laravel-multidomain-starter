@@ -4,6 +4,7 @@ use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use Tests\Fixtures\Health\FailingCheck;
+use Tests\Fixtures\Health\NestedMetaCheck;
 use Tests\Fixtures\Health\PassingCheck;
 
 uses(RefreshDatabase::class);
@@ -29,6 +30,15 @@ it('shows every check with its status and the overall result', function () {
         ->assertSeeHtml('data-check="failing" data-status="failed"')
         ->assertSee('Down.')
         ->assertSee(route('health'));
+});
+
+it('renders nested check meta', function () {
+    config(['health.checks' => [NestedMetaCheck::class]]);
+
+    Livewire::actingAs(adminActor())->test('pages::backoffice.health')
+        ->assertOk()
+        ->assertSee('backups: (reachable: yes, count: 1, newest: —)')
+        ->assertSee('local, public');
 });
 
 it('runs the checks again on demand', function () {

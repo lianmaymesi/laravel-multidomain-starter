@@ -48,7 +48,7 @@
             <dl class="grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-xs text-zinc-500 dark:text-white/40">
                 @foreach ($check['result']->meta as $key => $value)
                 <dt>{{ str($key)->headline() }}</dt>
-                <dd class="truncate">{{ is_array($value) ? collect($value)->map(fn ($v, $k) => is_string($k) ? "{$k}: {$v}" : $v)->implode(', ') : (is_bool($value) ? ($value ? 'yes' : 'no') : $value) }}</dd>
+                <dd class="truncate" title="{{ $this->formatMeta($value) }}">{{ $this->formatMeta($value) }}</dd>
                 @endforeach
             </dl>
             @endif
