@@ -1,5 +1,6 @@
 <?php
 
+use App\Support\Toast;
 use App\Models\ModuleSetting;
 use App\Support\Modules\Module;
 use Illuminate\Support\Facades\Artisan;
@@ -92,7 +93,7 @@ new #[Layout('layouts.backoffice')] class extends Component
             $message .= ' '.__('Route cache cleared — run "php artisan route:cache" to re-cache.');
         }
 
-        session()->flash('status', $message);
+        Toast::success($message, afterRedirect: true);
 
         // Modules register at boot, so only a fresh request sees the change.
         $this->redirectRoute('backoffice.modules.index');

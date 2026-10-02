@@ -26,6 +26,12 @@ jobs:
       - name: Copy .env
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
 
+      # livewire/flux-pro comes from Flux's private Composer repository.
+      # Add FLUX_USERNAME (license email) and FLUX_LICENSE_KEY as repository
+      # secrets: Settings → Secrets and variables → Actions.
+      - name: Add Flux Pro credentials
+        run: composer config http-basic.composer.fluxui.dev "${{ secrets.FLUX_USERNAME }}" "${{ secrets.FLUX_LICENSE_KEY }}"
+
       - name: Install Composer dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Support\Toast;
 use App\Models\AppSetting;
 use App\Services\SettingsRegistry;
 use App\Support\Modules\Module;
@@ -84,7 +85,7 @@ new #[Layout('layouts.backoffice')] class extends Component
             }
         }
 
-        session()->flash('status', __('Saved.'));
+        Toast::success(__('Saved.'));
     }
 
     public function removeSecret(string $key): void
@@ -94,6 +95,6 @@ new #[Layout('layouts.backoffice')] class extends Component
 
         AppSetting::setEncrypted($key, null);
 
-        session()->flash('status', __('Saved.'));
+        Toast::success(__('Saved.'));
     }
 };

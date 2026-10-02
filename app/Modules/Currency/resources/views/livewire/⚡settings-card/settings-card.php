@@ -1,5 +1,6 @@
 <?php
 
+use App\Support\Toast;
 use App\Modules\Currency\Models\Currency;
 use App\Modules\Currency\Services\ExchangeRateService;
 use Illuminate\Support\Facades\Gate;
@@ -22,8 +23,6 @@ new class extends Component
     public string $addCurrencyCode = '';
 
     public string $primaryCurrency = '';
-
-    public string $status = '';
 
     public function mount(): void
     {
@@ -99,7 +98,7 @@ new class extends Component
             }
         }
 
-        $this->status = __('Saved.');
+        Toast::success(__('Saved.'));
     }
 
     public function refreshRates(ExchangeRateService $exchangeRates): void
@@ -108,8 +107,8 @@ new class extends Component
 
         $updated = $exchangeRates->refresh();
 
-        $this->status = $updated > 0
+        Toast::success($updated > 0
             ? __('Refreshed :count exchange rate(s).', ['count' => $updated])
-            : __('No active currencies to refresh.');
+            : __('No active currencies to refresh.'));
     }
 };
