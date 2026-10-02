@@ -30,7 +30,8 @@ php artisan make:module Invoices
 ```
 
 That creates the folder below, adds the toggle to `config/modules.php` and
-`.env.example`, and writes a test that proves the module works on *and* that
+`.env.example`, registers its migrations folder for static analysis
+(`phpstan.neon`), and writes a test that proves the module works on *and* that
 disabling it breaks nothing. Providers are auto-discovered — there is nothing to
 register by hand.
 

@@ -27,6 +27,7 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
+        "larastan/larastan": "^3.12",
         "laravel/pail": "^1.2.5",
         "laravel/pao": "^1.1",
         "laravel/pint": "^1.27",
@@ -82,7 +83,11 @@
         ],
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
-        ]
+        ],
+        "analyse": "phpstan analyse --memory-limit=2G",
+        "analyse:baseline": "phpstan analyse --memory-limit=2G --generate-baseline=phpstan-baseline.neon",
+        "format": "pint",
+        "format:check": "pint --test"
     },
     "extra": {
         "laravel": {
@@ -99,5 +104,11 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "scripts-descriptions": {
+        "analyse": "Static analysis (Larastan, level 5, with baseline)",
+        "analyse:baseline": "Regenerate phpstan-baseline.neon (after fixing baselined errors)",
+        "format": "Fix code style with Pint",
+        "format:check": "Check code style without changing files"
+    }
 }

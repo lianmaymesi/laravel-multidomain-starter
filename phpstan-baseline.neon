@@ -1,0 +1,43 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$is_like\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/Activity/Livewire/ActivityTimeline.php
+
+		-
+			message: '#^Parameter \#1 \$activities of method App\\Modules\\Activity\\Livewire\\ActivityTimeline\:\:collapseSimilar\(\) expects Illuminate\\Support\\Collection\<int, App\\Modules\\Activity\\Models\\Activity\>, Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Modules/Activity/Livewire/ActivityTimeline.php
+
+		-
+			message: '#^Parameter \#1 \$groupBy of method Illuminate\\Support\\Collection\<int,Illuminate\\Database\\Eloquent\\Model\>\:\:groupBy\(\) expects \(callable\(Illuminate\\Database\\Eloquent\\Model, int\)\: string\)\|list\<Closure\|string\>\|string, Closure\(App\\Modules\\Activity\\Models\\Activity\)\: string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Modules/Activity/Livewire/ActivityTimeline.php
+
+		-
+			message: '#^Return type \(Illuminate\\Support\\Collection\<int, App\\Modules\\Language\\Models\\Language\>\) of method App\\Modules\\Language\\Services\\LanguageService\:\:active\(\) should be compatible with return type \(Illuminate\\Support\\Collection\<int, object\>\) of method App\\Contracts\\Languages\:\:active\(\)$#'
+			identifier: method.childReturnType
+			count: 1
+			path: app/Modules/Language/Services/LanguageService.php
+
+		-
+			message: '#^Method App\\Modules\\Language\\Services\\TranslationScannerService\:\:files\(\) should return Illuminate\\Support\\Collection\<int, SplFileInfo\> but returns Illuminate\\Support\\Collection\<\(int\|string\), Symfony\\Component\\Finder\\SplFileInfo\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Modules/Language/Services/TranslationScannerService.php
+
+		-
+			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
+			identifier: larastan.noEnvCallsOutsideOfConfig
+			count: 3
+			path: database/seeders/AdminUserSeeder.php
+
+		-
+			message: '#^Using nullsafe method call on non\-nullable type Illuminate\\Console\\Command\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: database/seeders/AdminUserSeeder.php

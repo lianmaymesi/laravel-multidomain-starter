@@ -19,6 +19,18 @@ Set `APP_MAIN_DOMAIN` in `.env` to your local dev domain (e.g. `yourapp.test` vi
 
 Set `APP_SINGLE_DOMAIN=true` to run everything on one domain instead — see the docs for details.
 
+## Code quality
+
+```bash
+composer analyse          # Larastan (PHPStan level 5)
+composer format           # fix code style (Pint, Laravel preset)
+composer format:check     # check style without changing files
+php artisan test
+```
+
+- **Static analysis** uses a baseline (`phpstan-baseline.neon`): errors that existed when it was introduced are listed there, and everything new must pass. After fixing baselined errors, run `composer analyse:baseline` to shrink it.
+- **CI** runs Larastan on every push and PR, plus Pint on the files a PR changes, so older files can be reformatted on their own schedule with `composer format`.
+
 ## License
 
 Open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
