@@ -41,4 +41,19 @@ return [
         ],
 
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Kill Switch
+    |--------------------------------------------------------------------------
+    |
+    | Flag names forced off for every portal and user, whatever is stored —
+    | e.g. PENNANT_KILLED=hello-world-advanced,whats-new-card. Checked by
+    | FeatureFlag::before(), so it also covers portals/users not decided yet
+    | (which "All off" on the Feature Flags page does not). Nothing is
+    | written: remove the name and the stored values apply again.
+    |
+    */
+
+    'killed' => array_values(array_filter(array_map('trim', explode(',', (string) env('PENNANT_KILLED', ''))))),
 ];

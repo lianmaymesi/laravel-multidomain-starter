@@ -28,4 +28,15 @@ abstract class FeatureFlag
 
     /** Value for a scope that has nothing stored yet. */
     abstract public function resolve(mixed $scope): mixed;
+
+    /**
+     * Pennant runs this before every check, ahead of any stored value. A
+     * non-null return wins and is never stored. Here: the PENNANT_KILLED kill
+     * switch (config/pennant.php). Override to add rules, starting with
+     * `if (($value = parent::before($scope)) !== null) return $value;`.
+     */
+    public function before(mixed $scope): mixed
+    {
+        return in_array($this->name, config('pennant.killed', []), true) ? false : null;
+    }
 }

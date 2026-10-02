@@ -30,6 +30,36 @@
     </flux:card>
     @endflag
 
+    {{-- Advanced demo flag (app/Features/HelloWorldAdvanced.php) — the value is
+        an A/B variant, not just on/off. "All on" stores plain true → classic. --}}
+    @flag(\App\Features\HelloWorldAdvanced::class)
+    @php
+        $variant = \App\Support\Features\Flags::value(\App\Features\HelloWorldAdvanced::class);
+        $variant = in_array($variant, \App\Features\HelloWorldAdvanced::VARIANTS, true) ? $variant : 'classic';
+    @endphp
+    <flux:card class="flex items-start gap-4" data-flag="hello-world-advanced" data-variant="{{ $variant }}">
+        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-violet-100 dark:bg-violet-500/15">
+            @if ($variant === 'rocket')
+            <flux:icon.rocket-launch class="size-4.5 text-violet-600 dark:text-violet-400" />
+            @elseif ($variant === 'wave')
+            <flux:icon.hand-raised class="size-4.5 text-violet-600 dark:text-violet-400" />
+            @else
+            <flux:icon.globe-alt class="size-4.5 text-violet-600 dark:text-violet-400" />
+            @endif
+        </div>
+        <div>
+            <flux:heading size="lg">
+                @switch($variant)
+                @case('rocket') {{ __('Hello, World — now 10x faster!') }} @break
+                @case('wave') {{ __('Hey :name, welcome aboard!', ['name' => auth()->user()?->name ?? __('there')]) }} @break
+                @default {{ __('Hello, World') }}
+                @endswitch
+            </flux:heading>
+            <flux:text class="text-zinc-500 dark:text-white/50 text-sm">{{ __('Feature flag demo — you are seeing variant ":variant". Manage it from Backoffice → Feature Flags.', ['variant' => $variant]) }}</flux:text>
+        </div>
+    </flux:card>
+    @endflag
+
     {{-- Stat cards --}}
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         @foreach ($stats as $stat)

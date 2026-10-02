@@ -77,6 +77,37 @@ Feature::for(Portal::named('app'))->activate(NewCurrencyPicker::class);
 Feature::for($user)->deactivate(BetaDashboard::class);
 ```
 
+## Advanced example: `HelloWorldAdvanced`
+
+[HelloWorldAdvanced.php](HelloWorldAdvanced.php) is a demo of the real-world
+patterns in one flag, a greeting card on the app dashboard:
+
+| Pattern | Where | Real-world use |
+|---|---|---|
+| **Kill switch** — `PENNANT_KILLED=hello-world-advanced` forces it off | `before()` (base class) | Feature is breaking production at 2 a.m.: flip an env var, no DB write, no deploy of code |
+| **Always on for a segment** — users < 7 days old always get `wave` | `before()` | Onboarding experiments, internal/beta testers, paying plans |
+| **Gradual rollout** — 50% of users let in, result stored | `initial()` + `Lottery` | Ship to 5% → 25% → 100% while watching error rates |
+| **A/B variants** — value is `classic` / `wave` / `rocket`, not just true | `initial()` + `Flags::value()` | Test which headline, pricing layout or checkout flow converts better |
+| **Sticky per user** — same user, same variant, every visit | stored value / id-based pick | Users don't see the UI flip between page loads |
+
+`before()` answers are never stored, so rules there apply instantly and undo
+themselves. `initial()` only runs the first time a user is checked.
+
+```php
+$variant = Flags::value(HelloWorldAdvanced::class);   // 'rocket', 'wave', 'classic', true or false
+```
+
+To try it: sign in to the app portal as a user. New accounts always see
+*wave*; for older ones it's a coin flip. Then, from **Backoffice → Feature
+Flags**, use *All on* / *All off* / *Reset*, or set `PENNANT_KILLED` in `.env`.
+
+## Kill switch
+
+Any flag can be forced off everywhere with `PENNANT_KILLED=name,other-name`
+in `.env` (`config('pennant.killed')`). It's checked in `FeatureFlag::before()`
+ahead of stored values, so unlike *All off* it also covers users and portals
+not decided yet. If you override `before()`, call `parent::before()` first.
+
 ## How values are stored
 
 Pennant's `database` store (`config/pennant.php`, table `features`). A portal

@@ -35,6 +35,21 @@ class Flags
         return Feature::for(static::scopeFor($instance, $user))->active($instance->name);
     }
 
+    /**
+     * The flag's value, for flags that hold more than on/off (e.g. an A/B
+     * variant like "rocket"). false when off or unknown.
+     */
+    public static function value(string $flag, ?User $user = null): mixed
+    {
+        $instance = static::find($flag);
+
+        if ($instance === null) {
+            return false;
+        }
+
+        return Feature::for(static::scopeFor($instance, $user))->value($instance->name);
+    }
+
     public static function scopeFor(FeatureFlag $flag, ?User $user = null): Portal|User|null
     {
         return $flag instanceof PortalFlag
