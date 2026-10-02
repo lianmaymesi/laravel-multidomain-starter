@@ -120,7 +120,8 @@ naming a module whose middleware must run early or late.
 
 Toggles vs. feature flags: modules are the coarse, deploy-time outer gate (is
 this feature in the app at all). Runtime per-user/per-portal experiments *inside*
-an enabled module belong to feature flags, not here.
+an enabled module belong to feature flags, not here — see
+[app/Features/README.md](../Features/README.md).
 
 Livewire: single/multi-file (⚡) components are addressed as `name::page` after
 `Livewire::addNamespace('name', viewPath: ...)`. A class-based component can't

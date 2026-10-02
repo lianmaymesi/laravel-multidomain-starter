@@ -16,6 +16,20 @@
         </div>
     </div>
 
+    {{-- Example feature flag (app/Features/WhatsNewCard.php) — off until switched
+        on for the app portal from Backoffice → Feature Flags. --}}
+    @flag(\App\Features\WhatsNewCard::class)
+    <flux:card class="flex items-start gap-4" data-flag="whats-new-card">
+        <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-500/15">
+            <flux:icon.sparkles class="size-4.5 text-blue-600 dark:text-blue-400" />
+        </div>
+        <div>
+            <flux:heading size="lg">{{ __("What's new") }}</flux:heading>
+            <flux:text class="text-zinc-500 dark:text-white/50 text-sm">{{ __('This card is behind a feature flag. Switch it off again from Backoffice → Feature Flags — no deploy needed.') }}</flux:text>
+        </div>
+    </flux:card>
+    @endflag
+
     {{-- Stat cards --}}
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         @foreach ($stats as $stat)
