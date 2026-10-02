@@ -1,23 +1,29 @@
 <?php
 
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
+/*
+ * make:module writes into the app (config/modules.php, .env.example,
+ * app/Modules/…, tests/…). Doing that in the real checkout raced with other
+ * parallel test workers reading those files — so each test points the app at
+ * a throwaway sandbox holding just what the command touches.
+ */
 beforeEach(function () {
-    // The command edits these two real files — snapshot so afterEach can restore them.
-    $this->modulesConfig = File::get(config_path('modules.php'));
-    $this->envExample = File::get(base_path('.env.example'));
+    $this->sandbox = sys_get_temp_dir().DIRECTORY_SEPARATOR.'make-module-'.Str::random(8);
+
+    File::copyDirectory(base_path('stubs'), "{$this->sandbox}/stubs");
+    File::ensureDirectoryExists("{$this->sandbox}/config");
+    File::copy(config_path('modules.php'), "{$this->sandbox}/config/modules.php");
+    File::copy(base_path('.env.example'), "{$this->sandbox}/.env.example");
+    File::ensureDirectoryExists("{$this->sandbox}/app/Modules/Maintenance");
+    File::ensureDirectoryExists("{$this->sandbox}/tests/Feature/Modules");
+
+    $this->app->setBasePath($this->sandbox);
 });
 
 afterEach(function () {
-    File::put(config_path('modules.php'), $this->modulesConfig);
-    File::put(base_path('.env.example'), $this->envExample);
-
-    File::deleteDirectory(app_path('Modules/Invoices'));
-    File::deleteDirectory(app_path('Modules/InvoiceReports'));
-    File::delete([
-        base_path('tests/Feature/Modules/InvoicesModuleTest.php'),
-        base_path('tests/Feature/Modules/InvoiceReportsModuleTest.php'),
-    ]);
+    File::deleteDirectory($this->sandbox);
 });
 
 it('scaffolds a module with provider, routes, page, migrations dir and test', function () {
@@ -35,6 +41,13 @@ it('scaffolds a module with provider, routes, page, migrations dir and test', fu
         ->and(File::exists(app_path('Modules/Invoices/resources/views/livewire/⚡index/index.blade.php')))->toBeTrue()
         ->and(File::isDirectory(app_path('Modules/Invoices/database/migrations')))->toBeTrue()
         ->and(File::exists(base_path('tests/Feature/Modules/InvoicesModuleTest.php')))->toBeTrue();
+});
+
+it('writes into the sandbox, never the real checkout', function () {
+    $this->artisan('make:module', ['name' => 'Invoices'])->assertSuccessful();
+
+    expect(app_path())->toStartWith($this->sandbox)
+        ->and(is_dir(dirname(__DIR__, 3).'/app/Modules/Invoices'))->toBeFalse();
 });
 
 it('registers the on/off toggle in config/modules.php and .env.example', function () {

@@ -95,6 +95,11 @@ domain, prefix, name and middleware group.
 
 ## Rules that keep modules removable
 
+The import rules are enforced by `tests/Arch/ModulesTest.php` (run alone with
+`composer test:arch`): core code may not use `App\Modules\…`, a module may not
+use another module, and every module's provider must extend `ModuleProvider`.
+New modules are picked up automatically.
+
 1. **Never call into a module from outside it without a guard.** Use
    `Module::enabled('x')` (or `@module('x') … @endmodule` in Blade), or better,
    contribute through an extension point so no check is needed.

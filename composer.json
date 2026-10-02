@@ -82,6 +82,14 @@
         ],
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
+        ],
+        "test:arch": [
+            "@php artisan config:clear --ansi",
+            "@php artisan test --testsuite=Arch"
+        ],
+        "test:coverage": [
+            "@php artisan config:clear --ansi",
+            "@php artisan test --coverage"
         ]
     },
     "extra": {
@@ -99,5 +107,9 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "scripts-descriptions": {
+        "test:arch": "Architecture rules only (module boundaries, hygiene)",
+        "test:coverage": "Tests with a coverage report (needs Xdebug or PCOV)"
+    }
 }
