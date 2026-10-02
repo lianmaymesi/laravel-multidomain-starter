@@ -28,3 +28,25 @@ Schedule::command('health:check --notify')
     ->everyFiveMinutes()
     ->withoutOverlapping()
     ->when(fn () => config('health.notify') !== []);
+
+// Backups (config/backup.php) — only when BACKUP_ENABLED=true. Clean before
+// running so the new backup never pushes out the newest old one; the monitor
+// emails BACKUP_NOTIFY_MAIL when the newest backup is too old or too big.
+$backupsEnabled = fn () => (bool) config('backup.enabled');
+
+Schedule::command('backup:clean')
+    ->dailyAt(config('backup.schedule.clean_at', '01:00'))
+    ->onOneServer()
+    ->withoutOverlapping()
+    ->when($backupsEnabled);
+
+Schedule::command('backup:run')
+    ->dailyAt(config('backup.schedule.run_at', '01:30'))
+    ->onOneServer()
+    ->withoutOverlapping()
+    ->when($backupsEnabled);
+
+Schedule::command('backup:monitor')
+    ->dailyAt(config('backup.schedule.monitor_at', '09:00'))
+    ->onOneServer()
+    ->when($backupsEnabled);
