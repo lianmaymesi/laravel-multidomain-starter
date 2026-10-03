@@ -4,9 +4,9 @@ namespace App\Modules\Api\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Modules\Api\Http\Resources\UserResource;
+use App\Modules\Api\Models\PersonalAccessToken;
 use DateTimeInterface;
 use Illuminate\Http\Request;
-use Laravel\Sanctum\PersonalAccessToken;
 
 class MeController extends Controller
 {

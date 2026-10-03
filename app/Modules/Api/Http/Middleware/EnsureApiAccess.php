@@ -2,10 +2,10 @@
 
 namespace App\Modules\Api\Http\Middleware;
 
+use App\Modules\Api\Models\PersonalAccessToken;
 use App\Modules\Api\Services\ApiAccess;
 use Closure;
 use Illuminate\Http\Request;
-use Laravel\Sanctum\PersonalAccessToken;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

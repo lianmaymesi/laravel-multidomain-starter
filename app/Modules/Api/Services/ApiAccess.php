@@ -4,8 +4,8 @@ namespace App\Modules\Api\Services;
 
 use App\Models\AppSetting;
 use App\Models\User;
+use App\Modules\Api\Models\PersonalAccessToken;
 use App\Support\Modules\Module;
-use Laravel\Sanctum\PersonalAccessToken;
 
 /**
  * The API access policy, set by a Super Admin on Backoffice → API Access and

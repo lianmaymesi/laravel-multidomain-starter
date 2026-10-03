@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\UserAnonymized;
 use App\Models\AccountDeletionRequest;
 use App\Models\User;
 use App\Notifications\AccountDeletionCancelled;
@@ -60,6 +61,9 @@ class AccountDeletionService
 
         // Anonymize user — keeps the row for audit/FK integrity
         $user->anonymize();
+
+        // Lets modules drop personal data they own (e.g. Media: profile photos).
+        UserAnonymized::dispatch($user);
 
         $request->update(['status' => 'completed']);
     }

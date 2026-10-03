@@ -1,7 +1,7 @@
 <?php
 
-use App\Modules\Currency\Models\Currency;
 use App\Models\User;
+use App\Modules\Currency\Models\Currency;
 use App\Modules\Currency\Seeders\CurrencySeeder;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;

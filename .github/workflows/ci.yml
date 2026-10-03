@@ -1,0 +1,169 @@
+name: CI
+
+# Cheapest checks first: style and static analysis run in parallel with the
+# frontend build; tests start only when those pass, reusing the built assets.
+#
+#   lint ──────┐
+#   analyse ───┼──► tests (PHP 8.4 + coverage, PHP 8.5)
+#   build ─────┘
+#   audit (report only)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# A new push to the same PR/branch cancels the run already in progress.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  FLUX_USERNAME: ${{ secrets.FLUX_USERNAME }}
+  FLUX_LICENSE_KEY: ${{ secrets.FLUX_LICENSE_KEY }}
+
+jobs:
+  lint:
+    name: Code style (Pint)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history, so Pint can compare against the PR's base branch.
+          fetch-depth: 0
+
+      - uses: ./.github/actions/setup-app
+        with:
+          flux-username: ${{ env.FLUX_USERNAME }}
+          flux-license-key: ${{ env.FLUX_LICENSE_KEY }}
+
+      # Only files the PR changes must follow the style, so older files are
+      # reformatted on their own schedule (`composer format`). Pushes to main
+      # were already checked as PRs.
+      - name: Pint (changed files)
+        if: github.event_name == 'pull_request'
+        run: vendor/bin/pint --test --diff=origin/${{ github.base_ref }}
+
+  analyse:
+    name: Static analysis (Larastan)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-app
+        with:
+          flux-username: ${{ env.FLUX_USERNAME }}
+          flux-license-key: ${{ env.FLUX_LICENSE_KEY }}
+
+      - name: Larastan
+        run: |
+          if [ ! -f phpstan.neon ]; then
+            echo "::notice::No phpstan.neon yet — static analysis skipped."
+            exit 0
+          fi
+          vendor/bin/phpstan analyse --no-progress --memory-limit=2G --error-format=github
+
+  build:
+    name: Frontend build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # The Vite build scans vendor/ stubs (Flux) for Tailwind classes, so
+      # PHP dependencies are installed here too.
+      - uses: ./.github/actions/setup-app
+        with:
+          flux-username: ${{ env.FLUX_USERNAME }}
+          flux-license-key: ${{ env.FLUX_LICENSE_KEY }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - name: Share the built assets with the test jobs
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-build
+          path: public/build
+          retention-days: 1
+
+  tests:
+    name: Tests (PHP ${{ matrix.php-version }})
+    needs: [lint, analyse, build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ["8.4", "8.5"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-app
+        with:
+          php-version: ${{ matrix.php-version }}
+          # Coverage is measured once, on 8.4; the other version skips the driver.
+          coverage: ${{ matrix.php-version == '8.4' && 'pcov' || 'none' }}
+          flux-username: ${{ env.FLUX_USERNAME }}
+          flux-license-key: ${{ env.FLUX_LICENSE_KEY }}
+
+      # Layouts call @vite, so tests need the manifest from the build job.
+      - name: Download built assets
+        uses: actions/download-artifact@v4
+        with:
+          name: public-build
+          path: public/build
+
+      # Unit, Feature and Arch suites on in-memory SQLite (phpunit.xml).
+      # Coverage has no minimum yet — add --min=<n> once the first number is known.
+      - name: Pest
+        run: |
+          if [ "${{ matrix.php-version }}" = "8.4" ]; then
+            php artisan test --parallel --coverage
+          else
+            php artisan test --parallel
+          fi
+
+  audit:
+    name: Dependency audit (report only)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Known advisories in transitive dependencies shouldn't block every PR —
+    # this job reports them; it never fails the run.
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-app
+        with:
+          flux-username: ${{ env.FLUX_USERNAME }}
+          flux-license-key: ${{ env.FLUX_LICENSE_KEY }}
+
+      - name: Composer audit
+        run: composer audit --no-interaction
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: npm audit (high and above)
+        run: npm audit --audit-level=high

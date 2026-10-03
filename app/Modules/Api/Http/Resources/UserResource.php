@@ -20,7 +20,7 @@ class UserResource extends JsonResource
             'timezone' => $this->timezone,
             'roles' => $this->roles->pluck('slug')->values(),
             'email_verified_at' => $this->email_verified_at?->toIso8601String(),
-            'created_at' => $this->created_at?->toIso8601String(),
+            'created_at' => $this->created_at->toIso8601String(),
         ];
     }
 }

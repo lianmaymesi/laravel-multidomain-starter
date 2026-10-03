@@ -1,11 +1,11 @@
 <?php
 
+use App\Concerns\ThrottlesActions;
 use App\Enums\OtpType;
 use App\Services\AccountDeletionService;
 use App\Services\Auth\OtpService;
 use App\Contracts\SmsService;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
@@ -13,6 +13,8 @@ use Livewire\Component;
 
 new #[Layout('layouts.auth')] class extends Component
 {
+    use ThrottlesActions;
+
     #[Validate(['required', 'email'])]
     public string $email = '';
 
@@ -25,17 +27,21 @@ new #[Layout('layouts.auth')] class extends Component
     {
         $this->validate();
 
-        $this->ensureNotRateLimited();
+        // Per email + IP (guessing one account), and per IP across every
+        // email (credential stuffing). Only failures count.
+        $this->ensureNotThrottled('login', $this->throttleKey(), 'email');
+        $this->ensureNotThrottled('login-ip', request()->ip(), 'email');
 
         if (!Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
-            RateLimiter::hit($this->throttleKey(), 300);
+            $this->hitThrottle('login', $this->throttleKey());
+            $this->hitThrottle('login-ip', request()->ip());
 
             throw ValidationException::withMessages([
                 'email' => __('These credentials do not match our records.'),
             ]);
         }
 
-        RateLimiter::clear($this->throttleKey());
+        $this->clearThrottle('login', $this->throttleKey());
 
         $user = Auth::user();
 
@@ -71,21 +77,8 @@ new #[Layout('layouts.auth')] class extends Component
         $this->redirect($user->redirect(), navigate: false);
     }
 
-    private function ensureNotRateLimited(): void
-    {
-        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
-            return;
-        }
-
-        $seconds = RateLimiter::availableIn($this->throttleKey());
-
-        throw ValidationException::withMessages([
-            'email' => __('Too many login attempts. Please wait :seconds seconds.', ['seconds' => $seconds]),
-        ]);
-    }
-
     private function throttleKey(): string
     {
-        return 'login:' . strtolower($this->email) . '|' . request()->ip();
+        return strtolower($this->email) . '|' . request()->ip();
     }
 };
