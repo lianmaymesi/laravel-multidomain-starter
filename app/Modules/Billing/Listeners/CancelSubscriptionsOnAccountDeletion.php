@@ -8,8 +8,9 @@ use Laravel\Cashier\Subscription;
 /**
  * A deleted account must stop being charged. Cancels every renewing
  * subscription in Stripe right away (no proration refund — same as cancelling in the
- * Billing Portal). A Stripe error throws, which stops the deletion so the
- * queued job retries rather than anonymizing a still-paying account.
+ * Billing Portal). A Stripe error throws, which stops the deletion (the
+ * request goes back to pending and is retried) rather than anonymizing a
+ * still-paying account.
  */
 class CancelSubscriptionsOnAccountDeletion
 {

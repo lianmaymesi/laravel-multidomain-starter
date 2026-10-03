@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\DeleteUserAccount;
 use App\Models\AccountDeletionRequest;
 use App\Models\User;
 use App\Services\AccountDeletionService;
@@ -49,13 +50,24 @@ it('cancels renewing subscriptions in Stripe before anonymizing the account', fu
         ->and($user->stripe_id)->not->toBeNull();
 });
 
-it('stops the deletion when Stripe cannot cancel, so the job retries', function () {
+it('stops the deletion when Stripe cannot cancel, and completes it on retry', function () {
     $user = User::factory()->create(['name' => 'Still Paying']);
-    Billing::subscribe($user);
+    $subscription = Billing::subscribe($user);
     $request = dueDeletionRequest($user);
 
-    expect(fn () => app(AccountDeletionService::class)->process($request))->toThrow(ApiErrorException::class);
+    expect(fn () => (new DeleteUserAccount($request))->handle(app(AccountDeletionService::class)))
+        ->toThrow(ApiErrorException::class);
 
+    // Nothing changed, and the request is pending again so a retry runs it.
     expect($user->fresh()->name)->toBe('Still Paying')
-        ->and($request->fresh()->status)->toBe('processing');
+        ->and($request->fresh()->status)->toBe('pending');
+
+    $this->stripe->respond('delete', '#^/v1/subscriptions/#',
+        Billing::stripeSubscription($subscription->stripe_id, $user->stripe_id, ['status' => 'canceled']));
+
+    (new DeleteUserAccount($request->fresh()))->handle(app(AccountDeletionService::class));
+
+    expect($user->fresh()->name)->toBe('Deleted User')
+        ->and($subscription->fresh()->ended())->toBeTrue()
+        ->and($request->fresh()->status)->toBe('completed');
 });

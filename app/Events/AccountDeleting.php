@@ -10,8 +10,9 @@ use Illuminate\Foundation\Events\Dispatchable;
  * the user's real data is still there. Modules listen to clean up what they
  * own (e.g. Billing cancels subscriptions) — core never calls into them.
  *
- * A listener that throws stops the deletion: the request stays "processing"
- * and the queued job retries, so nothing is anonymized half-way.
+ * It fires before anything is changed. A listener that throws stops the
+ * deletion and puts the request back to "pending", so the queued job retries
+ * (and the scheduler picks it up again) without anything anonymized half-way.
  */
 class AccountDeleting
 {
