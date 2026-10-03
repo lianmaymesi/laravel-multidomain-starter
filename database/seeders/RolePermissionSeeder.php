@@ -26,6 +26,9 @@ class RolePermissionSeeder extends Seeder
 
         // Switching features on and off changes the whole app — Super Admin only.
         'modules.manage',
+
+        // A backup is the whole database — Super Admin only.
+        'backups.manage',
     ];
 
     /**
@@ -35,6 +38,8 @@ class RolePermissionSeeder extends Seeder
         'settings.edit',
         'modules.manage',
         'feature-flags.manage',
+        'health.view',
+        'backups.manage',
         'roles.view',
         'roles.create',
         'roles.edit',

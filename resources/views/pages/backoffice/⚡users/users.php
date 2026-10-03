@@ -1,7 +1,10 @@
 <?php
 
+use App\Concerns\SortsTable;
 use App\Models\Role;
 use App\Models\User;
+use App\Support\Toast;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Layout;
@@ -10,7 +13,7 @@ use Livewire\WithPagination;
 
 new #[Layout('layouts.backoffice')] class extends Component
 {
-    use WithPagination;
+    use SortsTable, WithPagination;
 
     public string $search = '';
 
@@ -38,15 +41,33 @@ new #[Layout('layouts.backoffice')] class extends Component
         $this->resetPage();
     }
 
-    public function users(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    /**
+     * A typed search goes through Scout (see User::toSearchableArray());
+     * plain browsing stays a direct query, so the list never depends on an
+     * external index having been imported.
+     */
+    public function users(): LengthAwarePaginator
     {
-        return User::query()
-            ->when($this->search, fn ($query) => $query
-                ->where('name', 'like', "%{$this->search}%")
-                ->orWhere('email', 'like', "%{$this->search}%"))
-            ->with('roles')
-            ->orderBy('name')
+        $search = trim($this->search);
+
+        if ($search === '') {
+            return User::query()->with('roles')->tap(fn ($query) => $this->applySort($query))->paginate(10);
+        }
+
+        return User::search($search)
+            ->query(fn ($query) => $query->with('roles'))
+            ->orderBy(...$this->currentSort())
             ->paginate(10);
+    }
+
+    protected function sortableColumns(): array
+    {
+        return ['name' => 'name', 'email' => 'email'];
+    }
+
+    protected function defaultSort(): string
+    {
+        return 'name';
     }
 
     /**
@@ -122,6 +143,6 @@ new #[Layout('layouts.backoffice')] class extends Component
 
         $this->showModal = false;
 
-        session()->flash('status', __('Roles updated.'));
+        Toast::success(__('Roles updated.'));
     }
 };

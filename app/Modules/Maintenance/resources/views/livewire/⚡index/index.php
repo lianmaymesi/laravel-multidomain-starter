@@ -1,5 +1,6 @@
 <?php
 
+use App\Support\Toast;
 use App\Modules\Maintenance\Models\PortalSetting;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
@@ -44,7 +45,7 @@ new #[Layout('layouts.backoffice')] class extends Component
         $setting->updated_by = auth()->id();
         $setting->save();
 
-        session()->flash('status', $setting->maintenance_mode
+        Toast::success($setting->maintenance_mode
             ? __('":portal" is now under maintenance.', ['portal' => $portal])
             : __('":portal" is back online.', ['portal' => $portal]));
     }
@@ -59,6 +60,6 @@ new #[Layout('layouts.backoffice')] class extends Component
         $setting->updated_by = auth()->id();
         $setting->save();
 
-        session()->flash('status', __('Maintenance message for ":portal" saved.', ['portal' => $portal]));
+        Toast::success(__('Maintenance message for ":portal" saved.', ['portal' => $portal]));
     }
 };

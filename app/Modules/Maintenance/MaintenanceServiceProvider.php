@@ -2,6 +2,7 @@
 
 namespace App\Modules\Maintenance;
 
+use App\Modules\Maintenance\Health\MaintenanceCheck;
 use App\Modules\Maintenance\Http\Middleware\CheckMaintenance;
 use App\Support\Modules\Module;
 use App\Support\Modules\ModuleProvider;
@@ -37,6 +38,9 @@ class MaintenanceServiceProvider extends ModuleProvider
 
     protected function bootModule(): void
     {
+        // Portals left in maintenance show up as a warning on the health report.
+        Module::contribute('health.checks', [MaintenanceCheck::class]);
+
         // Appended after the app's own web-group middleware (SetLocale), the
         // same position it held when registered in bootstrap/app.php.
         Route::pushMiddlewareToGroup('web', CheckMaintenance::class);

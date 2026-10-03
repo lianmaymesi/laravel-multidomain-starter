@@ -13,17 +13,12 @@
         @endcan
     </div>
 
-    @if (session('status'))
-    <div class="border border-emerald-500/20 bg-emerald-500/6 px-4 py-3 text-sm text-emerald-400">
-        {{ session('status') }}
-    </div>
-    @endif
 
     <flux:card>
-        <flux:table>
+        <flux:table :paginate="$this->permissions()">
             <flux:table.columns>
-                <flux:table.column>{{ __('Name') }}</flux:table.column>
-                <flux:table.column>{{ __('Roles') }}</flux:table.column>
+                <flux:table.column sortable :sorted="$this->isSortedBy('name')" :direction="$sortDirection" wire:click="sort('name')">{{ __('Name') }}</flux:table.column>
+                <flux:table.column sortable :sorted="$this->isSortedBy('roles')" :direction="$sortDirection" wire:click="sort('roles')">{{ __('Roles') }}</flux:table.column>
                 <flux:table.column></flux:table.column>
             </flux:table.columns>
 

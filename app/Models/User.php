@@ -19,12 +19,16 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
+use Laravel\Cashier\Billable;
+use Laravel\Sanctum\HasApiTokens;
+use Laravel\Scout\Searchable;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
  * @property Carbon $created_at
+ * @property Carbon|null $email_verified_at
  * @property Carbon|null $pending_email_requested_at
  */
 #[Fillable(['name', 'email', 'password', 'country_code', 'phone', 'privilege', 'locale', 'timezone', 'two_factor_secret', 'two_factor_recovery_codes', 'pending_email', 'pending_email_token'])]
@@ -32,7 +36,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use Anonymizable, HasFactory, HasMedia, HasRoles, LogsActivity, MustVerifyPhone, Notifiable;
+    use Anonymizable, Billable, HasApiTokens, HasFactory, HasMedia, HasRoles, LogsActivity, MustVerifyPhone, Notifiable, Searchable;
 
     /**
      * Only these are ever written to the activity log — password hash,
@@ -45,6 +49,22 @@ class User extends Authenticatable implements MustVerifyEmail
             ->logOnly(['name', 'email', 'privilege'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
+    }
+
+    /**
+     * What the backoffice Users search matches on. With the database driver
+     * every key here is a column it LIKE-searches (a numeric term also
+     * matches `id` exactly), so only add real, non-sensitive columns.
+     *
+     * @return array<string, mixed>
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
+        ];
     }
 
     /**
@@ -61,6 +81,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'two_factor_enabled_at' => 'datetime',
             'two_factor_confirmed_at' => 'datetime',
             'pending_email_requested_at' => 'datetime',
+            'trial_ends_at' => 'datetime',
         ];
     }
 
@@ -105,6 +126,10 @@ class User extends Authenticatable implements MustVerifyEmail
             'pending_email_requested_at' => null,
             'remember_token' => null,
             'password' => fn () => Str::random(40),
+            // Billing (Cashier) columns: card brand/last four are personal.
+            // stripe_id stays — invoices and refunds still hang off it.
+            'pm_type' => null,
+            'pm_last_four' => null,
         ];
     }
 

@@ -13,11 +13,6 @@
         @endcan
     </div>
 
-    @if (session('status'))
-    <div class="border border-emerald-500/20 bg-emerald-500/6 px-4 py-3 text-sm text-emerald-400">
-        {{ session('status') }}
-    </div>
-    @endif
 
     @if (session('error'))
     <div class="border border-red-500/20 bg-red-500/6 px-4 py-3 text-sm text-red-400">
@@ -28,9 +23,9 @@
     <flux:card>
         <flux:table>
             <flux:table.columns>
-                <flux:table.column>{{ __('Name') }}</flux:table.column>
-                <flux:table.column>{{ __('Permissions') }}</flux:table.column>
-                <flux:table.column>{{ __('Users') }}</flux:table.column>
+                <flux:table.column sortable :sorted="$this->isSortedBy('name')" :direction="$sortDirection" wire:click="sort('name')">{{ __('Name') }}</flux:table.column>
+                <flux:table.column sortable :sorted="$this->isSortedBy('permissions')" :direction="$sortDirection" wire:click="sort('permissions')">{{ __('Permissions') }}</flux:table.column>
+                <flux:table.column sortable :sorted="$this->isSortedBy('users')" :direction="$sortDirection" wire:click="sort('users')">{{ __('Users') }}</flux:table.column>
                 <flux:table.column></flux:table.column>
             </flux:table.columns>
 
