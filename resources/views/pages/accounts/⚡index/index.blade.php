@@ -234,6 +234,9 @@
                         </div>
                     </div>
 
+                    @error('emailResend')
+                    <p class="text-xs text-red-400">{{ $message }}</p>
+                    @enderror
                     @if (session('emailStatus'))
                     <p class="text-xs text-emerald-400">{{ session('emailStatus') }}</p>
                     @else
