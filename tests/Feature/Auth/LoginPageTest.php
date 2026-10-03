@@ -4,7 +4,6 @@ use App\Contracts\SmsService;
 use App\Models\AccountDeletionRequest;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\RateLimiter;
 use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
@@ -100,8 +99,6 @@ it('cancels an active deletion request and redirects to the account portal on lo
 
 it('throttles repeated failed login attempts', function () {
     $user = loginTestUser();
-
-    RateLimiter::clear('login:'.strtolower($user->email).'|127.0.0.1');
 
     foreach (range(1, 5) as $attempt) {
         Livewire::test('pages::auth.login')

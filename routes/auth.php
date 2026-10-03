@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::livewire('verify-email-change/{token}', 'pages::auth.verify-email-change')->name('verify-email-change');
+// Emailed one-time link — throttled per IP so tokens can't be guessed at speed.
+Route::livewire('verify-email-change/{token}', 'pages::auth.verify-email-change')->middleware('throttle:links')->name('verify-email-change');
 
 Route::middleware('guest')->group(function () {
     Route::livewire('login', 'pages::auth.login')->name('login');

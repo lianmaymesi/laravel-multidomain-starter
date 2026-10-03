@@ -1,5 +1,6 @@
 <?php
 
+use App\Concerns\ThrottlesActions;
 use App\Enums\OtpType;
 use App\Models\AccountDeletionRequest;
 use App\Notifications\PendingEmailVerification;
@@ -15,6 +16,8 @@ use Livewire\Component;
 
 new #[Layout('layouts.accounts')] class extends Component
 {
+    use ThrottlesActions;
+
     // ── Profile section ───────────────────────────────────────────────
     public bool $editingName = false;
     public string $name = '';
@@ -97,6 +100,9 @@ new #[Layout('layouts.accounts')] class extends Component
             ],
         ]);
 
+        // Each request mails an address the user typed — don't let it become a spam cannon.
+        $this->throttle('email-change', (string) $user->id, 'newEmail');
+
         $token = Str::random(64);
 
         $user->forceFill([
@@ -142,6 +148,8 @@ new #[Layout('layouts.accounts')] class extends Component
             return;
         }
 
+        $this->throttle('email-change', (string) $user->id, 'emailResend');
+
         $token = Str::random(64);
 
         $user->forceFill([
@@ -186,6 +194,9 @@ new #[Layout('layouts.accounts')] class extends Component
         ]);
 
         $user = Auth::user();
+
+        // Each change sends an SMS.
+        $this->throttle('phone-change', (string) $user->id, 'newPhone');
 
         $user->forceFill([
             'phone'             => $this->newPhone,

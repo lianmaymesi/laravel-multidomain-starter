@@ -8,6 +8,7 @@ use App\Services\AccountDeletionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use Laravel\Sanctum\PersonalAccessToken;
 
 uses(RefreshDatabase::class);
 
@@ -76,4 +77,20 @@ it('processes a request by anonymizing the user and clearing their otps', functi
     expect($request->fresh()->status)->toBe('completed')
         ->and($user->otps()->count())->toBe(0)
         ->and($user->fresh()->name)->toBe('Deleted User');
+});
+
+it('revokes the user\'s API tokens when the deletion is processed', function () {
+    $user = User::factory()->create();
+    $token = $user->createToken('script', ['read']);
+
+    $request = $user->deletionRequest()->create([
+        'requested_at' => now(),
+        'scheduled_at' => now()->subMinute(),
+        'status' => 'pending',
+    ]);
+
+    app(AccountDeletionService::class)->process($request);
+
+    expect($user->tokens()->count())->toBe(0)
+        ->and(PersonalAccessToken::findToken($token->plainTextToken))->toBeNull();
 });

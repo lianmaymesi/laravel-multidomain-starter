@@ -10,7 +10,10 @@ use App\Services\Auth\TwilioSmsService;
 use App\Services\TimezoneService;
 use App\Support\NullCurrencies;
 use App\Support\NullLanguages;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -39,6 +42,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->registerRateLimiters();
+
         Password::defaults(function () {
             return Password::min(8)
                 ->letters()
@@ -56,5 +61,21 @@ class AppServiceProvider extends ServiceProvider
             /** @var Carbon $this */
             return $this->copy()->setTimezone(app(TimezoneService::class)->current($user));
         });
+    }
+
+    /**
+     * Named limiters for plain HTTP routes (`throttle:<name>`), from
+     * config/rate-limits.php. Livewire actions are limited in the component
+     * instead — see App\Concerns\ThrottlesActions.
+     */
+    private function registerRateLimiters(): void
+    {
+        RateLimiter::for('downloads', fn (Request $request) => Limit::perSecond(
+            (int) config('rate-limits.downloads.max'), (int) config('rate-limits.downloads.decay'),
+        )->by($request->user()?->getAuthIdentifier() ?? $request->ip()));
+
+        RateLimiter::for('links', fn (Request $request) => Limit::perSecond(
+            (int) config('rate-limits.links.max'), (int) config('rate-limits.links.decay'),
+        )->by($request->ip()));
     }
 }

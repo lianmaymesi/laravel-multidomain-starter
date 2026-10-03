@@ -1,5 +1,6 @@
 <?php
 
+use App\Concerns\ThrottlesActions;
 use App\Models\User;
 use App\Services\AccountDeletionService;
 use App\Services\Auth\TwoFactorService;
@@ -11,6 +12,8 @@ use Livewire\Component;
 
 new #[Layout('layouts.auth')] class extends Component
 {
+    use ThrottlesActions;
+
     #[Validate(['required', 'string'])]
     public string $code = '';
 
@@ -34,17 +37,27 @@ new #[Layout('layouts.auth')] class extends Component
 
         $user = User::findOrFail(session('2fa_user_id'));
 
+        // A 6-digit code is guessable without this: limit failures per
+        // account (whatever the IP) and per IP (whatever the account).
+        $this->ensureNotThrottled('two-factor', (string) $user->id, 'code');
+        $this->ensureNotThrottled('two-factor-ip', request()->ip(), 'code');
+
         $valid = $this->usingRecovery
             ? $twoFactor->verifyRecoveryCode($user, $this->code)
             : $twoFactor->verify($user, $this->code);
 
         if (!$valid) {
+            $this->hitThrottle('two-factor', (string) $user->id);
+            $this->hitThrottle('two-factor-ip', request()->ip());
+
             throw ValidationException::withMessages([
                 'code' => $this->usingRecovery
                     ? __('Invalid recovery code.')
                     : __('Invalid authenticator code. Please try again.'),
             ]);
         }
+
+        $this->clearThrottle('two-factor', (string) $user->id);
 
         session()->forget('2fa_user_id');
 
