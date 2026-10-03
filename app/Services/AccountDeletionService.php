@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\AccountDeleting;
 use App\Models\AccountDeletionRequest;
 use App\Models\User;
 use App\Notifications\AccountDeletionCancelled;
@@ -54,6 +55,9 @@ class AccountDeletionService
 
         // Delete OTPs
         $user->otps()->delete();
+
+        // Modules clean up what they own first (e.g. Billing cancels subscriptions)
+        AccountDeleting::dispatch($user);
 
         // Anonymize user — keeps the row for audit/FK integrity
         $user->anonymize();

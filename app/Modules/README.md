@@ -83,6 +83,7 @@ Module::contribute('backoffice.nav', [[
 | Point | Read by | Item shape |
 |---|---|---|
 | `backoffice.nav` | backoffice layout sidebar | `label, route, icon, permission (string or any-of array), visible (closure), order, mobile, active` |
+| `account.nav` | account layout sidebar + mobile bar | `label, route, icon, visible (closure), order, active` |
 | `backoffice.settings.cards` | Settings page | `component, permission, order` — a Livewire component with its own Save button |
 | `health.checks` | `/health`, `health:check`, System health page | class implementing `App\Support\Health\Check` |
 | `settings.fields` | `SettingsRegistry` (generic Settings form) | closure returning a `SettingField` (closure so labels translate per request) |
@@ -101,7 +102,10 @@ domain, prefix, name and middleware group.
    contribute through an extension point so no check is needed.
 2. **Cross-module communication goes through events**, not direct calls. A
    disabled module's listener is simply never registered; the emitting module
-   never breaks.
+   never breaks. Core fires `App\Events\AccountDeleting` just before an account
+   is anonymized — listen to it to clean up what your module owns (Billing
+   cancels subscriptions there). A listener that throws stops the deletion and
+   the queued job retries.
 3. **Where core needs a value from a module, depend on a contract with a
    null-object fallback.** Example: `App\Contracts\Currencies` is bound to
    `NullCurrencies` by default and rebound to the real service by the Currency

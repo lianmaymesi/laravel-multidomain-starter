@@ -27,4 +27,7 @@ return [
 
     'activity' => (bool) env('MODULE_ACTIVITY', true),
 
+    // Off by default: not every app built on this kit sells subscriptions.
+    'billing' => (bool) env('MODULE_BILLING', false),
+
 ];

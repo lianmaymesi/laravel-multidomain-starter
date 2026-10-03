@@ -105,8 +105,8 @@ it('renders a working on/off switch for every module, with a confirm only when d
         // Not swallowed into literal text by a malformed component tag.
         ->and($html)->not->toContain(':checked=')
         ->and(substr_count($html, "wire:click=\"toggle('"))->toBe($count)
-        // Every module is enabled here, so each switch asks before disabling.
-        ->and(substr_count($html, 'wire:confirm='))->toBe($count)
+        // Only switching an enabled module off asks first (Billing ships off).
+        ->and(substr_count($html, 'wire:confirm='))->toBe(count(Module::enabledNames()))
         ->and($html)->toContain('Disable Currencies')
         ->and($html)->not->toContain('Reset to default');
 });
@@ -120,8 +120,8 @@ it('shows an Enable switch without a confirm, plus Reset, for a disabled module'
         ->and($html)->toContain('Reset to default')
         ->and($html)->toContain('Disabled')
         ->and($html)->toContain('Default: on')
-        // One fewer confirm: the disabled module's switch turns it on.
-        ->and(substr_count($html, 'wire:confirm='))->toBe(count(Module::names()) - 1);
+        // No confirm on a disabled module's switch: it turns it on.
+        ->and(substr_count($html, 'wire:confirm='))->toBe(count(Module::enabledNames()));
 });
 
 it('explains what to do instead of erroring while the module_settings table is missing', function () {

@@ -150,6 +150,53 @@ Once `LIKE` queries get slow (roughly hundreds of thousands of rows), switch to 
 
 From then on, Scout keeps the index up to date as rows are saved and deleted. Re-run `scout:import` after a restore, after turning a module back on, or after any bulk change that skips Eloquent events (for example `DB::table()->update()`).
 
+## Billing
+
+An optional module for selling subscriptions with Stripe, using [Laravel Cashier](https://laravel.com/docs/billing). It is **off by default**. Each user subscribes on their own; there are no team or seat subscriptions.
+
+Card details never reach this app:
+- **Subscribing** goes through Stripe Checkout.
+- **Cards, invoices, plan changes and cancelling** go through the Stripe Billing Portal.
+- **Stripe webhooks** keep the local `subscriptions` table in sync with what happened in Stripe.
+
+### Setup
+
+1. In the Stripe dashboard, create a product with a recurring price for each plan.
+2. Turn the module on and add your keys in `.env`:
+   ```dotenv
+   MODULE_BILLING=true
+   STRIPE_KEY=pk_live_…
+   STRIPE_SECRET=sk_live_…
+   BILLING_STARTER_PRICE=price_…   # Stripe Price ids; a plan without one is hidden
+   BILLING_PRO_PRICE=price_…
+   BILLING_TRIAL_DAYS=0
+   ```
+3. Create the webhook endpoint with `php artisan cashier:webhook`. It points at `https://<APP_URL>/stripe/webhook` and subscribes to the events Cashier handles. Then copy its signing secret into `STRIPE_WEBHOOK_SECRET`. The route answers on any host and needs no CSRF token. Without a secret, every webhook is refused with a 503, so Stripe keeps retrying until you set it.
+4. In Stripe → Settings → Billing → Customer portal, turn on the actions you want customers to have, such as updating cards, switching plans and cancelling. To allow plan switching, add your plan prices to the portal's product catalogue.
+5. Run `php artisan db:seed --class=RolePermissionSeeder` to create the `billing.view` and `billing.manage` permissions.
+
+For local development, forward webhooks with `stripe listen --forward-to <your-local-url>/stripe/webhook` and use the `whsec_…` secret it prints.
+
+Plans, their display price and their feature list are defined in `app/Modules/Billing/config.php`. Prices themselves always come from Stripe; the `amount` there is only a label.
+
+### What you get
+
+- **Account → Billing** (every signed-in user):
+  - plan cards that lead to Checkout
+  - after subscribing, the current plan and its status: active, trial, payment failed, or cancelled until a date
+  - cancel at period end, and resume
+  - a "Payment & invoices" button that opens the Billing Portal
+- **Backoffice → Billing** (`billing.view`):
+  - every subscription, with search, a status filter and counts (active, on trial, cancelling, past due)
+  - for Super Admins only (`billing.manage`): cancel at period end, end now, or resume. Each action is recorded on the customer's activity timeline under `billing`.
+- **Activity log:** subscriptions that start, change status or plan, or end show on the user's timeline. Routine renewals are not logged.
+- **Health check** (`/health`): fails when a Stripe key, the webhook secret or every plan price is missing. Warns when a subscription is past due. It never calls Stripe.
+- **Account deletion:** subscriptions that would renew are cancelled in Stripe before the account is anonymized. Card brand and last four digits are cleared. `stripe_id` is kept, so invoices and refunds can still be found in Stripe. If Stripe can't be reached, the deletion stops and the job retries.
+
+Refunds, coupons, tax and invoice changes are handled in the Stripe dashboard. To use Paddle instead of Stripe, replace `laravel/cashier` with `laravel/cashier-paddle` and adapt the module. The two packages share most of their API, but webhooks and checkout differ.
+
+Turning the module off removes the pages, the nav links and the `/stripe/*` routes. The tables and Stripe ids stay, so turning it back on needs no setup. Stripe keeps billing existing subscribers while the module is off. Webhooks get a 404 in the meantime: Stripe retries them for up to three days, and after that they are lost. Turn the module off only when no one is subscribed.
+
 ## License
 
 Open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

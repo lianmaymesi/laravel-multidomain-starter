@@ -22,10 +22,25 @@ abstract class TestCase extends BaseTestCase
      */
     protected function disableModules(string ...$modules): static
     {
+        return $this->toggleModules('false', $modules);
+    }
+
+    /**
+     * Boot a fresh application with the given feature modules switched on —
+     * for modules that ship off by default (e.g. Billing).
+     */
+    protected function enableModules(string ...$modules): static
+    {
+        return $this->toggleModules('true', $modules);
+    }
+
+    /** @param  array<int, string>  $modules */
+    private function toggleModules(string $value, array $modules): static
+    {
         foreach ($modules as $module) {
             $key = 'MODULE_'.strtoupper($module);
 
-            $_ENV[$key] = $_SERVER[$key] = 'false';
+            $_ENV[$key] = $_SERVER[$key] = $value;
             $this->moduleEnvKeys[] = $key;
         }
 

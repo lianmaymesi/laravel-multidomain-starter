@@ -125,6 +125,7 @@ class ModuleManager
      * bootstrapping without core ever referencing the module:
      *
      *   backoffice.nav             sidebar links   [label, route, icon, permission, order, mobile]
+     *   account.nav                account sidebar [label, route, icon, order]
      *   backoffice.settings.cards  Settings page   [component, permission]
      *   permissions                permission names to seed
      *   database.seeders           seeder classes DatabaseSeeder should call
