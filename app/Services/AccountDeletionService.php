@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\AccountDeleting;
 use App\Events\UserAnonymized;
 use App\Models\AccountDeletionRequest;
 use App\Models\User;
@@ -9,6 +10,7 @@ use App\Notifications\AccountDeletionCancelled;
 use App\Notifications\AccountDeletionRequested;
 use Illuminate\Support\Facades\DB;
 use LogicException;
+use Throwable;
 
 class AccountDeletionService
 {
@@ -49,6 +51,18 @@ class AccountDeletionService
         $request->update(['status' => 'processing']);
 
         $user = $request->user;
+
+        // Modules clean up what they own first (e.g. Billing cancels
+        // subscriptions), before anything is changed. If one fails, the
+        // request goes back to pending: the job's retry and the next
+        // scheduler run only pick up pending requests.
+        try {
+            AccountDeleting::dispatch($user);
+        } catch (Throwable $e) {
+            $request->update(['status' => 'pending']);
+
+            throw $e;
+        }
 
         // Revoke all active sessions
         DB::table('sessions')->where('user_id', $user->id)->delete();

@@ -117,7 +117,10 @@ New modules are picked up automatically.
    contribute through an extension point so no check is needed.
 2. **Cross-module communication goes through events**, not direct calls. A
    disabled module's listener is simply never registered; the emitting module
-   never breaks.
+   never breaks. Core fires `App\Events\AccountDeleting` just before an account
+   is anonymized — listen to it to clean up what your module owns (Billing
+   cancels subscriptions there). A listener that throws stops the deletion and
+   the queued job retries.
 3. **Where core needs a value from a module, depend on a contract with a
    null-object fallback.** Example: `App\Contracts\Currencies` is bound to
    `NullCurrencies` by default and rebound to the real service by the Currency

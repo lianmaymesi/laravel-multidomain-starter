@@ -19,6 +19,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
+use Laravel\Cashier\Billable;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Scout\Searchable;
 use Spatie\Activitylog\LogOptions;
@@ -35,7 +36,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use Anonymizable, HasApiTokens, HasFactory, HasMedia, HasRoles, LogsActivity, MustVerifyPhone, Notifiable, Searchable;
+    use Anonymizable, Billable, HasApiTokens, HasFactory, HasMedia, HasRoles, LogsActivity, MustVerifyPhone, Notifiable, Searchable;
 
     /**
      * Only these are ever written to the activity log — password hash,
@@ -80,6 +81,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'two_factor_enabled_at' => 'datetime',
             'two_factor_confirmed_at' => 'datetime',
             'pending_email_requested_at' => 'datetime',
+            'trial_ends_at' => 'datetime',
         ];
     }
 
@@ -124,6 +126,10 @@ class User extends Authenticatable implements MustVerifyEmail
             'pending_email_requested_at' => null,
             'remember_token' => null,
             'password' => fn () => Str::random(40),
+            // Billing (Cashier) columns: card brand/last four are personal.
+            // stripe_id stays — invoices and refunds still hang off it.
+            'pm_type' => null,
+            'pm_last_four' => null,
         ];
     }
 

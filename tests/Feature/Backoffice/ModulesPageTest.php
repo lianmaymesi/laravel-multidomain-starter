@@ -105,7 +105,7 @@ it('renders a working on/off switch for every module, with a confirm only when d
         // Not swallowed into literal text by a malformed component tag.
         ->and($html)->not->toContain(':checked=')
         ->and(substr_count($html, "wire:click=\"toggle('"))->toBe($count)
-        // Only enabled modules' switches ask before disabling (API is off by default).
+        // Only enabled modules' switches ask before disabling (API and Billing ship off).
         ->and(substr_count($html, 'wire:confirm='))->toBe(count(Module::enabledNames()))
         ->and($html)->toContain('Disable Currencies')
         ->and($html)->not->toContain('Reset to default');

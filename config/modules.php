@@ -31,4 +31,7 @@ return [
     // Off by default: not every app needs a public API.
     'api' => (bool) env('MODULE_API', false),
 
+    // Off by default: not every app built on this kit sells subscriptions.
+    'billing' => (bool) env('MODULE_BILLING', false),
+
 ];
