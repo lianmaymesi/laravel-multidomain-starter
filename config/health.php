@@ -34,6 +34,7 @@ return [
         Checks\SchedulerCheck::class,
         Checks\DiskSpaceCheck::class,
         Checks\PortalsCheck::class,
+        Checks\BackupCheck::class,
     ],
 
     'thresholds' => [
