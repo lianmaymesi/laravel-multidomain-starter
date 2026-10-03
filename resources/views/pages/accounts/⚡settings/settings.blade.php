@@ -13,6 +13,11 @@
     </div>
     @endif
 
+    {{-- Cards contributed by feature modules (Module::contribute 'account.settings.cards'). --}}
+    @foreach ($this->cards() as $card)
+    @livewire($card['component'], [], key($card['component']))
+    @endforeach
+
     <form wire:submit="save" class="space-y-8">
 
         @if ($this->isMultiLanguageEnabled())

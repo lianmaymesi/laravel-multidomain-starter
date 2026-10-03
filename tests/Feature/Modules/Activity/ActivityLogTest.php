@@ -1,11 +1,11 @@
 <?php
 
-use App\Modules\Activity\Models\Activity;
-use App\Modules\Activity\Models\ActivityComment;
-use App\Modules\Activity\Models\ActivityCommentReaction;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
+use App\Modules\Activity\Models\Activity;
+use App\Modules\Activity\Models\ActivityComment;
+use App\Modules\Activity\Models\ActivityCommentReaction;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Testing\RefreshDatabase;

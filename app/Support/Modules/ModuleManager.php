@@ -127,6 +127,7 @@ class ModuleManager
      *   backoffice.nav             sidebar links   [label, route, icon, permission, order, mobile]
      *   account.nav                account sidebar [label, route, icon, order]
      *   backoffice.settings.cards  Settings page   [component, permission]
+     *   account.settings.cards     account Settings page [component, order]
      *   permissions                permission names to seed
      *   database.seeders           seeder classes DatabaseSeeder should call
      *

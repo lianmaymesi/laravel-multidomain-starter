@@ -10,22 +10,23 @@ use Illuminate\Support\Collection;
  */
 class Plans
 {
-    /** @return Collection<string, array{key: string, name: string, description: string, price: string, amount: string, features: array<int, string>}> */
+    /** @return Collection<string, array{key: string, name: string, description: string, price: string, amount: string, features: list<string>}> */
     public function all(): Collection
     {
         return collect(config('billing.plans', []))
             ->filter(fn (array $plan) => filled($plan['price'] ?? null))
-            ->map(fn (array $plan, string $key) => [
+            ->mapWithKeys(fn (array $plan, string $key) => [$key => [
                 'key' => $key,
                 'name' => (string) ($plan['name'] ?? str($key)->headline()),
                 'description' => (string) ($plan['description'] ?? ''),
                 'price' => (string) $plan['price'],
                 'amount' => (string) ($plan['amount'] ?? ''),
-                'features' => array_values((array) ($plan['features'] ?? [])),
-            ]);
+                // Config values are display text; normalise to a list of strings.
+                'features' => array_values(array_map(fn ($feature) => (string) $feature, (array) ($plan['features'] ?? []))),
+            ]]);
     }
 
-    /** @return array{key: string, name: string, description: string, price: string, amount: string, features: array<int, string>}|null */
+    /** @return array{key: string, name: string, description: string, price: string, amount: string, features: list<string>}|null */
     public function find(string $key): ?array
     {
         return $this->all()->get($key);

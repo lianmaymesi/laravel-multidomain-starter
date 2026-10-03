@@ -28,7 +28,7 @@ class HealthStatusChanged extends Notification
 
         $mail = (new MailMessage)
             ->subject("[{$app}] Health: ".strtoupper($status->value))
-            ->line('Overall status changed from **'.($this->previous?->value ?? 'unknown')."** to **{$status->value}** at ".$this->report->checkedAt->toDayDateTimeString().'.');
+            ->line('Overall status changed from **'.($this->previous->value ?? 'unknown')."** to **{$status->value}** at ".$this->report->checkedAt->toDayDateTimeString().'.');
 
         foreach ($this->report->checks as $check) {
             if ($check['result']->status !== Status::Ok) {

@@ -32,10 +32,11 @@ class BackupInventory
                 'disk' => $destination->diskName(),
                 'reachable' => $reachable,
                 'healthy' => $healthy,
-                'problems' => $status->failureMessages()->pluck('message')->all(),
-                'used_bytes' => $reachable ? $destination->usedStorage() : 0,
+                'problems' => $status->failureMessages()->map(fn (array $failure) => $failure['message'])->values()->all(),
+                'used_bytes' => $reachable ? $destination->usedStorage() : 0.0,
                 'backups' => $reachable
-                    ? $destination->backups()->map(fn (Backup $backup) => [
+                    // toBase(): mapping a BackupCollection would type the rows as Backups.
+                    ? $destination->backups()->toBase()->map(fn (Backup $backup) => [
                         'path' => $backup->path(),
                         'date' => $backup->date(),
                         'size_bytes' => $backup->sizeInBytes(),

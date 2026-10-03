@@ -17,7 +17,8 @@ class CancelSubscriptionsOnAccountDeletion
     {
         // No ends_at = still renews. One already cancelled at period end
         // (grace period) won't charge again, so it's left to run out.
-        $event->user->subscriptions()
+        Subscription::query()
+            ->whereBelongsTo($event->user, 'owner')
             ->whereNull('ends_at')
             ->get()
             ->each(function (Subscription $subscription) use ($event) {
@@ -25,7 +26,7 @@ class CancelSubscriptionsOnAccountDeletion
 
                 activity('billing')
                     ->performedOn($event->user)
-                    ->withProperties(['subscription' => $subscription->stripe_id])
+                    ->withProperties(['subscription' => $subscription->getAttribute('stripe_id')])
                     ->log('subscription cancelled on account deletion');
             });
     }

@@ -36,7 +36,7 @@ class CurrencyService implements Currencies
 
     public function primaryCode(): string
     {
-        return $this->primary()?->code ?? 'USD';
+        return $this->primary()->code ?? 'USD';
     }
 
     public function find(string $code): ?Currency

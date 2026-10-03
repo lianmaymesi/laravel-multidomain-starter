@@ -22,25 +22,22 @@ abstract class TestCase extends BaseTestCase
      */
     protected function disableModules(string ...$modules): static
     {
-        return $this->toggleModules('false', $modules);
+        return $this->setModules($modules, false);
     }
 
-    /**
-     * Boot a fresh application with the given feature modules switched on —
-     * for modules that ship off by default (e.g. Billing).
-     */
+    /** Boot a fresh application with the given (default-off) modules switched on. */
     protected function enableModules(string ...$modules): static
     {
-        return $this->toggleModules('true', $modules);
+        return $this->setModules($modules, true);
     }
 
     /** @param  array<int, string>  $modules */
-    private function toggleModules(string $value, array $modules): static
+    private function setModules(array $modules, bool $enabled): static
     {
         foreach ($modules as $module) {
             $key = 'MODULE_'.strtoupper($module);
 
-            $_ENV[$key] = $_SERVER[$key] = $value;
+            $_ENV[$key] = $_SERVER[$key] = $enabled ? 'true' : 'false';
             $this->moduleEnvKeys[] = $key;
         }
 

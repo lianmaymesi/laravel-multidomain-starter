@@ -220,7 +220,9 @@ it('filters the users list by name or email', function () {
 
     $results = Livewire::actingAs(adminActor())
         ->test('pages::backoffice.users')
-        ->set('search', 'Ada')
+        // Distinctive: a short term like "Ada" also hits the acting admin's
+        // random factory name/email now and then.
+        ->set('search', 'Lovelace')
         ->instance()
         ->users();
 

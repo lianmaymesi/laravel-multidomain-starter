@@ -1,5 +1,6 @@
 <?php
 
+use App\Concerns\ThrottlesActions;
 use App\Enums\OtpType;
 use App\Models\User;
 use App\Notifications\ForgotPassword;
@@ -7,11 +8,14 @@ use App\Services\Auth\OtpService;
 use App\Contracts\SmsService;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 new #[Layout('layouts.auth')] class extends Component
 {
+    use ThrottlesActions;
+
     /** Which tab is active: 'phone' | 'email' */
     public string $activeTab = 'phone';
 
@@ -75,7 +79,18 @@ new #[Layout('layouts.auth')] class extends Component
             $this->maskedEmail = substr($local, 0, 1) . '***@' . $domain;
         }
 
-        $otpService->gateResend($recipient, $otpType);
+        $field = $this->activeTab === 'phone' ? 'phone' : 'email';
+
+        // Per IP across every recipient (each recipient also has its own limit
+        // below) — stops one client spraying codes at many accounts.
+        $this->throttle('password-reset-request', request()->ip(), $field);
+
+        try {
+            $otpService->gateResend($recipient, $otpType);
+        } catch (ValidationException $e) {
+            // gateResend reports on "code", which isn't on screen yet at this step.
+            throw ValidationException::withMessages([$field => collect($e->errors())->flatten()->first()]);
+        }
 
         // Always show success to prevent user enumeration
         if (!$user) {
@@ -145,6 +160,8 @@ new #[Layout('layouts.auth')] class extends Component
 
         $otpType = $this->otpType();
         $recipient = $this->resendRecipient();
+
+        $this->throttle('password-reset-request', request()->ip(), 'code');
 
         $otpService->gateResend($recipient, $otpType);
 

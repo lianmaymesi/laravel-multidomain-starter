@@ -37,15 +37,6 @@
         </div>
     </header>
 
-    {{-- Links contributed by feature modules (see Module::contribute
-        'account.nav'). A disabled module contributes nothing. --}}
-    @php
-    $moduleNav = collect(\App\Support\Modules\Module::contributions('account.nav'))
-        ->filter(fn ($item) => Route::has($item['route'])
-            && (! isset($item['visible']) || $item['visible']()))
-        ->sortBy(fn ($item) => $item['order'] ?? 100);
-    @endphp
-
     {{-- Mobile nav --}}
     <div class="border-b border-zinc-200 dark:border-white/6 bg-white dark:bg-zinc-950 lg:hidden sticky top-13.25 z-30">
         <div class="mx-auto max-w-7xl overflow-x-auto px-4">
@@ -59,8 +50,11 @@
                 ['label' => __('Settings'), 'route' => 'account.settings'],
                 ];
 
-                foreach ($moduleNav as $item) {
-                    $mobileItems[] = ['label' => __($item['label']), 'route' => $item['route']];
+                // Items contributed by feature modules (Module::contribute 'account.nav').
+                foreach (\App\Support\Modules\Module::contributions('account.nav') as $item) {
+                    if (Route::has($item['route']) && (! isset($item['visible']) || $item['visible'](auth()->user()))) {
+                        $mobileItems[] = ['label' => __($item['label']), 'route' => $item['route']];
+                    }
                 }
                 @endphp
                 @foreach ($mobileItems as $item)
@@ -136,17 +130,6 @@
                     </a>
                     @endif
 
-                    @foreach ($moduleNav as $item)
-                    @php $itemActive = request()->routeIs($item['active'] ?? $item['route']); @endphp
-                    <a href="{{ route($item['route']) }}" wire:navigate
-                        class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
-                            {{ $itemActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
-                        <flux:icon :name="$item['icon'] ?? 'squares-2x2'"
-                            class="size-4 shrink-0 {{ $itemActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        {{ __($item['label']) }}
-                    </a>
-                    @endforeach
-
                     @if (Route::has('account.settings'))
                     @php $settActive = request()->routeIs('account.settings'); @endphp
                     <a href="{{ route('account.settings') }}" wire:navigate
@@ -164,6 +147,18 @@
                         <span class="ms-auto text-[10px] text-zinc-300 dark:text-white/20">{{ __('Soon') }}</span>
                     </span>
                     @endif
+
+                    {{-- Links contributed by feature modules (Module::contribute 'account.nav'). --}}
+                    @foreach (collect(\App\Support\Modules\Module::contributions('account.nav'))->filter(fn ($item) => Route::has($item['route']) && (! isset($item['visible']) || $item['visible'](auth()->user())))->sortBy(fn ($item) => $item['order'] ?? 100) as $item)
+                    @php $itemActive = request()->routeIs($item['route']); @endphp
+                    <a href="{{ route($item['route']) }}" wire:navigate
+                        class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
+                                {{ $itemActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
+                        <flux:icon :name="$item['icon'] ?? 'squares-2x2'"
+                            class="size-4 shrink-0 {{ $itemActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
+                        {{ __($item['label']) }}
+                    </a>
+                    @endforeach
 
                 </nav>
 

@@ -6,6 +6,7 @@ use App\Http\Middleware\Demo\EnsureIsStaff;
 use App\Http\Middleware\Demo\EnsurePhoneIsVerified;
 use App\Http\Middleware\EnsurePortalAccess;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Support\Modules\Module;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -39,13 +40,21 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
+        // JSON instead of an HTML error page when the client asks for it, or
+        // when a module claims the request (the API module: everything on
+        // the API host — even routes that don't exist).
+        $wantsJson = fn (Request $request): bool => $request->expectsJson()
+            || collect(Module::contributions('http.json-requests'))->contains(fn (callable $matches) => $matches($request));
+
+        $exceptions->shouldRenderJsonWhen($wantsJson);
+
         // Route every HTTP error (404, 419, 500, ...) through one dynamic
         // view instead of Laravel's per-code errors::{code} convention —
         // the framework ships its own default view for several common
         // codes, which would otherwise pre-empt ours. See:
         // resources/views/errors/_dispatch.blade.php
-        $exceptions->render(function (HttpExceptionInterface $e, Request $request) {
-            if ($request->expectsJson()) {
+        $exceptions->render(function (HttpExceptionInterface $e, Request $request) use ($wantsJson) {
+            if ($wantsJson($request)) {
                 return null;
             }
 

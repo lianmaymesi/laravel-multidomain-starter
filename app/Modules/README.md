@@ -30,7 +30,8 @@ php artisan make:module Invoices
 ```
 
 That creates the folder below, adds the toggle to `config/modules.php` and
-`.env.example`, and writes a test that proves the module works on *and* that
+`.env.example`, registers its migrations folder for static analysis
+(`phpstan.neon`), and writes a test that proves the module works on *and* that
 disabling it breaks nothing. Providers are auto-discovered — there is nothing to
 register by hand.
 
@@ -83,8 +84,11 @@ Module::contribute('backoffice.nav', [[
 | Point | Read by | Item shape |
 |---|---|---|
 | `backoffice.nav` | backoffice layout sidebar | `label, route, icon, permission (string or any-of array), visible (closure), order, mobile, active` |
-| `account.nav` | account layout sidebar + mobile bar | `label, route, icon, visible (closure), order, active` |
 | `backoffice.settings.cards` | Settings page | `component, permission, order` — a Livewire component with its own Save button |
+| `account.settings.cards` | account Settings page | `component, order` — a Livewire component that saves itself |
+| `account.nav` | account portal sidebar + mobile bar | `label, route, icon, order, visible` (`visible` gets the user) |
+| `api.abilities` | API token abilities | `ability, description` |
+| `http.json-requests` | exception rendering | closure(Request): bool — render errors as JSON (e.g. the API host) |
 | `health.checks` | `/health`, `health:check`, System health page | class implementing `App\Support\Health\Check` |
 | `settings.fields` | `SettingsRegistry` (generic Settings form) | closure returning a `SettingField` (closure so labels translate per request) |
 | `permissions` | `RolePermissionSeeder` | permission name (use `permissions()` instead) |
@@ -95,7 +99,18 @@ Routes: each portal route file ends with `Module::routes('<portal>')`, which
 includes every enabled module's `routes/<portal>.php` inside that portal's
 domain, prefix, name and middleware group.
 
+The API module (off by default) works the same way: a module's `routes/api.php`
+is included inside the authenticated `/v1` group, so it only exists while both
+modules are on. Scope each route with `->middleware('ability:<resource>:<read|write>')`,
+declare those abilities with `Module::contribute('api.abilities', …)`, and check the
+user's permission in the controller or form request. See `app/Modules/Api/README.md`.
+
 ## Rules that keep modules removable
+
+The import rules are enforced by `tests/Arch/ModulesTest.php` (run alone with
+`composer test:arch`): core code may not use `App\Modules\…`, a module may not
+use another module, and every module's provider must extend `ModuleProvider`.
+New modules are picked up automatically.
 
 1. **Never call into a module from outside it without a guard.** Use
    `Module::enabled('x')` (or `@module('x') … @endmodule` in Blade), or better,
@@ -125,7 +140,8 @@ naming a module whose middleware must run early or late.
 
 Toggles vs. feature flags: modules are the coarse, deploy-time outer gate (is
 this feature in the app at all). Runtime per-user/per-portal experiments *inside*
-an enabled module belong to feature flags, not here.
+an enabled module belong to feature flags, not here — see
+[app/Features/README.md](../Features/README.md).
 
 Livewire: single/multi-file (⚡) components are addressed as `name::page` after
 `Livewire::addNamespace('name', viewPath: ...)`. A class-based component can't
