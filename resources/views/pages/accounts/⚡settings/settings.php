@@ -3,6 +3,7 @@
 use App\Support\Toast;
 use App\Contracts\Languages;
 use App\Services\TimezoneService;
+use App\Support\Modules\Module;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -16,6 +17,20 @@ new #[Layout('layouts.accounts')] class extends Component
     {
         $this->locale = auth()->user()->locale ?? $languages->primaryCode();
         $this->timezone = $timezones->current();
+    }
+
+    /**
+     * Cards contributed by feature modules (Module::contribute('account.settings.cards')),
+     * each a Livewire component that saves itself.
+     *
+     * @return array<int, array{component: string, order?: int}>
+     */
+    public function cards(): array
+    {
+        return collect(Module::contributions('account.settings.cards'))
+            ->sortBy(fn (array $card) => $card['order'] ?? 100)
+            ->values()
+            ->all();
     }
 
     public function languages()

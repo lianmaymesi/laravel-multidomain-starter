@@ -27,4 +27,6 @@ return [
 
     'activity' => (bool) env('MODULE_ACTIVITY', true),
 
+    'media' => (bool) env('MODULE_MEDIA', true),
+
 ];

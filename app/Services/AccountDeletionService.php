@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\UserAnonymized;
 use App\Models\AccountDeletionRequest;
 use App\Models\User;
 use App\Notifications\AccountDeletionCancelled;
@@ -22,7 +23,7 @@ class AccountDeletionService
         $request = $user->deletionRequest()->create([
             'requested_at' => $now,
             'scheduled_at' => $now->copy()->addDays(AccountDeletionRequest::GRACE_PERIOD_DAYS),
-            'status'       => 'pending',
+            'status' => 'pending',
         ]);
 
         // Revoke all active sessions immediately on deletion request
@@ -57,6 +58,9 @@ class AccountDeletionService
 
         // Anonymize user — keeps the row for audit/FK integrity
         $user->anonymize();
+
+        // Lets modules drop personal data they own (e.g. Media: profile photos).
+        UserAnonymized::dispatch($user);
 
         $request->update(['status' => 'completed']);
     }
