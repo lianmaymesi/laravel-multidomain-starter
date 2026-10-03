@@ -33,7 +33,7 @@ jobs:
     timeout-minutes: 10
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           # Full history, so Pint can compare against the PR's base branch.
           fetch-depth: 0
@@ -56,7 +56,7 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: ./.github/actions/setup-app
         with:
@@ -77,7 +77,7 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # The Vite build scans vendor/ stubs (Flux) for Tailwind classes, so
       # PHP dependencies are installed here too.
@@ -86,7 +86,7 @@ jobs:
           flux-username: ${{ env.FLUX_USERNAME }}
           flux-license-key: ${{ env.FLUX_LICENSE_KEY }}
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
@@ -96,7 +96,7 @@ jobs:
       - run: npm run build
 
       - name: Share the built assets with the test jobs
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: public-build
           path: public/build
@@ -114,7 +114,7 @@ jobs:
         php-version: ["8.4", "8.5"]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: ./.github/actions/setup-app
         with:
@@ -126,7 +126,7 @@ jobs:
 
       # Layouts call @vite, so tests need the manifest from the build job.
       - name: Download built assets
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: public-build
           path: public/build
@@ -150,7 +150,7 @@ jobs:
     continue-on-error: true
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - uses: ./.github/actions/setup-app
         with:
@@ -160,7 +160,7 @@ jobs:
       - name: Composer audit
         run: composer audit --no-interaction
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
