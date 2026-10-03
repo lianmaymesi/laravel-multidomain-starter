@@ -66,6 +66,24 @@ Tests only start once style, analysis and the build pass. A new push cancels the
 
 **Branch protection** is a manual, one-time step. In Settings → Branches → add a rule for `main`, require a pull request, and require these status checks: *Code style (Pint)*, *Static analysis (Larastan)*, *Frontend build*, *Tests (PHP 8.4)*, *Tests (PHP 8.5)*.
 
+## API (optional module)
+
+A versioned, token-authenticated JSON API (Laravel Sanctum) on the `api` subdomain, e.g. `https://api.yourapp.test/v1`. It is **off by default**, since not every app needs one. Turn it on with `MODULE_API=true` or on Backoffice → Modules.
+
+- **Super Admin decides who gets API access** on Backoffice → **API Access**:
+  - who may create their own tokens: nobody (default), backoffice staff, everyone, or specific roles, plus which abilities, the longest lifetime and how many tokens per user
+  - issue tokens to any user (integrations, partners) with any ability, including full access
+  - see, search and revoke every token, or revoke them all at once
+- **Users** see Account → **API tokens** only when the policy includes them, or when an admin issued them a token.
+- **Enforced on every request:** tightening the policy disables affected self-made tokens immediately. A token never grants more than its user's permissions.
+
+```bash
+curl https://api.yourapp.test/v1/me        -H "Authorization: Bearer <token>"
+curl https://api.yourapp.test/v1/languages -H "Authorization: Bearer <token>"
+```
+
+Endpoints, abilities and how modules add their own: [app/Modules/Api/README.md](app/Modules/Api/README.md).
+
 ## License
 
 Open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

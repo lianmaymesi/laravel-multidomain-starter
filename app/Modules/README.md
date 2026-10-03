@@ -86,6 +86,9 @@ Module::contribute('backoffice.nav', [[
 | `backoffice.nav` | backoffice layout sidebar | `label, route, icon, permission (string or any-of array), visible (closure), order, mobile, active` |
 | `backoffice.settings.cards` | Settings page | `component, permission, order` — a Livewire component with its own Save button |
 | `account.settings.cards` | account Settings page | `component, order` — a Livewire component that saves itself |
+| `account.nav` | account portal sidebar + mobile bar | `label, route, icon, order, visible` (`visible` gets the user) |
+| `api.abilities` | API token abilities | `ability, description` |
+| `http.json-requests` | exception rendering | closure(Request): bool — render errors as JSON (e.g. the API host) |
 | `settings.fields` | `SettingsRegistry` (generic Settings form) | closure returning a `SettingField` (closure so labels translate per request) |
 | `permissions` | `RolePermissionSeeder` | permission name (use `permissions()` instead) |
 | `permissions.super-admin-only` | `RolePermissionSeeder` | names Admin must never get (use `superAdminOnlyPermissions()`) |
@@ -94,6 +97,12 @@ Module::contribute('backoffice.nav', [[
 Routes: each portal route file ends with `Module::routes('<portal>')`, which
 includes every enabled module's `routes/<portal>.php` inside that portal's
 domain, prefix, name and middleware group.
+
+The API module (off by default) works the same way: a module's `routes/api.php`
+is included inside the authenticated `/v1` group, so it only exists while both
+modules are on. Scope each route with `->middleware('ability:<resource>:<read|write>')`,
+declare those abilities with `Module::contribute('api.abilities', …)`, and check the
+user's permission in the controller or form request. See `app/Modules/Api/README.md`.
 
 ## Rules that keep modules removable
 

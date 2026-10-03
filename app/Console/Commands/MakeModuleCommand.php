@@ -102,7 +102,7 @@ class MakeModuleCommand extends Command
             $env = File::get($envExample);
 
             File::put($envExample, str_contains($env, '# MODULE_')
-                ? preg_replace('/^(# MODULE_[A-Z0-9_]+=true)$(?![\s\S]*^# MODULE_)/m', "$1\n# MODULE_{$envName}=true", $env, 1)
+                ? preg_replace('/^(# MODULE_[A-Z0-9_]+=(?:true|false))$(?![\s\S]*^# MODULE_)/m', "$1\n# MODULE_{$envName}=true", $env, 1)
                 : rtrim($env)."\n\n# MODULE_{$envName}=true\n");
         }
     }

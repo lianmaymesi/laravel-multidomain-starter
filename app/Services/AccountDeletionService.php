@@ -56,6 +56,9 @@ class AccountDeletionService
         // Delete OTPs
         $user->otps()->delete();
 
+        // Revoke API tokens — the anonymized row stays, its tokens must not
+        $user->tokens()->delete();
+
         // Anonymize user — keeps the row for audit/FK integrity
         $user->anonymize();
 

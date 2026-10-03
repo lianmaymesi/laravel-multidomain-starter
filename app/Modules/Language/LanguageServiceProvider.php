@@ -83,6 +83,12 @@ class LanguageServiceProvider extends ModuleProvider
 
     protected function bootModule(): void
     {
+        // API token abilities for routes/api.php (used only while the API module is on).
+        Module::contribute('api.abilities', [
+            ['ability' => 'languages:read', 'description' => 'Read languages'],
+            ['ability' => 'languages:write', 'description' => 'Create, update and delete languages'],
+        ]);
+
         // Runs before other modules' web middleware (providers boot in folder
         // order) so the locale is already set when e.g. the maintenance page renders.
         Route::pushMiddlewareToGroup('web', SetLocale::class);
