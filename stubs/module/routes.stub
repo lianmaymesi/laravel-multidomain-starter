@@ -1,0 +1,9 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+// Loaded by Module::routes('backoffice') inside the backoffice route group —
+// inherits its domain, prefix, "backoffice." name prefix and middleware.
+// Add routes/app.php, routes/account.php, ... for other portals (each portal's
+// route file must call Module::routes('<portal>') to pull them in).
+Route::livewire('{{ name }}', '{{ name }}::index')->name('{{ name }}.index');

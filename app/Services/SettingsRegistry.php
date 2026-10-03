@@ -3,15 +3,18 @@
 namespace App\Services;
 
 use App\Models\AppSetting;
+use App\Support\Modules\Module;
 use App\Support\Settings\SettingField;
+use Closure;
 use Illuminate\Support\Collection;
 
 /**
- * Every app-level setting the backoffice Settings page can edit, declared
- * once here. The page itself (`resources/views/pages/backoffice/⚡settings`)
+ * Every app-level setting the backoffice Settings page can edit: the core
+ * ones declared here, plus whatever enabled modules contribute through
+ * Module::contribute('settings.fields', [...]). The page itself (`resources/views/pages/backoffice/⚡settings`)
  * just loops over `all()` and renders whichever widget each field's `type`
- * calls for — add a setting by adding an entry here, not by editing the
- * Blade/PHP files.
+ * calls for — add a setting by adding an entry here (or from a module), not by
+ * editing the Blade/PHP files.
  */
 class SettingsRegistry
 {
@@ -20,21 +23,7 @@ class SettingsRegistry
      */
     public function all(): Collection
     {
-        return collect([
-            new SettingField(
-                key: AppSetting::URL_MODE,
-                type: SettingField::TYPE_RADIO,
-                label: __('Language URL mode'),
-                description: __("Only one of these is ever active — switching here changes how every portal's URLs are generated."),
-                permission: 'languages.edit',
-                default: AppSetting::MODE_PATH,
-                rules: ['required', 'in:'.AppSetting::MODE_PATH.','.AppSetting::MODE_QUERY],
-                options: [
-                    AppSetting::MODE_PATH => ['label' => __('Path prefix'), 'description' => 'example.com/ · example.com/ar · example.com/ta'],
-                    AppSetting::MODE_QUERY => ['label' => __('Query string'), 'description' => 'example.com/?lang=ar'],
-                ],
-            ),
-
+        $core = [
             new SettingField(
                 key: AppSetting::DEFAULT_TIMEZONE,
                 type: SettingField::TYPE_SELECT,
@@ -45,17 +34,16 @@ class SettingsRegistry
                 rules: ['required', 'timezone'],
                 options: collect(app(TimezoneService::class)->identifiers())->mapWithKeys(fn (string $tz) => [$tz => $tz])->all(),
             ),
+        ];
 
-            new SettingField(
-                key: AppSetting::GOOGLE_TRANSLATE_API_KEY,
-                type: SettingField::TYPE_SECRET,
-                label: __('Google Translate API key'),
-                description: __('Lets admins machine-translate pending strings on the Translations page with one click. Optional — leave blank to keep translating by hand.'),
-                permission: 'settings.edit',
-                helpText: __('Google Cloud Console'),
-                helpUrl: 'https://console.cloud.google.com/apis/credentials',
-            ),
-        ]);
+        // Feature modules add their own settings via the 'settings.fields'
+        // extension point — closures, so labels are translated per request.
+        $fromModules = array_map(
+            fn ($field) => $field instanceof Closure ? $field() : $field,
+            Module::contributions('settings.fields'),
+        );
+
+        return collect([...$core, ...$fromModules]);
     }
 
     public function find(string $key): ?SettingField

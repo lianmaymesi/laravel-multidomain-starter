@@ -50,6 +50,12 @@ function something()
     // ..
 }
 
+/** Absolute URL under the backoffice portal, e.g. backofficeUrl('maintenance'). */
+function backofficeUrl(string $path = ''): string
+{
+    return rtrim(route('backoffice.dashboard'), '/').'/'.ltrim($path, '/');
+}
+
 function staffUser(): User
 {
     return User::factory()->create([

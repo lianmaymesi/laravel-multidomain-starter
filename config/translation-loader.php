@@ -1,18 +1,16 @@
 <?php
 
-use App\Models\LanguageLine;
+use App\Modules\Language\Models\LanguageLine;
 use Spatie\TranslationLoader\TranslationLoaderManager;
-use Spatie\TranslationLoader\TranslationLoaders\Db;
 
 return [
 
     /*
-     * Language lines will be fetched by these loaders. You can put any class here that implements
-     * the Spatie\TranslationLoader\TranslationLoaders\TranslationLoader-interface.
+     * Language lines will be fetched by these loaders. Left empty on purpose: the
+     * Language module (app/Modules/Language) sets the Db loader while it is
+     * enabled, so database translation overrides never apply with it off.
      */
-    'translation_loaders' => [
-        Db::class,
-    ],
+    'translation_loaders' => [],
 
     /*
      * This is the model used by the Db Translation loader. You can put any model here

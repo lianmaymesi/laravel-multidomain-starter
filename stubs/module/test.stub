@@ -1,0 +1,39 @@
+<?php
+
+use App\Support\Modules\Module;
+use Database\Seeders\RolePermissionSeeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Route;
+
+uses(RefreshDatabase::class);
+
+it('registers its routes, page and nav link when the {{ name }} module is enabled', function () {
+    $this->seed(RolePermissionSeeder::class);
+    $this->withoutVite();
+
+    expect(Module::enabled('{{ name }}'))->toBeTrue()
+        ->and(Route::has('backoffice.{{ name }}.index'))->toBeTrue();
+
+    $this->actingAs(superAdminActor())
+        ->get(route('backoffice.{{ name }}.index'))
+        ->assertOk()
+        ->assertSee('{{ Title }}')
+        ->assertSee('/{{ name }}');
+});
+
+it('breaks nothing when the {{ name }} module is disabled', function () {
+    $this->disableModules('{{ name }}');
+    $this->seed(RolePermissionSeeder::class);
+    $this->withoutVite();
+
+    expect(Module::enabled('{{ name }}'))->toBeFalse()
+        ->and(Route::has('backoffice.{{ name }}.index'))->toBeFalse();
+
+    $actor = superAdminActor();
+
+    // Old URL 404s cleanly (route never registered) and backoffice still renders.
+    $this->actingAs($actor)->get(backofficeUrl('{{ name }}'))->assertNotFound();
+    $this->actingAs($actor)->get(route('backoffice.dashboard'))
+        ->assertOk()
+        ->assertDontSee('/{{ name }}');
+});

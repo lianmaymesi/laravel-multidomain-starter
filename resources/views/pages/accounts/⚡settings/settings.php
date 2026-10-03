@@ -1,6 +1,6 @@
 <?php
 
-use App\Services\LanguageService;
+use App\Contracts\Languages;
 use App\Services\TimezoneService;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -11,7 +11,7 @@ new #[Layout('layouts.accounts')] class extends Component
 
     public string $timezone = '';
 
-    public function mount(LanguageService $languages, TimezoneService $timezones): void
+    public function mount(Languages $languages, TimezoneService $timezones): void
     {
         $this->locale = auth()->user()->locale ?? $languages->primaryCode();
         $this->timezone = $timezones->current();
@@ -19,12 +19,12 @@ new #[Layout('layouts.accounts')] class extends Component
 
     public function languages()
     {
-        return app(LanguageService::class)->active();
+        return app(Languages::class)->active();
     }
 
     public function isMultiLanguageEnabled(): bool
     {
-        return app(LanguageService::class)->isMultiLanguageEnabled();
+        return app(Languages::class)->isMultiLanguageEnabled();
     }
 
     public function timezones(): array
@@ -41,7 +41,7 @@ new #[Layout('layouts.accounts')] class extends Component
      * up the change. Timezone doesn't affect the initial render, but riding
      * along on the same reload is harmless.
      */
-    public function save(LanguageService $languages, TimezoneService $timezones): void
+    public function save(Languages $languages, TimezoneService $timezones): void
     {
         if ($this->isMultiLanguageEnabled() && ! $languages->isValidCode($this->locale)) {
             $this->addError('locale', __('That language is not available.'));

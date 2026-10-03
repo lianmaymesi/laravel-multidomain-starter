@@ -52,7 +52,7 @@
                     <flux:table.cell align="end">
                         <div class="flex justify-end gap-2">
                             @can('activity.view')
-                            <x-activity-log-button :model="$user" />
+                            @module('activity')<x-dynamic-component component="activity::log-button" :model="$user" />@endmodule
                             @endcan
                             @can('users.assign-roles')
                             <flux:button size="xs" variant="ghost" icon="shield-check" wire:click="editRoles({{ $user->id }})">

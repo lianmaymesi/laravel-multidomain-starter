@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app(App\Services\LanguageService::class)->currentDirection() }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="{{ app(App\Contracts\Languages::class)->currentDirection() }}">
 
 <head>
     <meta charset="utf-8">
@@ -57,8 +57,14 @@
                 ['label' => __('Roles'), 'route' => 'backoffice.roles.index'],
                 ['label' => __('Permissions'), 'route' => 'backoffice.permissions.index'],
                 ['label' => __('Users'), 'route' => 'backoffice.users.index'],
-                ['label' => __('Maintenance'), 'route' => 'backoffice.maintenance.index'],
                 ];
+
+                // Module nav items opt in to the mobile bar with 'mobile' => true.
+                foreach (\App\Support\Modules\Module::contributions('backoffice.nav') as $item) {
+                    if (($item['mobile'] ?? false) && (! isset($item['visible']) || $item['visible']()) && (! isset($item['permission']) || Gate::any((array) $item['permission']))) {
+                        $mobileItems[] = ['label' => __($item['label']), 'route' => $item['route']];
+                    }
+                }
                 @endphp
                 @foreach ($mobileItems as $item)
                 @php $active = request()->routeIs($item['route']); @endphp
@@ -134,55 +140,32 @@
                     </a>
                     @endcan
 
-                    @canany(['maintenance.view', 'activity.view', 'languages.edit'])
+                    {{-- Links contributed by feature modules (see Module::contribute
+                        'backoffice.nav'). A disabled module contributes nothing, so
+                        there's no per-module check to keep in sync here. --}}
+                    @php
+                    $moduleNav = collect(\App\Support\Modules\Module::contributions('backoffice.nav'))
+                        ->filter(fn ($item) => Route::has($item['route'])
+                            && (! isset($item['visible']) || $item['visible']())
+                            && (! isset($item['permission']) || Gate::any((array) $item['permission'])))
+                        ->sortBy(fn ($item) => $item['order'] ?? 100);
+                    @endphp
+                    @if ($moduleNav->isNotEmpty() || Gate::any(['languages.edit', 'modules.manage']))
                     <div class="mt-4 mb-1 px-4 text-[10px] font-medium tracking-[0.12em] uppercase text-zinc-300 dark:text-white/20">
                         {{ __('System') }}
                     </div>
-                    @endcanany
+                    @endif
 
-                    @can('maintenance.view')
-                    @php $maintenanceActive = request()->routeIs('backoffice.maintenance.index'); @endphp
-                    <a href="{{ route('backoffice.maintenance.index') }}" wire:navigate
+                    @foreach ($moduleNav as $item)
+                    @php $itemActive = request()->routeIs($item['active'] ?? $item['route']); @endphp
+                    <a href="{{ route($item['route']) }}" wire:navigate
                         class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
-                            {{ $maintenanceActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
-                        <flux:icon.wrench
-                            class="size-4 shrink-0 {{ $maintenanceActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        {{ __('Maintenance') }}
+                            {{ $itemActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
+                        <flux:icon :name="$item['icon'] ?? 'squares-2x2'"
+                            class="size-4 shrink-0 {{ $itemActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
+                        {{ __($item['label']) }}
                     </a>
-                    @endcan
-
-                    @can('activity.view')
-                    @php $activityActive = request()->routeIs('backoffice.activity.index'); @endphp
-                    <a href="{{ route('backoffice.activity.index') }}" wire:navigate
-                        class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
-                            {{ $activityActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
-                        <flux:icon.clock
-                            class="size-4 shrink-0 {{ $activityActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        {{ __('Activity Log') }}
-                    </a>
-                    @endcan
-
-                    @can('languages.view')
-                    @php $languagesActive = request()->routeIs('backoffice.languages.index'); @endphp
-                    <a href="{{ route('backoffice.languages.index') }}" wire:navigate
-                        class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
-                            {{ $languagesActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
-                        <flux:icon.language
-                            class="size-4 shrink-0 {{ $languagesActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        {{ __('Languages') }}
-                    </a>
-                    @endcan
-
-                    @can('currencies.view')
-                    @php $currenciesActive = request()->routeIs('backoffice.currencies.index'); @endphp
-                    <a href="{{ route('backoffice.currencies.index') }}" wire:navigate
-                        class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
-                            {{ $currenciesActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
-                        <flux:icon.banknotes
-                            class="size-4 shrink-0 {{ $currenciesActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        {{ __('Currencies') }}
-                    </a>
-                    @endcan
+                    @endforeach
 
                     @can('languages.edit')
                     @php $settingsActive = request()->routeIs('backoffice.settings.index'); @endphp
@@ -195,21 +178,17 @@
                     </a>
                     @endcan
 
-                    {{-- Nothing to translate with a single active language, so this
-                        stays hidden until there's a second one — same rule the
-                        locale switcher itself follows. --}}
-                    @if (app(App\Services\LanguageService::class)->isMultiLanguageEnabled())
-                    @canany(['translations.landing', 'translations.portal', 'translations.common'])
-                    @php $translationsActive = request()->routeIs('backoffice.translations.index'); @endphp
-                    <a href="{{ route('backoffice.translations.index') }}" wire:navigate
+                    @can('modules.manage')
+                    @php $modulesActive = request()->routeIs('backoffice.modules.index'); @endphp
+                    <a href="{{ route('backoffice.modules.index') }}" wire:navigate
                         class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors
-                            {{ $translationsActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
-                        <flux:icon.chat-bubble-left-right
-                            class="size-4 shrink-0 {{ $translationsActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
-                        {{ __('Translations') }}
+                            {{ $modulesActive ? 'border-blue-400 bg-blue-50 dark:bg-blue-500/10 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 dark:text-white/40 hover:border-zinc-300 dark:hover:border-white/15 hover:bg-zinc-50 dark:hover:bg-white/3 hover:text-zinc-700 dark:hover:text-white/75' }}">
+                        <flux:icon.puzzle-piece
+                            class="size-4 shrink-0 {{ $modulesActive ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 dark:text-white/25 group-hover:text-zinc-500 dark:group-hover:text-white/50' }}" />
+                        {{ __('Modules') }}
                     </a>
-                    @endcanany
-                    @endif
+                    @endcan
+
 
                 </nav>
 

@@ -50,7 +50,7 @@
                     <flux:table.cell align="end">
                         <div class="flex justify-end gap-2">
                             @can('activity.view')
-                            <x-activity-log-button :model="$role" />
+                            @module('activity')<x-dynamic-component component="activity::log-button" :model="$role" />@endmodule
                             @endcan
                             @can('roles.assign-permissions')
                             @unless ($role->locked || ($role->isPortalRole() && ! $this->viewerIsSuperAdmin()))

@@ -2,7 +2,7 @@
 
 namespace App\Casts;
 
-use App\Services\CurrencyService;
+use App\Contracts\Currencies;
 use App\Support\Money;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
@@ -32,8 +32,8 @@ class MoneyCast implements CastsAttributes
         }
 
         $currencyCode = $this->currencyColumn !== null
-            ? ($attributes[$this->currencyColumn] ?? app(CurrencyService::class)->primaryCode())
-            : app(CurrencyService::class)->primaryCode();
+            ? ($attributes[$this->currencyColumn] ?? app(Currencies::class)->primaryCode())
+            : app(Currencies::class)->primaryCode();
 
         return new Money((int) $value, $currencyCode);
     }

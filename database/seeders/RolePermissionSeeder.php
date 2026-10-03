@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Permission;
 use App\Models\Role;
+use App\Support\Modules\Module;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -22,26 +23,17 @@ class RolePermissionSeeder extends Seeder
         'permissions.create',
         'permissions.edit',
         'permissions.delete',
-        'languages.view',
-        'languages.create',
-        'languages.edit',
-        'languages.delete',
 
-        // "common" strings are reused across every portal including landing
-        // — letting an Admin holding just one scope permission edit them
-        // would leak into wording they weren't granted control over.
-        'translations.common',
+        // Switching features on and off changes the whole app — Super Admin only.
+        'modules.manage',
     ];
 
     /**
      * @var array<int, string>
      */
     private const PERMISSIONS = [
-        'activity.view',
-        'activity.comment',
-        'maintenance.view',
-        'maintenance.update',
         'settings.edit',
+        'modules.manage',
         'roles.view',
         'roles.create',
         'roles.edit',
@@ -53,14 +45,6 @@ class RolePermissionSeeder extends Seeder
         'permissions.delete',
         'users.view',
         'users.assign-roles',
-        'languages.view',
-        'languages.create',
-        'languages.edit',
-        'languages.delete',
-        'currencies.view',
-        'translations.landing',
-        'translations.portal',
-        'translations.common',
     ];
 
     /**
@@ -68,7 +52,9 @@ class RolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        foreach (self::PERMISSIONS as $permission) {
+        // Feature modules declare their own permissions (ModuleProvider::permissions()),
+        // seeded even while a module is off so roles keep them across a toggle.
+        foreach ([...self::PERMISSIONS, ...Module::contributions('permissions')] as $permission) {
             Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web']);
         }
 
@@ -86,7 +72,7 @@ class RolePermissionSeeder extends Seeder
         $admin->forceFill(['name' => 'Admin', 'locked' => true])->save();
         $admin->syncPermissions(
             Permission::where('guard_name', 'web')
-                ->whereNotIn('name', self::ADMIN_EXCLUDED_PERMISSIONS)
+                ->whereNotIn('name', [...self::ADMIN_EXCLUDED_PERMISSIONS, ...Module::contributions('permissions.super-admin-only')])
                 ->get(),
         );
     }
