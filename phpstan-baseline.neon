@@ -1,6 +1,30 @@
 parameters:
 	ignoreErrors:
 		-
+			message: '#^Trait App\\Concerns\\ThrottlesActions is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: app/Concerns/ThrottlesActions.php
+
+		-
+			message: '#^Using nullsafe method call on non\-nullable type Illuminate\\Support\\Carbon\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Features/HelloWorldAdvanced.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<App\\Modules\\Media\\Models\\Media\>\:\:orderByPivot\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Method App\\Models\\User\:\:getMedia\(\) should return Illuminate\\Database\\Eloquent\\Collection\<int, App\\Modules\\Media\\Models\\Media\> but returns Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/User.php
+
+		-
 			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$is_like\.$#'
 			identifier: property.notFound
 			count: 1
@@ -19,6 +43,12 @@ parameters:
 			path: app/Modules/Activity/Livewire/ActivityTimeline.php
 
 		-
+			message: '#^Using nullsafe method call on non\-nullable type Illuminate\\Console\\Command\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Modules/Language/Seeders/LanguageSeeder.php
+
+		-
 			message: '#^Return type \(Illuminate\\Support\\Collection\<int, App\\Modules\\Language\\Models\\Language\>\) of method App\\Modules\\Language\\Services\\LanguageService\:\:active\(\) should be compatible with return type \(Illuminate\\Support\\Collection\<int, object\>\) of method App\\Contracts\\Languages\:\:active\(\)$#'
 			identifier: method.childReturnType
 			count: 1
@@ -31,13 +61,115 @@ parameters:
 			path: app/Modules/Language/Services/TranslationScannerService.php
 
 		-
-			message: '#^Called ''env'' outside of the config directory which returns null when the config is cached, use ''config''\.$#'
-			identifier: larastan.noEnvCallsOutsideOfConfig
+			message: '#^Trait App\\Modules\\Media\\Concerns\\BrowsesLibrary is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: app/Modules/Media/Concerns/BrowsesLibrary.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$disk\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Modules/Media/Models/Media.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$mime_type\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Modules/Media/Models/Media.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$original_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/Media/Models/Media.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$path\.$#'
+			identifier: property.notFound
 			count: 3
+			path: app/Modules/Media/Models/Media.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$size\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/Media/Models/Media.php
+
+		-
+			message: '#^Method App\\Modules\\Media\\Models\\Media\:\:conversion\(\) should return App\\Modules\\Media\\Models\\Media but returns Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Modules/Media/Models/Media.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$disk\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Modules/Media/Services/ImageConversionService.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$mime_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/Media/Services/ImageConversionService.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/Media/Services/ImageConversionService.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$original_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/Media/Services/ImageConversionService.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$path\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Modules/Media/Services/ImageConversionService.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$uploaded_by\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/Media/Services/ImageConversionService.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$uuid\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/Media/Services/ImageConversionService.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$mime_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/Media/Services/MediaValidationService.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Modules/Media/Services/MediaValidationService.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$size\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/Media/Services/MediaValidationService.php
+
+		-
+			message: '#^Using nullsafe method call on non\-nullable type Illuminate\\Console\\Command\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
 			path: database/seeders/AdminUserSeeder.php
 
 		-
 			message: '#^Using nullsafe method call on non\-nullable type Illuminate\\Console\\Command\. Use \-\> instead\.$#'
 			identifier: nullsafe.neverNull
 			count: 1
-			path: database/seeders/AdminUserSeeder.php
+			path: database/seeders/DemoSeeder.php

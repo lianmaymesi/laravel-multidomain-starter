@@ -1,5 +1,6 @@
 <?php
 
+use App\Concerns\ThrottlesActions;
 use App\Enums\OtpType;
 use App\Models\User;
 use App\Services\Auth\OtpService;
@@ -16,6 +17,8 @@ use Livewire\Component;
 
 new #[Layout('layouts.auth')] class extends Component
 {
+    use ThrottlesActions;
+
     #[Validate('required')]
     #[Validate('string')]
     #[Validate('max:255')]
@@ -86,6 +89,9 @@ new #[Layout('layouts.auth')] class extends Component
     public function register(OtpService $otpService, SmsService $smsService)
     {
         $this->validate();
+
+        // Per IP: every new account sends a verification SMS/email.
+        $this->throttle('register', request()->ip(), 'email');
 
         $phoneEnabled = config('multidomain.phone_verification_enabled');
 
