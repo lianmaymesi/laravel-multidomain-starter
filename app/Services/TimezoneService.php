@@ -30,6 +30,6 @@ class TimezoneService
     {
         $user ??= auth()->user();
 
-        return $user?->timezone ?? $this->default();
+        return $user->timezone ?? $this->default();
     }
 }

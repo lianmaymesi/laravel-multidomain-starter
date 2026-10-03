@@ -7,6 +7,10 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Models\Role as SpatieRole;
 
+/**
+ * @property string $slug
+ * @property bool $locked
+ */
 class Role extends SpatieRole
 {
     use LogsActivity;

@@ -59,7 +59,7 @@ class ModuleSetting extends Model
     public static function overrides(): array
     {
         try {
-            return DB::table((new static)->getTable())
+            return DB::table((new self)->getTable())
                 ->pluck('enabled', 'module')
                 ->map(fn ($enabled) => (bool) $enabled)
                 ->all();

@@ -7,6 +7,32 @@ on:
     branches: [main]
 
 jobs:
+  quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history, so Pint can compare against the base branch.
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+
+      - name: Install Composer dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+
+      # Pull requests: only files changed in the PR must follow the style, so
+      # older files are reformatted on their own schedule (`composer format`).
+      - name: Code style (Pint)
+        if: github.event_name == 'pull_request'
+        run: vendor/bin/pint --test --diff=origin/${{ github.base_ref }}
+
+      - name: Static analysis (Larastan)
+        run: vendor/bin/phpstan analyse --no-progress --memory-limit=2G
+
   ci:
     runs-on: ubuntu-latest
 

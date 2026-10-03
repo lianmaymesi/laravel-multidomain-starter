@@ -3,14 +3,16 @@
 use Illuminate\Support\Facades\File;
 
 beforeEach(function () {
-    // The command edits these two real files — snapshot so afterEach can restore them.
+    // The command edits these real files — snapshot so afterEach can restore them.
     $this->modulesConfig = File::get(config_path('modules.php'));
     $this->envExample = File::get(base_path('.env.example'));
+    $this->phpstanNeon = File::get(base_path('phpstan.neon'));
 });
 
 afterEach(function () {
     File::put(config_path('modules.php'), $this->modulesConfig);
     File::put(base_path('.env.example'), $this->envExample);
+    File::put(base_path('phpstan.neon'), $this->phpstanNeon);
 
     File::deleteDirectory(app_path('Modules/Invoices'));
     File::deleteDirectory(app_path('Modules/InvoiceReports'));
@@ -63,4 +65,18 @@ it('refuses a module that already exists', function () {
 
 it('rejects invalid names', function () {
     $this->artisan('make:module', ['name' => '9lives'])->assertFailed();
+});
+
+it('registers the module migrations folder for static analysis', function () {
+    $this->artisan('make:module', ['name' => 'Invoices'])->assertSuccessful();
+
+    $neon = File::get(base_path('phpstan.neon'));
+
+    expect($neon)->toContain("        - app/Modules/Maintenance/database/migrations\n        - app/Modules/Invoices/database/migrations\n");
+
+    // Running again (another module) keeps the list tidy and doesn't duplicate.
+    $this->artisan('make:module', ['name' => 'invoice reports'])->assertSuccessful();
+
+    expect(substr_count(File::get(base_path('phpstan.neon')), 'app/Modules/Invoices/database/migrations'))->toBe(1)
+        ->and(File::get(base_path('phpstan.neon')))->toContain('app/Modules/InvoiceReports/database/migrations');
 });

@@ -7,6 +7,7 @@ use App\Concerns\Anonymizable;
 use App\Modules\Media\Concerns\HasMedia;
 use App\Notifications\VerifyEmail;
 use App\Trait\MustVerifyPhone;
+use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
@@ -22,6 +23,10 @@ use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @property Carbon $created_at
+ * @property Carbon|null $pending_email_requested_at
+ */
 #[Fillable(['name', 'email', 'password', 'country_code', 'phone', 'privilege', 'locale', 'timezone', 'two_factor_secret', 'two_factor_recovery_codes', 'pending_email', 'pending_email_token'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmail
@@ -59,16 +64,19 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+    /** @return HasMany<OtpCode, $this> */
     public function otps(): HasMany
     {
         return $this->hasMany(OtpCode::class);
     }
 
+    /** @return HasOne<AccountDeletionRequest, $this> */
     public function deletionRequest(): HasOne
     {
         return $this->hasOne(AccountDeletionRequest::class);
     }
 
+    /** @return HasMany<AccountDataExport, $this> */
     public function dataExports(): HasMany
     {
         return $this->hasMany(AccountDataExport::class);
