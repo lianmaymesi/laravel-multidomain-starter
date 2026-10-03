@@ -16,6 +16,7 @@ beforeEach(function () {
     File::ensureDirectoryExists("{$this->sandbox}/config");
     File::copy(config_path('modules.php'), "{$this->sandbox}/config/modules.php");
     File::copy(base_path('.env.example'), "{$this->sandbox}/.env.example");
+    File::copy(base_path('phpstan.neon'), "{$this->sandbox}/phpstan.neon");
     File::ensureDirectoryExists("{$this->sandbox}/app/Modules/Maintenance");
     File::ensureDirectoryExists("{$this->sandbox}/tests/Feature/Modules");
 
@@ -76,4 +77,18 @@ it('refuses a module that already exists', function () {
 
 it('rejects invalid names', function () {
     $this->artisan('make:module', ['name' => '9lives'])->assertFailed();
+});
+
+it('registers the module migrations folder for static analysis', function () {
+    $this->artisan('make:module', ['name' => 'Invoices'])->assertSuccessful();
+
+    $neon = File::get(base_path('phpstan.neon'));
+
+    expect($neon)->toContain("        - app/Modules/Maintenance/database/migrations\n        - app/Modules/Invoices/database/migrations\n");
+
+    // Running again (another module) keeps the list tidy and doesn't duplicate.
+    $this->artisan('make:module', ['name' => 'invoice reports'])->assertSuccessful();
+
+    expect(substr_count(File::get(base_path('phpstan.neon')), 'app/Modules/Invoices/database/migrations'))->toBe(1)
+        ->and(File::get(base_path('phpstan.neon')))->toContain('app/Modules/InvoiceReports/database/migrations');
 });

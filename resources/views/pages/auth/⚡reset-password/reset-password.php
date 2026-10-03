@@ -1,5 +1,6 @@
 <?php
 
+use App\Concerns\ThrottlesActions;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -12,6 +13,8 @@ use Livewire\Component;
 
 new #[Layout('layouts.auth')] class extends Component
 {
+    use ThrottlesActions;
+
     /** The signed token from the URL — written by Password::createToken() after OTP verification */
     #[Locked]
     public string $token = '';
@@ -55,6 +58,8 @@ new #[Layout('layouts.auth')] class extends Component
         $this->validate([
             'password' => ['required', 'confirmed', PasswordRule::defaults()],
         ]);
+
+        $this->throttle('password-reset', request()->ip(), 'password');
 
         $user = $this->resolveUser($this->email ?: null, $this->phone ?: null);
 

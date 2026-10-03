@@ -32,7 +32,10 @@ foreach (glob(dirname(__DIR__, 2).'/app/*', GLOB_ONLYDIR) as $dir) {
 
     arch("core {$namespace} never imports a module")
         ->expect($namespace)
-        ->not->toUse('App\Modules');
+        ->not->toUse('App\Modules')
+        // The one sanctioned exception: Media's HasMedia trait is built to sit
+        // on core models (User) — every method no-ops while the module is off.
+        ->ignoring('App\Modules\Media\Concerns\HasMedia');
 }
 
 foreach (moduleNames() as $module) {

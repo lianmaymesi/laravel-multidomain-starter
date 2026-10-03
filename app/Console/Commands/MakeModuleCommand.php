@@ -62,6 +62,7 @@ class MakeModuleCommand extends Command
         $created[] = "{$moduleDir}/database/migrations/.gitkeep";
 
         $this->registerToggle($slug, $replacements['{{ NAME }}']);
+        $this->registerMigrationsForAnalysis($studly);
 
         $this->components->info("Module [{$studly}] created.");
         $this->components->bulletList([
@@ -104,6 +105,36 @@ class MakeModuleCommand extends Command
                 ? preg_replace('/^(# MODULE_[A-Z0-9_]+=true)$(?![\s\S]*^# MODULE_)/m', "$1\n# MODULE_{$envName}=true", $env, 1)
                 : rtrim($env)."\n\n# MODULE_{$envName}=true\n");
         }
+    }
+
+    /**
+     * Larastan learns model columns from migrations, so the new module's
+     * folder joins phpstan.neon's databaseMigrationsPath list.
+     */
+    private function registerMigrationsForAnalysis(string $studly): void
+    {
+        $neon = base_path('phpstan.neon');
+
+        if (! File::exists($neon)) {
+            return;
+        }
+
+        $contents = File::get($neon);
+        $entry = "        - app/Modules/{$studly}/database/migrations";
+
+        if (str_contains($contents, $entry)) {
+            return;
+        }
+
+        // After the last existing module migrations entry (or the core one).
+        $updated = preg_replace(
+            '/((?:^        - (?:database|app\/Modules\/[^\/]+\/database)\/migrations\R)+)/m',
+            "$1{$entry}\n",
+            $contents,
+            1,
+        );
+
+        File::put($neon, $updated ?? $contents);
     }
 
     /**

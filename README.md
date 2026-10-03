@@ -19,6 +19,35 @@ Set `APP_MAIN_DOMAIN` in `.env` to your local dev domain (e.g. `yourapp.test` vi
 
 Set `APP_SINGLE_DOMAIN=true` to run everything on one domain instead — see the docs for details.
 
+## First-run setup
+
+One command gets a fresh clone ready (also run by `composer setup`):
+
+```bash
+php artisan app:setup          # app key, migrations, roles, Super Admin, defaults
+php artisan app:setup --demo   # + a demo account for every portal
+```
+
+It finishes with every portal's URL and who to sign in as:
+
+- **Super Admin**: `ADMIN_EMAIL` / `ADMIN_PASSWORD` from `.env`. Leave the password empty and a strong one is generated and **printed once**. There is no default password. Re-running never resets an existing admin's password unless `ADMIN_PASSWORD` is set.
+- **`--demo`**: `demo-admin@example.com` (backoffice, Admin role), `demo-staff@example.com` (backoffice), `demo-user@example.com` (app). They share `DEMO_PASSWORD`, or a generated one. It also adds a little data for enabled modules: EUR/GBP turned on, and Arabic added (inactive) to try RTL. Demo accounts are refused in production.
+- **Defaults**: roles and permissions, the primary language from `APP_LOCALE`, and USD as the primary currency.
+
+Safe to run again at any time. `--fresh` drops everything first (asks before it does).
+
+## Code quality
+
+```bash
+composer analyse          # Larastan (PHPStan level 5)
+composer format           # fix code style (Pint, Laravel preset)
+composer format:check     # check style without changing files
+php artisan test
+```
+
+- **Static analysis** uses a baseline (`phpstan-baseline.neon`): errors that existed when it was introduced are listed there, and everything new must pass. After fixing baselined errors, run `composer analyse:baseline` to shrink it.
+- **CI** runs Larastan on every push and PR, plus Pint on the files a PR changes, so older files can be reformatted on their own schedule with `composer format`.
+
 ## License
 
 Open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
