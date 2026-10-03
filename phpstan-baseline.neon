@@ -1,0 +1,175 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Trait App\\Concerns\\ThrottlesActions is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: app/Concerns/ThrottlesActions.php
+
+		-
+			message: '#^Using nullsafe method call on non\-nullable type Illuminate\\Support\\Carbon\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Features/HelloWorldAdvanced.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<App\\Modules\\Media\\Models\\Media\>\:\:orderByPivot\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Method App\\Models\\User\:\:getMedia\(\) should return Illuminate\\Database\\Eloquent\\Collection\<int, App\\Modules\\Media\\Models\\Media\> but returns Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$is_like\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/Activity/Livewire/ActivityTimeline.php
+
+		-
+			message: '#^Parameter \#1 \$activities of method App\\Modules\\Activity\\Livewire\\ActivityTimeline\:\:collapseSimilar\(\) expects Illuminate\\Support\\Collection\<int, App\\Modules\\Activity\\Models\\Activity\>, Illuminate\\Database\\Eloquent\\Collection\<int, Illuminate\\Database\\Eloquent\\Model\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Modules/Activity/Livewire/ActivityTimeline.php
+
+		-
+			message: '#^Parameter \#1 \$groupBy of method Illuminate\\Support\\Collection\<int,Illuminate\\Database\\Eloquent\\Model\>\:\:groupBy\(\) expects \(callable\(Illuminate\\Database\\Eloquent\\Model, int\)\: string\)\|list\<Closure\|string\>\|string, Closure\(App\\Modules\\Activity\\Models\\Activity\)\: string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: app/Modules/Activity/Livewire/ActivityTimeline.php
+
+		-
+			message: '#^Using nullsafe method call on non\-nullable type Illuminate\\Console\\Command\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Modules/Language/Seeders/LanguageSeeder.php
+
+		-
+			message: '#^Return type \(Illuminate\\Support\\Collection\<int, App\\Modules\\Language\\Models\\Language\>\) of method App\\Modules\\Language\\Services\\LanguageService\:\:active\(\) should be compatible with return type \(Illuminate\\Support\\Collection\<int, object\>\) of method App\\Contracts\\Languages\:\:active\(\)$#'
+			identifier: method.childReturnType
+			count: 1
+			path: app/Modules/Language/Services/LanguageService.php
+
+		-
+			message: '#^Method App\\Modules\\Language\\Services\\TranslationScannerService\:\:files\(\) should return Illuminate\\Support\\Collection\<int, SplFileInfo\> but returns Illuminate\\Support\\Collection\<\(int\|string\), Symfony\\Component\\Finder\\SplFileInfo\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Modules/Language/Services/TranslationScannerService.php
+
+		-
+			message: '#^Trait App\\Modules\\Media\\Concerns\\BrowsesLibrary is used zero times and is not analysed\.$#'
+			identifier: trait.unused
+			count: 1
+			path: app/Modules/Media/Concerns/BrowsesLibrary.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$disk\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Modules/Media/Models/Media.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$mime_type\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Modules/Media/Models/Media.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$original_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/Media/Models/Media.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$path\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Modules/Media/Models/Media.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$size\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/Media/Models/Media.php
+
+		-
+			message: '#^Method App\\Modules\\Media\\Models\\Media\:\:conversion\(\) should return App\\Modules\\Media\\Models\\Media but returns Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Modules/Media/Models/Media.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$disk\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Modules/Media/Services/ImageConversionService.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$mime_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/Media/Services/ImageConversionService.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/Media/Services/ImageConversionService.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$original_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/Media/Services/ImageConversionService.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$path\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Modules/Media/Services/ImageConversionService.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$uploaded_by\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/Media/Services/ImageConversionService.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$uuid\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/Media/Services/ImageConversionService.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$mime_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/Media/Services/MediaValidationService.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Modules/Media/Services/MediaValidationService.php
+
+		-
+			message: '#^Access to an undefined property App\\Modules\\Media\\Models\\Media\:\:\$size\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Modules/Media/Services/MediaValidationService.php
+
+		-
+			message: '#^Using nullsafe method call on non\-nullable type Illuminate\\Console\\Command\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: database/seeders/AdminUserSeeder.php
+
+		-
+			message: '#^Using nullsafe method call on non\-nullable type Illuminate\\Console\\Command\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: database/seeders/DemoSeeder.php

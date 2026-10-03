@@ -37,6 +37,7 @@ class RolePermissionSeeder extends Seeder
     private const PERMISSIONS = [
         'settings.edit',
         'modules.manage',
+        'feature-flags.manage',
         'health.view',
         'backups.manage',
         'roles.view',

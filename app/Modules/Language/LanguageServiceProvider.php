@@ -5,6 +5,7 @@ namespace App\Modules\Language;
 use App\Contracts\Languages;
 use App\Models\AppSetting;
 use App\Modules\Language\Http\Middleware\SetLocale;
+use App\Modules\Language\Seeders\LanguageSeeder;
 use App\Modules\Language\Services\LanguageService;
 use App\Support\Modules\Module;
 use App\Support\Modules\ModuleProvider;
@@ -34,6 +35,11 @@ class LanguageServiceProvider extends ModuleProvider
     protected function icon(): string
     {
         return 'language';
+    }
+
+    protected function seeders(): array
+    {
+        return [LanguageSeeder::class];
     }
 
     protected function permissions(): array
@@ -77,6 +83,12 @@ class LanguageServiceProvider extends ModuleProvider
 
     protected function bootModule(): void
     {
+        // API token abilities for routes/api.php (used only while the API module is on).
+        Module::contribute('api.abilities', [
+            ['ability' => 'languages:read', 'description' => 'Read languages'],
+            ['ability' => 'languages:write', 'description' => 'Create, update and delete languages'],
+        ]);
+
         // Runs before other modules' web middleware (providers boot in folder
         // order) so the locale is already set when e.g. the maintenance page renders.
         Route::pushMiddlewareToGroup('web', SetLocale::class);
