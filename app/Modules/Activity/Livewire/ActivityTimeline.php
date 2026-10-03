@@ -9,11 +9,14 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
+use Laravel\Scout\Builder as SearchBuilder;
 use Livewire\Component;
 
 class ActivityTimeline extends Component
 {
     private const PAGE_SIZE = 20;
+
+    private const EAGER_LOAD = ['causer', 'subject', 'comments.user', 'comments.reactions'];
 
     public ?string $subjectType = null;
 
@@ -22,6 +25,8 @@ class ActivityTimeline extends Component
     public bool $isGlobal = true;
 
     public string $modelFilter = '';
+
+    public string $search = '';
 
     public int $loaded = self::PAGE_SIZE;
 
@@ -44,6 +49,36 @@ class ActivityTimeline extends Component
         $this->loaded += self::PAGE_SIZE;
     }
 
+    public function updatedSearch(): void
+    {
+        $this->loaded = self::PAGE_SIZE;
+    }
+
+    public function updatedModelFilter(): void
+    {
+        $this->loaded = self::PAGE_SIZE;
+    }
+
+    private function searching(): bool
+    {
+        return trim($this->search) !== '';
+    }
+
+    /**
+     * Only a typed search goes through Scout — plain browsing stays a direct
+     * query, so the timeline still works against an external engine whose
+     * index hasn't been imported yet. Filters use Scout's where() (not a
+     * query() callback) so they're applied inside the engine either way.
+     */
+    private function searchQuery(): SearchBuilder
+    {
+        return Activity::search(trim($this->search))
+            ->when($this->subjectType, fn (SearchBuilder $search) => $search
+                ->where('subject_type', $this->subjectType)
+                ->where('subject_id', $this->subjectId))
+            ->when($this->isGlobal && $this->modelFilter, fn (SearchBuilder $search) => $search->where('subject_type', $this->modelFilter));
+    }
+
     private function baseQuery(): Builder
     {
         return Activity::query()
@@ -55,7 +90,9 @@ class ActivityTimeline extends Component
 
     public function totalCount(): int
     {
-        return $this->baseQuery()->count();
+        return $this->searching()
+            ? $this->searchQuery()->paginate(1, page: 1)->total()
+            : $this->baseQuery()->count();
     }
 
     public function hasMore(): bool
@@ -89,11 +126,19 @@ class ActivityTimeline extends Component
      */
     public function days(): Collection
     {
-        return $this->baseQuery()
-            ->with(['causer', 'subject', 'comments.user', 'comments.reactions'])
-            ->orderByDesc('created_at')
-            ->limit($this->loaded)
-            ->get()
+        $activities = $this->searching()
+            ? $this->searchQuery()
+                ->query(fn (Builder $query) => $query->with(self::EAGER_LOAD))
+                ->orderByDesc('created_at')
+                ->take($this->loaded)
+                ->get()
+            : $this->baseQuery()
+                ->with(self::EAGER_LOAD)
+                ->orderByDesc('created_at')
+                ->limit($this->loaded)
+                ->get();
+
+        return $activities
             ->groupBy(fn (Activity $activity) => $activity->created_at->toDateString())
             ->sortKeysDesc()
             ->map(fn (Collection $activities) => $this->collapseSimilar($activities));

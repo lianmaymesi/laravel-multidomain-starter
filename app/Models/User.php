@@ -20,6 +20,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
+use Laravel\Scout\Searchable;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
@@ -34,7 +35,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use Anonymizable, HasApiTokens, HasFactory, HasMedia, HasRoles, LogsActivity, MustVerifyPhone, Notifiable;
+    use Anonymizable, HasApiTokens, HasFactory, HasMedia, HasRoles, LogsActivity, MustVerifyPhone, Notifiable, Searchable;
 
     /**
      * Only these are ever written to the activity log — password hash,
@@ -47,6 +48,22 @@ class User extends Authenticatable implements MustVerifyEmail
             ->logOnly(['name', 'email', 'privilege'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
+    }
+
+    /**
+     * What the backoffice Users search matches on. With the database driver
+     * every key here is a column it LIKE-searches (a numeric term also
+     * matches `id` exactly), so only add real, non-sensitive columns.
+     *
+     * @return array<string, mixed>
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email,
+        ];
     }
 
     /**
