@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Concerns\Anonymizable;
+use App\Modules\Media\Concerns\HasMedia;
 use App\Notifications\VerifyEmail;
 use App\Trait\MustVerifyPhone;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -26,7 +27,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements MustVerifyEmail
 {
     /** @use HasFactory<UserFactory> */
-    use Anonymizable, HasFactory, HasRoles, LogsActivity, MustVerifyPhone, Notifiable;
+    use Anonymizable, HasFactory, HasMedia, HasRoles, LogsActivity, MustVerifyPhone, Notifiable;
 
     /**
      * Only these are ever written to the activity log — password hash,
