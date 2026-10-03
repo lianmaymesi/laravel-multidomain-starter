@@ -9,6 +9,17 @@ A Laravel 13 + Livewire 4 starter kit for apps split across multiple subdomains 
 
 Full docs (setup, single-vs-multi domain, SSO, the `make:subdomain` command): **[docs site](https://lianmaymesi.github.io/laravel-multidomain-starter-docs/)**
 
+## Requirements
+
+- PHP 8.4+
+- A **[Flux UI Pro](https://fluxui.dev/pricing) license**. The UI uses Pro components (charts, sortable/paginated tables, toasts, …), and `livewire/flux-pro` is installed from Flux's private Composer repository. Give Composer your credentials once, before installing:
+
+  ```bash
+  composer config --global http-basic.composer.fluxui.dev "your-license-email" "your-license-key"
+  ```
+
+  For CI, add `FLUX_USERNAME` and `FLUX_LICENSE_KEY` as GitHub Actions secrets (see `.github/workflows/tests.yml`). Never commit an `auth.json`.
+
 ## Quick start
 
 ```bash

@@ -1,14 +1,19 @@
 <?php
 
+use App\Support\Toast;
+use App\Concerns\SortsTable;
 use App\Models\Permission;
-use Illuminate\Support\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 new #[Layout('layouts.backoffice')] class extends Component
 {
+    use SortsTable, WithPagination;
+
     public bool $showModal = false;
 
     public ?int $editingId = null;
@@ -24,9 +29,21 @@ new #[Layout('layouts.backoffice')] class extends Component
         abort_unless(Gate::allows('permissions.view'), 403);
     }
 
-    public function permissions(): Collection
+    public function permissions(): LengthAwarePaginator
     {
-        return Permission::withCount('roles')->orderBy('name')->get();
+        return Permission::withCount('roles')
+            ->tap(fn ($query) => $this->applySort($query))
+            ->paginate(25);
+    }
+
+    protected function sortableColumns(): array
+    {
+        return ['name' => 'name', 'roles' => 'roles_count'];
+    }
+
+    protected function defaultSort(): string
+    {
+        return 'name';
     }
 
     public function create(): void
@@ -71,7 +88,7 @@ new #[Layout('layouts.backoffice')] class extends Component
 
         $this->showModal = false;
 
-        session()->flash('status', __('Permission saved.'));
+        Toast::success(__('Permission saved.'));
     }
 
     public function confirmDelete(int $permissionId): void
@@ -90,6 +107,6 @@ new #[Layout('layouts.backoffice')] class extends Component
         $this->deletingId = null;
         $this->confirmingDelete = false;
 
-        session()->flash('status', __('Permission deleted.'));
+        Toast::success(__('Permission deleted.'));
     }
 };

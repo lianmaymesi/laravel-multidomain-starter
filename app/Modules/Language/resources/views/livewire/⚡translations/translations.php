@@ -1,5 +1,6 @@
 <?php
 
+use App\Support\Toast;
 use App\Modules\Language\Models\LanguageLine;
 use App\Modules\Language\Services\GoogleTranslateService;
 use App\Modules\Language\Services\LanguageService;
@@ -92,7 +93,7 @@ new #[Layout('layouts.backoffice')] class extends Component
             ->values();
 
         if ($pending->isEmpty()) {
-            session()->flash('status', __('Nothing to translate.'));
+            Toast::success(__('Nothing to translate.'));
 
             return;
         }
@@ -125,7 +126,7 @@ new #[Layout('layouts.backoffice')] class extends Component
 
         $this->loadValues();
 
-        session()->flash('status', $skipped > 0
+        Toast::success($skipped > 0
             ? __('Translated :saved string(s), skipped :skipped (placeholder mismatch).', ['saved' => $saved, 'skipped' => $skipped])
             : __('Translated :saved string(s).', ['saved' => $saved]));
     }
@@ -182,7 +183,7 @@ new #[Layout('layouts.backoffice')] class extends Component
 
         $this->loadValues();
 
-        session()->flash('status', $created > 0 ? __('Synced :count new string(s).', ['count' => $created]) : __('Nothing to sync.'));
+        Toast::success($created > 0 ? __('Synced :count new string(s).', ['count' => $created]) : __('Nothing to sync.'));
     }
 
     public function lines()
@@ -218,7 +219,7 @@ new #[Layout('layouts.backoffice')] class extends Component
         $line->text = array_filter($this->values[$id] ?? [], fn ($v) => $v !== '');
         $line->save();
 
-        session()->flash('status', __('Saved.'));
+        Toast::success(__('Saved.'));
     }
 
     public function addLine(): void
@@ -263,7 +264,7 @@ new #[Layout('layouts.backoffice')] class extends Component
         $this->resetNewForm();
         $this->loadValues();
 
-        session()->flash('status', __('Line added.'));
+        Toast::success(__('Line added.'));
     }
 
     /**
@@ -289,7 +290,7 @@ new #[Layout('layouts.backoffice')] class extends Component
         $line->delete();
         unset($this->values[$id]);
 
-        session()->flash('status', __('Line removed.'));
+        Toast::success(__('Line removed.'));
     }
 
     private function loadValues(): void

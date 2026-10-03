@@ -21,6 +21,7 @@
         "laravel/scout": "^11.8",
         "laravel/tinker": "^3.0",
         "livewire/flux": "^2.15",
+        "livewire/flux-pro": "^2.20",
         "livewire/livewire": "^4.3.3",
         "mcamara/laravel-localization": "^2.4",
         "nunomaduro/termwind": "^2.4",
@@ -126,5 +127,10 @@
         "format:check": "Check code style without changing files",
         "test:arch": "Architecture rules only (module boundaries, hygiene)",
         "test:coverage": "Tests with a coverage report (needs Xdebug or PCOV)"
-    }
+    },
+    "repositories": [{
+        "name": "flux-pro",
+        "type": "composer",
+        "url": "https://composer.fluxui.dev"
+    }]
 }

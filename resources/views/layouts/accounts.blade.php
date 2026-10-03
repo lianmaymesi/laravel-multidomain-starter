@@ -184,6 +184,9 @@
     </div>
 
     @livewireScripts
+    <flux:toast position="bottom end" />
+    <x-flash-toast />
+
     @fluxScripts
 </body>
 

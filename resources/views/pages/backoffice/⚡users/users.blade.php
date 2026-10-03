@@ -11,17 +11,12 @@
         <flux:input wire:model.live.debounce.300ms="search" placeholder="{{ __('Search users…') }}" icon="magnifying-glass" class="max-w-xs" />
     </div>
 
-    @if (session('status'))
-    <div class="border border-emerald-500/20 bg-emerald-500/6 px-4 py-3 text-sm text-emerald-400">
-        {{ session('status') }}
-    </div>
-    @endif
 
     <flux:card>
         <flux:table :paginate="$this->users()">
             <flux:table.columns>
-                <flux:table.column>{{ __('Name') }}</flux:table.column>
-                <flux:table.column>{{ __('Email') }}</flux:table.column>
+                <flux:table.column sortable :sorted="$this->isSortedBy('name')" :direction="$sortDirection" wire:click="sort('name')">{{ __('Name') }}</flux:table.column>
+                <flux:table.column sortable :sorted="$this->isSortedBy('email')" :direction="$sortDirection" wire:click="sort('email')">{{ __('Email') }}</flux:table.column>
                 <flux:table.column>{{ __('Portal') }}</flux:table.column>
                 <flux:table.column>{{ __('Roles') }}</flux:table.column>
                 <flux:table.column></flux:table.column>

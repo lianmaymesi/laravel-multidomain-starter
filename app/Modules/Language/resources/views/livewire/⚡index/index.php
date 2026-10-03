@@ -1,5 +1,6 @@
 <?php
 
+use App\Support\Toast;
 use App\Modules\Language\Models\Language;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Layout;
@@ -51,7 +52,7 @@ new #[Layout('layouts.backoffice')] class extends Component
         $this->reset(['code', 'name', 'native_name']);
         $this->direction = 'ltr';
 
-        session()->flash('status', __('Language added.'));
+        Toast::success(__('Language added.'));
     }
 
     public function toggleActive(int $id): void
@@ -76,7 +77,7 @@ new #[Layout('layouts.backoffice')] class extends Component
         $language = Language::findOrFail($id);
         $language->update(['is_primary' => true, 'is_active' => true]);
 
-        session()->flash('status', __('":name" is now the primary language.', ['name' => $language->name]));
+        Toast::success(__('":name" is now the primary language.', ['name' => $language->name]));
     }
 
     public function move(int $id, int $direction): void
@@ -111,6 +112,6 @@ new #[Layout('layouts.backoffice')] class extends Component
 
         $language->delete();
 
-        session()->flash('status', __('Language removed.'));
+        Toast::success(__('Language removed.'));
     }
 };

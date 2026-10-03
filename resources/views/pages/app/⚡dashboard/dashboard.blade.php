@@ -90,18 +90,29 @@
                 <flux:badge color="blue" size="sm">+18.2%</flux:badge>
             </div>
 
-            @php $max = max(array_column($weeklyActivity, 'value')); @endphp
-            <div class="flex h-48 items-end gap-3">
-                @foreach ($weeklyActivity as $day)
-                <div class="flex flex-1 flex-col items-center gap-2">
-                    <div class="flex h-40 w-full items-end overflow-hidden rounded-lg bg-zinc-100 dark:bg-white/5">
-                        <div class="w-full rounded-lg bg-linear-to-t from-blue-600 to-blue-400"
-                            style="height: {{ (int) round(($day['value'] / $max) * 100) }}%"></div>
-                    </div>
-                    <flux:text class="text-xs text-zinc-500 dark:text-white/40">{{ $day['label'] }}</flux:text>
-                </div>
-                @endforeach
-            </div>
+            <flux:chart :value="$weeklyActivity" class="aspect-3/1" data-chart="weekly-activity">
+                <flux:chart.svg>
+                    <flux:chart.line field="value" class="text-blue-500 dark:text-blue-400" />
+                    <flux:chart.area field="value" class="text-blue-200/50 dark:text-blue-400/10" />
+
+                    <flux:chart.axis axis="x" field="label">
+                        <flux:chart.axis.line />
+                        <flux:chart.axis.tick />
+                    </flux:chart.axis>
+
+                    <flux:chart.axis axis="y">
+                        <flux:chart.axis.grid />
+                        <flux:chart.axis.tick />
+                    </flux:chart.axis>
+
+                    <flux:chart.cursor />
+                </flux:chart.svg>
+
+                <flux:chart.tooltip>
+                    <flux:chart.tooltip.heading field="label" />
+                    <flux:chart.tooltip.value field="value" :label="__('Sessions')" />
+                </flux:chart.tooltip>
+            </flux:chart>
         </flux:card>
 
         {{-- Recent activity --}}
