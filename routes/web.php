@@ -105,7 +105,7 @@ $portalOnly(
         ->name('account.'),
     config('multidomain.single_domain') ? 'account' : null,
 )->group(function () {
-    Route::get('export/{token}', DataExportController::class)->name('export.download');
+    Route::get('export/{token}', DataExportController::class)->middleware('throttle:downloads')->name('export.download');
 });
 
 $portalOnly(
