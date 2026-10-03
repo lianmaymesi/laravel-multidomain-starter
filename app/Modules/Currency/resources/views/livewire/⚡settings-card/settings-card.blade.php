@@ -11,12 +11,6 @@
         <flux:button type="button" size="sm" wire:click="refreshRates" wire:loading.attr="disabled">{{ __('Refresh rates') }}</flux:button>
     </div>
 
-    @if ($status !== '')
-    <div class="border border-emerald-500/20 bg-emerald-500/6 px-4 py-3 text-sm text-emerald-400">
-        {{ $status }}
-    </div>
-    @endif
-
     <div class="flex flex-wrap gap-2">
         @forelse ($this->activeCurrencies() as $currency)
         <flux:badge size="lg" :color="$currency->code === $primaryCurrency ? 'blue' : 'zinc'" wire:key="tag-{{ $currency->code }}">

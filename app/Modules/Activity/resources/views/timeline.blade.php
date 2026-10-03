@@ -1,14 +1,17 @@
 <div class="space-y-6">
 
     @if ($isGlobal)
-    <div class="flex items-center justify-between gap-3">
+    <div class="flex flex-wrap items-center justify-between gap-3">
         <flux:text class="text-sm text-zinc-500 dark:text-white/50">{{ __('Every change, permanently — nothing here can be edited or deleted.') }}</flux:text>
-        <flux:select wire:model.live="modelFilter" class="max-w-48">
-            <flux:select.option value="">{{ __('All models') }}</flux:select.option>
-            @foreach ($this->availableModels() as $fqcn => $label)
-            <flux:select.option value="{{ $fqcn }}">{{ $label }}</flux:select.option>
-            @endforeach
-        </flux:select>
+        <div class="flex items-center gap-3">
+            <flux:input wire:model.live.debounce.300ms="search" placeholder="{{ __('Search activity…') }}" icon="magnifying-glass" class="max-w-xs" />
+            <flux:select wire:model.live="modelFilter" class="max-w-48">
+                <flux:select.option value="">{{ __('All models') }}</flux:select.option>
+                @foreach ($this->availableModels() as $fqcn => $label)
+                <flux:select.option value="{{ $fqcn }}">{{ $label }}</flux:select.option>
+                @endforeach
+            </flux:select>
+        </div>
     </div>
     @endif
 
@@ -16,7 +19,7 @@
 
     @if ($days->isEmpty())
     <flux:card>
-        <flux:text class="text-sm text-zinc-500 dark:text-white/40">{{ __('No activity recorded yet.') }}</flux:text>
+        <flux:text class="text-sm text-zinc-500 dark:text-white/40">{{ trim($search) !== '' ? __('No activity matches your search.') : __('No activity recorded yet.') }}</flux:text>
     </flux:card>
     @endif
 

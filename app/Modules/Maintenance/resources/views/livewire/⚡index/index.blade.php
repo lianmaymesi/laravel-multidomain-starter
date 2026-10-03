@@ -13,11 +13,6 @@
     </div>
     @endif
 
-    @if (session('status'))
-    <div class="border border-emerald-500/20 bg-emerald-500/6 px-4 py-3 text-sm text-emerald-400">
-        {{ session('status') }}
-    </div>
-    @endif
 
     <div class="space-y-4">
         @foreach ($this->portals() as $portal)

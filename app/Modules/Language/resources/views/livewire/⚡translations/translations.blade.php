@@ -7,11 +7,6 @@
         <flux:text class="mt-1 text-zinc-500 dark:text-white/50">{{ __("Overrides for hardcoded strings and validation messages. Anything left blank falls back to the app's default text.") }}</flux:text>
     </div>
 
-    @if (session('status'))
-    <div class="border border-emerald-500/20 bg-emerald-500/6 px-4 py-3 text-sm text-emerald-400">
-        {{ session('status') }}
-    </div>
-    @endif
 
     @php $stats = $this->stats(); @endphp
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">

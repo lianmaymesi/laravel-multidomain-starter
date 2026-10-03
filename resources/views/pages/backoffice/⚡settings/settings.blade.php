@@ -7,11 +7,6 @@
         <flux:text class="mt-1 text-zinc-500 dark:text-white/50">{{ __('System-wide behavior.') }}</flux:text>
     </div>
 
-    @if (session('status'))
-    <div class="border border-emerald-500/20 bg-emerald-500/6 px-4 py-3 text-sm text-emerald-400">
-        {{ session('status') }}
-    </div>
-    @endif
 
     @if (session('error'))
     <div class="border border-red-500/20 bg-red-500/6 px-4 py-3 text-sm text-red-400">

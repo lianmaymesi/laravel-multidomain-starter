@@ -1,5 +1,6 @@
 <?php
 
+use App\Support\Toast;
 use App\Contracts\Languages;
 use App\Services\TimezoneService;
 use App\Support\Modules\Module;
@@ -79,11 +80,12 @@ new #[Layout('layouts.accounts')] class extends Component
         auth()->user()->update($updates);
 
         if ($this->isMultiLanguageEnabled()) {
+            Toast::success(__('Saved.'), afterRedirect: true);
             $this->redirect(route('account.settings'));
 
             return;
         }
 
-        session()->flash('status', __('Saved.'));
+        Toast::success(__('Saved.'));
     }
 };

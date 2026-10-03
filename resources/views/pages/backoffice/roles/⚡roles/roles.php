@@ -1,5 +1,7 @@
 <?php
 
+use App\Support\Toast;
+use App\Concerns\SortsTable;
 use App\Models\Role;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
@@ -9,6 +11,8 @@ use Livewire\Component;
 
 new #[Layout('layouts.backoffice')] class extends Component
 {
+    use SortsTable;
+
     public bool $showModal = false;
 
     public ?int $editingId = null;
@@ -36,8 +40,18 @@ new #[Layout('layouts.backoffice')] class extends Component
     {
         return Role::withCount(['users', 'permissions'])
             ->when(! $this->viewerIsSuperAdmin(), fn ($query) => $query->where('slug', '!=', Role::SUPER_ADMIN))
-            ->orderBy('name')
+            ->tap(fn ($query) => $this->applySort($query))
             ->get();
+    }
+
+    protected function sortableColumns(): array
+    {
+        return ['name' => 'name', 'permissions' => 'permissions_count', 'users' => 'users_count'];
+    }
+
+    protected function defaultSort(): string
+    {
+        return 'name';
     }
 
     /**
@@ -98,7 +112,7 @@ new #[Layout('layouts.backoffice')] class extends Component
 
         $this->showModal = false;
 
-        session()->flash('status', __('Role saved.'));
+        Toast::success(__('Role saved.'));
     }
 
     public function confirmDelete(int $roleId): void
@@ -128,6 +142,6 @@ new #[Layout('layouts.backoffice')] class extends Component
         $this->deletingId = null;
         $this->confirmingDelete = false;
 
-        session()->flash('status', __('Role deleted.'));
+        Toast::success(__('Role deleted.'));
     }
 };
