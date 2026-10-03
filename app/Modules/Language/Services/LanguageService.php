@@ -43,7 +43,7 @@ class LanguageService implements Languages
 
     public function primaryCode(): string
     {
-        return $this->primary()?->code ?? config('app.locale');
+        return $this->primary()->code ?? config('app.locale');
     }
 
     public function current(): ?Language
@@ -53,7 +53,7 @@ class LanguageService implements Languages
 
     public function currentDirection(): string
     {
-        return $this->current()?->direction ?? 'ltr';
+        return $this->current()->direction ?? 'ltr';
     }
 
     public function isValidCode(string $code): bool

@@ -14,8 +14,11 @@
         "php": "^8.4",
         "bacon/bacon-qr-code": "^3.0",
         "intervention/image": "^4.3",
+        "laravel/cashier": "^16.8",
         "laravel/framework": "^13.0",
         "laravel/pennant": "^1.26",
+        "laravel/sanctum": "^4.3",
+        "laravel/scout": "^11.8",
         "laravel/tinker": "^3.0",
         "livewire/flux": "^2.15",
         "livewire/flux-pro": "^2.20",
@@ -24,12 +27,14 @@
         "nunomaduro/termwind": "^2.4",
         "pragmarx/google2fa-laravel": "^3.0",
         "spatie/laravel-activitylog": "^4.12",
+        "spatie/laravel-backup": "^10.3",
         "spatie/laravel-permission": "^8.3",
         "spatie/laravel-translation-loader": "^2.8",
         "twilio/sdk": "^8.11"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
+        "larastan/larastan": "^3.12",
         "laravel/pail": "^1.2.5",
         "laravel/pao": "^1.1",
         "laravel/pint": "^1.27",
@@ -56,7 +61,7 @@
             "composer install",
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
             "@php artisan key:generate",
-            "@php artisan migrate --force",
+            "@php artisan app:setup --force",
             "npm install",
             "npm run build"
         ],
@@ -85,6 +90,18 @@
         ],
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
+        ],
+        "analyse": "phpstan analyse --memory-limit=2G",
+        "analyse:baseline": "phpstan analyse --memory-limit=2G --generate-baseline=phpstan-baseline.neon",
+        "format": "pint",
+        "format:check": "pint --test",
+        "test:arch": [
+            "@php artisan config:clear --ansi",
+            "@php artisan test --testsuite=Arch"
+        ],
+        "test:coverage": [
+            "@php artisan config:clear --ansi",
+            "@php artisan test --coverage"
         ]
     },
     "extra": {
@@ -103,6 +120,14 @@
     },
     "minimum-stability": "stable",
     "prefer-stable": true,
+    "scripts-descriptions": {
+        "analyse": "Static analysis (Larastan, level 5, with baseline)",
+        "analyse:baseline": "Regenerate phpstan-baseline.neon (after fixing baselined errors)",
+        "format": "Fix code style with Pint",
+        "format:check": "Check code style without changing files",
+        "test:arch": "Architecture rules only (module boundaries, hygiene)",
+        "test:coverage": "Tests with a coverage report (needs Xdebug or PCOV)"
+    },
     "repositories": [{
         "name": "flux-pro",
         "type": "composer",

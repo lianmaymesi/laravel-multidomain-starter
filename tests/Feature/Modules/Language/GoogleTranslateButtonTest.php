@@ -1,9 +1,9 @@
 <?php
 
 use App\Models\AppSetting;
+use App\Models\User;
 use App\Modules\Language\Models\Language;
 use App\Modules\Language\Models\LanguageLine;
-use App\Models\User;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;

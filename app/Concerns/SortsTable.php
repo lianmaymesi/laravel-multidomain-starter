@@ -56,10 +56,24 @@ trait SortsTable
 
     protected function applySort(Builder $query): Builder
     {
-        $columns = $this->sortableColumns();
-        $column = $columns[$this->sortBy] ?? $columns[$this->defaultSort()];
-        $direction = $this->sortDirection === 'desc' ? 'desc' : 'asc';
+        [$column, $direction] = $this->currentSort();
 
         return $query->orderBy($column, $direction);
+    }
+
+    /**
+     * The validated SQL column and direction — for queries that aren't a query
+     * builder, e.g. a Scout search: `->orderBy(...$this->currentSort())`.
+     *
+     * @return array{0: string, 1: 'asc'|'desc'}
+     */
+    protected function currentSort(): array
+    {
+        $columns = $this->sortableColumns();
+
+        return [
+            $columns[$this->sortBy] ?? $columns[$this->defaultSort()],
+            $this->sortDirection === 'desc' ? 'desc' : 'asc',
+        ];
     }
 }
