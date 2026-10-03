@@ -10,6 +10,7 @@ Route::livewire('permissions', 'pages::backoffice.permissions')->name('permissio
 Route::livewire('users', 'pages::backoffice.users')->name('users.index');
 Route::livewire('settings', 'pages::backoffice.settings')->name('settings.index');
 Route::livewire('modules', 'pages::backoffice.modules')->name('modules.index');
+Route::livewire('feature-flags', 'pages::backoffice.feature-flags')->name('feature-flags.index');
 
 // Routes contributed by enabled feature modules (app/Modules/*/routes/backoffice.php).
 Module::routes('backoffice');

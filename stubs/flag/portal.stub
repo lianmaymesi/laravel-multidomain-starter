@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Features;
+
+use App\Support\Features\Portal;
+use App\Support\Features\PortalFlag;
+
+class {{ Name }} extends PortalFlag
+{
+    public string $name = '{{ name }}';
+
+    public function label(): string
+    {
+        return '{{ Title }}';
+    }
+
+    public function description(): string
+    {
+        return '';
+    }
+
+    /**
+     * Value for a portal nothing is stored for yet. false ships it dark;
+     * Lottery::odds(1, 10) rolls it out to roughly one portal in ten.
+     */
+    protected function initial(Portal $portal): mixed
+    {
+        return false;
+    }
+}
