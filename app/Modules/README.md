@@ -89,6 +89,7 @@ Module::contribute('backoffice.nav', [[
 | `account.nav` | account portal sidebar + mobile bar | `label, route, icon, order, visible` (`visible` gets the user) |
 | `api.abilities` | API token abilities | `ability, description` |
 | `http.json-requests` | exception rendering | closure(Request): bool — render errors as JSON (e.g. the API host) |
+| `health.checks` | `/health`, `health:check`, System health page | class implementing `App\Support\Health\Check` |
 | `settings.fields` | `SettingsRegistry` (generic Settings form) | closure returning a `SettingField` (closure so labels translate per request) |
 | `permissions` | `RolePermissionSeeder` | permission name (use `permissions()` instead) |
 | `permissions.super-admin-only` | `RolePermissionSeeder` | names Admin must never get (use `superAdminOnlyPermissions()`) |

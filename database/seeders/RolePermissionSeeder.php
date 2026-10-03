@@ -35,6 +35,7 @@ class RolePermissionSeeder extends Seeder
         'settings.edit',
         'modules.manage',
         'feature-flags.manage',
+        'health.view',
         'roles.view',
         'roles.create',
         'roles.edit',
