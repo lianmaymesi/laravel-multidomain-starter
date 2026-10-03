@@ -106,6 +106,50 @@ A backup that has never been restored isn't proven. Rehearse this on a staging c
 
 The same `APP_KEY` is required. Without it, 2FA secrets and encrypted settings (API keys) can't be read, so keep `.env` in your secrets manager, not only on the server.
 
+## Search
+
+The search boxes on **Backoffice → Users** and **Backoffice → Activity Log** go through [Laravel Scout](https://laravel.com/docs/scout). By default it uses the `database` driver, which needs no extra service and no index:
+
+```dotenv
+SCOUT_DRIVER=database
+```
+
+The driver searches the model's own table with `LIKE` (`ILIKE` on PostgreSQL). It matches the columns in the model's `toSearchableArray()`:
+
+| Model | Matches on |
+|---|---|
+| `App\Models\User` | name, email, or an exact id |
+| `App\Modules\Activity\Models\Activity` | description, event, log name |
+
+Only a typed search goes through Scout. A blank search box is a plain database query, so the lists keep working even when an external index is empty.
+
+To make another model searchable, add the `Laravel\Scout\Searchable` trait and a `toSearchableArray()` that returns only real text columns. Every key you return is searched with `LIKE`. A model owned by a module should also return `Module::enabled('<module>')` from `shouldBeSearchable()`, like `Activity` does. A switched-off module then never writes to an external index.
+
+On MySQL/MariaDB or PostgreSQL, a full-text index makes large text columns faster to search. Add the index in a migration (`$table->fullText('description')`), then mark the column on `toSearchableArray()` with `#[SearchUsingFullText(['description'])]`. Full-text matches whole words, not substrings.
+
+### Switching to Meilisearch
+
+Once `LIKE` queries get slow (roughly hundreds of thousands of rows), switch to [Meilisearch](https://www.meilisearch.com). It adds typo tolerance and relevance ranking. Nothing in the pages changes.
+
+1. Install the client: `composer require meilisearch/meilisearch-php http-interop/http-factory-guzzle`
+2. Run Meilisearch, for example with `docker run -p 7700:7700 getmeili/meilisearch`.
+3. Set the driver:
+   ```dotenv
+   SCOUT_DRIVER=meilisearch
+   MEILISEARCH_HOST=http://127.0.0.1:7700
+   MEILISEARCH_KEY=your-master-key
+   SCOUT_QUEUE=true   # index on the queue, not in the request
+   ```
+4. In `config/scout.php`, uncomment the `users` and `activity_log` entries under `meilisearch.index-settings`. The Activity Log filters by record and model, and both lists sort, so these fields must be filterable and sortable.
+5. Push the settings and import the existing rows:
+   ```bash
+   php artisan scout:sync-index-settings
+   php artisan scout:import "App\Models\User"
+   php artisan scout:import "App\Modules\Activity\Models\Activity"
+   ```
+
+From then on, Scout keeps the index up to date as rows are saved and deleted. Re-run `scout:import` after a restore, after turning a module back on, or after any bulk change that skips Eloquent events (for example `DB::table()->update()`).
+
 ## License
 
 Open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

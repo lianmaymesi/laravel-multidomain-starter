@@ -2,6 +2,7 @@
 
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Layout;
@@ -38,13 +39,21 @@ new #[Layout('layouts.backoffice')] class extends Component
         $this->resetPage();
     }
 
-    public function users(): \Illuminate\Contracts\Pagination\LengthAwarePaginator
+    /**
+     * A typed search goes through Scout (see User::toSearchableArray());
+     * plain browsing stays a direct query, so the list never depends on an
+     * external index having been imported.
+     */
+    public function users(): LengthAwarePaginator
     {
-        return User::query()
-            ->when($this->search, fn ($query) => $query
-                ->where('name', 'like', "%{$this->search}%")
-                ->orWhere('email', 'like', "%{$this->search}%"))
-            ->with('roles')
+        $search = trim($this->search);
+
+        if ($search === '') {
+            return User::query()->with('roles')->orderBy('name')->paginate(10);
+        }
+
+        return User::search($search)
+            ->query(fn ($query) => $query->with('roles'))
             ->orderBy('name')
             ->paginate(10);
     }
