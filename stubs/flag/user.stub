@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Features;
+
+use App\Models\User;
+use App\Support\Features\UserFlag;
+
+class {{ Name }} extends UserFlag
+{
+    public string $name = '{{ name }}';
+
+    public function label(): string
+    {
+        return '{{ Title }}';
+    }
+
+    public function description(): string
+    {
+        return '';
+    }
+
+    /**
+     * Value for a user nothing is stored for yet (null = guest). false ships
+     * it dark; Lottery::odds(1, 10) rolls it out to ~10% of users — each
+     * user's result is stored, so it sticks.
+     */
+    protected function initial(?User $user): mixed
+    {
+        return false;
+    }
+}

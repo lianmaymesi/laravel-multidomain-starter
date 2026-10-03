@@ -1,5 +1,6 @@
 <?php
 
+use App\Concerns\ThrottlesActions;
 use App\Services\Auth\TwoFactorService;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
@@ -8,6 +9,8 @@ use Livewire\Component;
 
 new #[Layout('layouts.accounts')] class extends Component
 {
+    use ThrottlesActions;
+
     #[Validate('required')]
     #[Validate('digits:6')]
     public string $code = '';
@@ -52,10 +55,15 @@ new #[Layout('layouts.accounts')] class extends Component
 
         $user = Auth::user();
 
+        $this->ensureNotThrottled('two-factor-setup', (string) $user->id, 'code');
+
         if (! $twoFactor->confirm($user, $this->code)) {
+            $this->hitThrottle('two-factor-setup', (string) $user->id);
             $this->addError('code', __('Invalid code. Please scan the QR again and try.'));
             return;
         }
+
+        $this->clearThrottle('two-factor-setup', (string) $user->id);
 
         $this->confirmed      = true;
         $this->justConfirmed  = true;

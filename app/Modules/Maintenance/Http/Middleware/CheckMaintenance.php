@@ -38,6 +38,6 @@ class CheckMaintenance
     {
         return response()
             ->view('errors._dispatch', ['code' => 'maintenance', 'message' => $message], 503)
-            ->header('Retry-After', 3600);
+            ->header('Retry-After', '3600');
     }
 }

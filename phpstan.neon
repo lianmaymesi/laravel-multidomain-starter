@@ -1,0 +1,43 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+    - phpstan-baseline.neon
+
+parameters:
+    # Start pragmatic, ramp up over time. Errors that existed when Larastan
+    # was introduced are in phpstan-baseline.neon — new code must be clean.
+    level: 5
+
+    paths:
+        - app
+        - bootstrap/app.php
+        - config
+        - database
+        - routes
+
+    excludePaths:
+        # Livewire single-file components (`new class extends Component {}`):
+        # PHPStan reads the bare `new class` statement as unused.
+        - app/Modules/*/resources/views/*
+
+    # Larastan learns model columns from migrations. Feature modules keep
+    # theirs next to the module; `make:module` adds new ones here.
+    databaseMigrationsPath:
+        - database/migrations
+        - app/Modules/Activity/database/migrations
+        - app/Modules/Currency/database/migrations
+        - app/Modules/Language/database/migrations
+        - app/Modules/Maintenance/database/migrations
+
+    ignoreErrors:
+        # Module config files (merged by ModuleProvider) are config files —
+        # env() is correct there, the rule just only knows about config/.
+        -
+            identifier: larastan.noEnvCallsOutsideOfConfig
+            path: app/Modules/*/config.php
+
+    # Several feature branches are in flight; a baseline entry fixed on
+    # another branch shouldn't fail this one. Prune the baseline with
+    # `composer analyse:baseline` after merging.
+    reportUnmatchedIgnoredErrors: false
+
+    tmpDir: storage/framework/cache/phpstan

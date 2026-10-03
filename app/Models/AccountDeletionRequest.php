@@ -4,7 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
+/**
+ * @property int $id
+ * @property int $user_id
+ * @property string $status
+ * @property Carbon $requested_at
+ * @property Carbon $scheduled_at
+ * @property-read User $user
+ */
 class AccountDeletionRequest extends Model
 {
     const GRACE_PERIOD_DAYS = 30;
@@ -24,6 +33,7 @@ class AccountDeletionRequest extends Model
         ];
     }
 
+    /** @return BelongsTo<User, $this> */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
