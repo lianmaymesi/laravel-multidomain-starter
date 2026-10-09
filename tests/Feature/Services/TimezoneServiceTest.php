@@ -1,8 +1,8 @@
 <?php
 
-use App\Models\AppSetting;
 use App\Models\User;
-use App\Services\TimezoneService;
+use Atrium\Core\Models\AppSetting;
+use Atrium\Core\Services\TimezoneService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 

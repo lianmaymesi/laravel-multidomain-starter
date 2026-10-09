@@ -1,9 +1,9 @@
 <?php
 
-use App\Jobs\DeleteUserAccount;
-use App\Models\AccountDeletionRequest;
 use App\Models\User;
-use App\Services\AccountDeletionService;
+use Atrium\Core\Jobs\DeleteUserAccount;
+use Atrium\Core\Models\AccountDeletionRequest;
+use Atrium\Core\Services\AccountDeletionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Stripe\Exception\ApiErrorException;
 use Tests\Fixtures\Billing\Billing;

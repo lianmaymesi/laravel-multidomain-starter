@@ -1,10 +1,10 @@
 <?php
 
-use App\Concerns\ThrottlesActions;
-use App\Enums\OtpType;
-use App\Services\AccountDeletionService;
-use App\Services\Auth\OtpService;
-use App\Contracts\SmsService;
+use Atrium\Core\Concerns\ThrottlesActions;
+use Atrium\Core\Contracts\SmsService;
+use Atrium\Core\Enums\OtpType;
+use Atrium\Core\Services\AccountDeletionService;
+use Atrium\Core\Services\Auth\OtpService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
@@ -32,7 +32,7 @@ new #[Layout('layouts.auth')] class extends Component
         $this->ensureNotThrottled('login', $this->throttleKey(), 'email');
         $this->ensureNotThrottled('login-ip', request()->ip(), 'email');
 
-        if (!Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
+        if (! Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
             $this->hitThrottle('login', $this->throttleKey());
             $this->hitThrottle('login-ip', request()->ip());
 
@@ -46,11 +46,12 @@ new #[Layout('layouts.auth')] class extends Component
         $user = Auth::user();
 
         // Phone not verified → send OTP, redirect to verify
-        if (!$user->hasVerifiedPhone()) {
+        if (! $user->hasVerifiedPhone()) {
             $otp = $otpService->generate($user, OtpType::PHONE_VERIFICATION);
             $smsService->sendOtp($user->fullPhone(), $otp->code);
 
             $this->redirect(route('auth.verify-phone'), navigate: true);
+
             return;
         }
 
@@ -61,6 +62,7 @@ new #[Layout('layouts.auth')] class extends Component
             Auth::logout(); // log out until 2FA passed
 
             $this->redirect(route('auth.two-factor-challenge'), navigate: true);
+
             return;
         }
 
@@ -70,6 +72,7 @@ new #[Layout('layouts.auth')] class extends Component
             app(AccountDeletionService::class)->cancel($deletion);
             session()->flash('deletion_cancelled', true);
             $this->redirect(route('account.index'), navigate: false);
+
             return;
         }
 
@@ -79,6 +82,6 @@ new #[Layout('layouts.auth')] class extends Component
 
     private function throttleKey(): string
     {
-        return strtolower($this->email) . '|' . request()->ip();
+        return strtolower($this->email).'|'.request()->ip();
     }
 };

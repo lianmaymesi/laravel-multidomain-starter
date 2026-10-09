@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\Permission;
 use App\Models\User;
+use Atrium\Core\Models\Permission;
 use Database\Seeders\RolePermissionSeeder;
 use Flux\Flux;
 use Illuminate\Foundation\Testing\RefreshDatabase;

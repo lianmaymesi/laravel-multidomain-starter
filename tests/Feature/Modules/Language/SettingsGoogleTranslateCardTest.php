@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\AppSetting;
 use App\Models\User;
+use Atrium\Core\Models\AppSetting;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;

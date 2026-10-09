@@ -2,14 +2,14 @@
 
 namespace App\Modules\Language;
 
-use App\Contracts\Languages;
-use App\Models\AppSetting;
 use App\Modules\Language\Http\Middleware\SetLocale;
 use App\Modules\Language\Seeders\LanguageSeeder;
 use App\Modules\Language\Services\LanguageService;
-use App\Support\Settings\SettingField;
+use Atrium\Core\Contracts\Languages;
+use Atrium\Core\Models\AppSetting;
 use Atrium\Core\Support\Modules\Module;
 use Atrium\Core\Support\Modules\ModuleProvider;
+use Atrium\Core\Support\Settings\SettingField;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;

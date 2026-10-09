@@ -1,7 +1,7 @@
 <?php
 
-use App\Jobs\RunBackup;
-use App\Support\Backup\BackupInventory;
+use Atrium\Core\Jobs\RunBackup;
+use Atrium\Core\Support\Backup\BackupInventory;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Layout;
 use Livewire\Component;

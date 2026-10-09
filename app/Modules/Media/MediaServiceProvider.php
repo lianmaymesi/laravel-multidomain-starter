@@ -2,9 +2,9 @@
 
 namespace App\Modules\Media;
 
-use App\Events\UserAnonymized;
 use App\Modules\Media\Models\Media;
 use App\Modules\Media\Services\MediaLibrary;
+use Atrium\Core\Events\UserAnonymized;
 use Atrium\Core\Support\Modules\Module;
 use Atrium\Core\Support\Modules\ModuleProvider;
 use Illuminate\Support\Facades\Blade;

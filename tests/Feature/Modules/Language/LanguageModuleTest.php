@@ -1,12 +1,12 @@
 <?php
 
-use App\Contracts\Languages;
 use App\Models\User;
 use App\Modules\Language\Http\Middleware\SetLocale;
 use App\Modules\Language\Models\Language;
 use App\Modules\Language\Services\LanguageService;
-use App\Support\NullLanguages;
+use Atrium\Core\Contracts\Languages;
 use Atrium\Core\Support\Modules\Module;
+use Atrium\Core\Support\NullLanguages;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Route;

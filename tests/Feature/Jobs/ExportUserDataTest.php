@@ -1,8 +1,8 @@
 <?php
 
-use App\Jobs\ExportUserData;
 use App\Models\User;
-use App\Notifications\AccountDataExportReady;
+use Atrium\Core\Jobs\ExportUserData;
+use Atrium\Core\Notifications\AccountDataExportReady;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;

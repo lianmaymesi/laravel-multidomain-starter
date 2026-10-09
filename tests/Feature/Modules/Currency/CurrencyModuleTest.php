@@ -1,12 +1,12 @@
 <?php
 
-use App\Contracts\Currencies;
 use App\Modules\Currency\Jobs\RefreshExchangeRates;
 use App\Modules\Currency\Seeders\CurrencySeeder;
 use App\Modules\Currency\Services\CurrencyService;
-use App\Support\Money;
-use App\Support\NullCurrencies;
+use Atrium\Core\Contracts\Currencies;
 use Atrium\Core\Support\Modules\Module;
+use Atrium\Core\Support\Money;
+use Atrium\Core\Support\NullCurrencies;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Testing\RefreshDatabase;

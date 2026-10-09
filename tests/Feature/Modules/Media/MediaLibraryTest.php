@@ -1,11 +1,11 @@
 <?php
 
-use App\Events\UserAnonymized;
 use App\Models\User;
 use App\Modules\Media\Models\Media;
 use App\Modules\Media\Models\MediaAttachment;
 use App\Modules\Media\Services\MediaLibrary;
-use App\Services\AccountDeletionService;
+use Atrium\Core\Events\UserAnonymized;
+use Atrium\Core\Services\AccountDeletionService;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;

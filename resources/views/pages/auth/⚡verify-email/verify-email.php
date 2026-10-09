@@ -1,8 +1,8 @@
 <?php
 
-use App\Enums\OtpType;
-use App\Notifications\VerifyEmail;
-use App\Services\Auth\OtpService;
+use Atrium\Core\Enums\OtpType;
+use Atrium\Core\Notifications\VerifyEmail;
+use Atrium\Core\Services\Auth\OtpService;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
@@ -31,6 +31,7 @@ new #[Layout('layouts.auth')] class extends Component
         // Already verified — skip this page
         if ($user->hasVerifiedEmail()) {
             $this->redirect($user->redirect(), navigate: false);
+
             return;
         }
 

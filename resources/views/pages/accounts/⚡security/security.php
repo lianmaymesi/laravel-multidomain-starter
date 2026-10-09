@@ -1,12 +1,13 @@
 <?php
 
-use App\Concerns\ThrottlesActions;
+use Atrium\Core\Concerns\ThrottlesActions;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\Rules\Password as PasswordRule;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -15,8 +16,11 @@ new #[Layout('layouts.accounts')] class extends Component
     use ThrottlesActions;
 
     public string $current_password = '';
+
     public string $password = '';
+
     public string $password_confirmation = '';
+
     public bool $passwordSuccess = false;
 
     public function updatePassword(): void
@@ -27,8 +31,8 @@ new #[Layout('layouts.accounts')] class extends Component
 
         try {
             $this->validate([
-                'current_password'      => ['required', 'current_password'],
-                'password'              => ['required', 'confirmed', PasswordRule::defaults()],
+                'current_password' => ['required', 'current_password'],
+                'password' => ['required', 'confirmed', PasswordRule::defaults()],
                 'password_confirmation' => ['required'],
             ]);
         } catch (ValidationException $e) {
@@ -55,9 +59,9 @@ new #[Layout('layouts.accounts')] class extends Component
     }
 
     /**
-     * @return \Illuminate\Support\Collection<int, object>
+     * @return Collection<int, object>
      */
-    public function sessions(): \Illuminate\Support\Collection
+    public function sessions(): Collection
     {
         return DB::table('sessions')
             ->where('user_id', Auth::id())
@@ -121,28 +125,28 @@ new #[Layout('layouts.accounts')] class extends Component
 
         $platform = match (true) {
             (bool) preg_match('/iPhone|iPad/i', $userAgent) => 'iOS',
-            (bool) preg_match('/Android/i', $userAgent)     => 'Android',
-            (bool) preg_match('/Macintosh/i', $userAgent)   => 'macOS',
-            (bool) preg_match('/Windows/i', $userAgent)     => 'Windows',
-            (bool) preg_match('/Linux/i', $userAgent)       => 'Linux',
-            default                                         => 'Unknown device',
+            (bool) preg_match('/Android/i', $userAgent) => 'Android',
+            (bool) preg_match('/Macintosh/i', $userAgent) => 'macOS',
+            (bool) preg_match('/Windows/i', $userAgent) => 'Windows',
+            (bool) preg_match('/Linux/i', $userAgent) => 'Linux',
+            default => 'Unknown device',
         };
 
         $browser = match (true) {
-            (bool) preg_match('/Edg\//i', $userAgent)               => 'Edge',
-            (bool) preg_match('/OPR\/|Opera/i', $userAgent)         => 'Opera',
-            (bool) preg_match('/Chrome\//i', $userAgent)            => 'Chrome',
-            (bool) preg_match('/CriOS/i', $userAgent)               => 'Chrome',
-            (bool) preg_match('/Firefox\//i', $userAgent)           => 'Firefox',
-            (bool) preg_match('/Safari\//i', $userAgent)            => 'Safari',
-            default                                                 => 'Unknown browser',
+            (bool) preg_match('/Edg\//i', $userAgent) => 'Edge',
+            (bool) preg_match('/OPR\/|Opera/i', $userAgent) => 'Opera',
+            (bool) preg_match('/Chrome\//i', $userAgent) => 'Chrome',
+            (bool) preg_match('/CriOS/i', $userAgent) => 'Chrome',
+            (bool) preg_match('/Firefox\//i', $userAgent) => 'Firefox',
+            (bool) preg_match('/Safari\//i', $userAgent) => 'Safari',
+            default => 'Unknown browser',
         };
 
         $isMobile = (bool) preg_match('/iPhone|Android|Mobile/i', $userAgent);
 
         return [
             'label' => "{$browser} on {$platform}",
-            'icon'  => $isMobile ? 'device-phone-mobile' : 'computer-desktop',
+            'icon' => $isMobile ? 'device-phone-mobile' : 'computer-desktop',
         ];
     }
 };

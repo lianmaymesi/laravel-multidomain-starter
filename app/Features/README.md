@@ -51,7 +51,7 @@ so it sticks.
 ## Check a flag
 
 ```php
-use App\Support\Features\Flags;
+use Atrium\Core\Support\Features\Flags;
 
 Flags::active(NewCurrencyPicker::class);   // current portal, or signed-in user
 ```
@@ -70,7 +70,7 @@ so it would always answer false.
 For a specific scope, use Pennant directly:
 
 ```php
-use App\Support\Features\Portal;
+use Atrium\Core\Support\Features\Portal;
 use Laravel\Pennant\Feature;
 
 Feature::for(Portal::named('app'))->activate(NewCurrencyPicker::class);

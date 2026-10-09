@@ -1,8 +1,8 @@
 <?php
 
-use App\Support\Toast;
 use Atrium\Core\Models\ModuleSetting;
 use Atrium\Core\Support\Modules\Module;
+use Atrium\Core\Support\Toast;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;

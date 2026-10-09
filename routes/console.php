@@ -1,8 +1,8 @@
 <?php
 
-use App\Jobs\ProcessPendingAccountDeletions;
-use App\Jobs\PruneAccountExports;
-use App\Support\Health\Checks\SchedulerCheck;
+use Atrium\Core\Jobs\ProcessPendingAccountDeletions;
+use Atrium\Core\Jobs\PruneAccountExports;
+use Atrium\Core\Support\Health\Checks\SchedulerCheck;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;

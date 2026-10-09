@@ -51,7 +51,7 @@
             <flux:text class="text-sm text-blue-600 dark:text-blue-400">{{ __('View config →') }}</flux:text>
         </flux:card>
 
-        <flux:card as="a" href="https://github.com/atrium-php/atrium/blob/main/app/Console/Commands/MakeSubdomainCommand.php"
+        <flux:card as="a" href="https://github.com/atrium-php/atrium/blob/main/packages/core/src/Console/Commands/MakeSubdomainCommand.php"
             target="_blank" rel="noopener" class="space-y-2">
             <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-500/15">
                 <flux:icon.command-line class="size-4.5 text-blue-600 dark:text-blue-400" />

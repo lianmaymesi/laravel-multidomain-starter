@@ -1,10 +1,10 @@
 <?php
 
-use App\Models\Role;
 use App\Models\User;
 use App\Modules\Currency\Models\Currency;
 use App\Modules\Language\Models\Language;
 use App\Modules\Language\Seeders\LanguageSeeder;
+use Atrium\Core\Models\Role;
 use Database\Seeders\AdminUserSeeder;
 use Database\Seeders\DemoSeeder;
 use Database\Seeders\RolePermissionSeeder;

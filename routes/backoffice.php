@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Backoffice\BackupDownloadController;
+use Atrium\Core\Http\Controllers\Backoffice\BackupDownloadController;
 use Atrium\Core\Support\Modules\Module;
 use Illuminate\Support\Facades\Route;
 

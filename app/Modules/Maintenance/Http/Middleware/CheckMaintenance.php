@@ -3,7 +3,7 @@
 namespace App\Modules\Maintenance\Http\Middleware;
 
 use App\Modules\Maintenance\Models\PortalSetting;
-use App\Support\PortalResolver;
+use Atrium\Core\Support\PortalResolver;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;

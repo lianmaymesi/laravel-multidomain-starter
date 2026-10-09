@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\Role;
 use App\Models\User;
 use App\Modules\Media\Models\Media;
 use App\Modules\Media\Services\MediaLibrary;
+use Atrium\Core\Models\Role;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;

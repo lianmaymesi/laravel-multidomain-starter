@@ -1,7 +1,7 @@
 <?php
 
-use App\Jobs\ExportUserData;
-use App\Models\AccountDataExport;
+use Atrium\Core\Jobs\ExportUserData;
+use Atrium\Core\Models\AccountDataExport;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
@@ -14,6 +14,7 @@ new #[Layout('layouts.accounts')] class extends Component
     public Collection $exports;
 
     public ?int $downloadExportId = null;
+
     public string $downloadPassword = '';
 
     public function mount(): void
@@ -25,7 +26,7 @@ new #[Layout('layouts.accounts')] class extends Component
     public function exportData(): void
     {
         $export = Auth::user()->dataExports()->create([
-            'token'  => Str::random(64),
+            'token' => Str::random(64),
             'status' => 'processing',
         ]);
 
@@ -58,11 +59,12 @@ new #[Layout('layouts.accounts')] class extends Component
         ]);
 
         $userId = Auth::id();
-        $limiterKey = AccountDataExport::DOWNLOAD_LIMITER_KEY . $userId;
+        $limiterKey = AccountDataExport::DOWNLOAD_LIMITER_KEY.$userId;
 
         if (RateLimiter::tooManyAttempts($limiterKey, AccountDataExport::MAX_DOWNLOADS_PER_DAY)) {
             $hours = (int) ceil(RateLimiter::availableIn($limiterKey) / 3600);
             $this->addError('downloadPassword', __('Download limit reached (3/day). Try again in :hours hour(s).', ['hours' => $hours]));
+
             return;
         }
 
@@ -70,13 +72,14 @@ new #[Layout('layouts.accounts')] class extends Component
 
         if (! $export || ! $export->isReady()) {
             $this->cancelDownload();
+
             return;
         }
 
         $downloadToken = Str::random(32);
 
         $export->update([
-            'download_token'            => $downloadToken,
+            'download_token' => $downloadToken,
             'download_token_expires_at' => now()->addSeconds(60),
         ]);
 
@@ -93,7 +96,7 @@ new #[Layout('layouts.accounts')] class extends Component
 
         $this->js("
             const a = document.createElement('a');
-            a.href = " . json_encode($url) . ";
+            a.href = ".json_encode($url).";
             a.download = 'my-data-export.zip';
             document.body.appendChild(a);
             a.click();

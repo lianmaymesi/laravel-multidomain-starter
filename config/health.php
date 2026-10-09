@@ -1,6 +1,6 @@
 <?php
 
-use App\Support\Health\Checks;
+use Atrium\Core\Support\Health\Checks;
 
 return [
 

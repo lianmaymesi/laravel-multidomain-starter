@@ -1,7 +1,7 @@
 <?php
 
-use App\Support\Health\Checks\BackupCheck;
-use App\Support\Health\Status;
+use Atrium\Core\Support\Health\Checks\BackupCheck;
+use Atrium\Core\Support\Health\Status;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Env;
 use Illuminate\Support\Facades\File;

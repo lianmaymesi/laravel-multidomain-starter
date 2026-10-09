@@ -1,0 +1,37 @@
+<?php
+
+namespace Atrium\Core\Http\Controllers\Accounts;
+
+use Atrium\Core\Models\AccountDataExport;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+
+class DataExportController
+{
+    public function __invoke(Request $request, string $token): BinaryFileResponse
+    {
+        $export = AccountDataExport::where('token', '=', $token)->firstOrFail();
+        $dt = (string) $request->query('dt', '');
+
+        if (! $export->isReady()) {
+            abort(404, __('Export not available.'));
+        }
+
+        if (! $export->hasValidDownloadToken($dt)) {
+            abort(403, __('Invalid or expired download link. Please re-authenticate from your account.'));
+        }
+
+        $fullPath = Storage::disk('local')->path($export->path);
+
+        if (! file_exists($fullPath)) {
+            abort(404, __('Export file not found.'));
+        }
+
+        $export->consumeDownloadToken();
+
+        return response()->download($fullPath, 'my-data-export.zip', [
+            'Content-Type' => 'application/zip',
+        ]);
+    }
+}

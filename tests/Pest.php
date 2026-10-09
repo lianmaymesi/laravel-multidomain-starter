@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\Role;
 use App\Models\User;
+use Atrium\Core\Models\Role;
 use Tests\TestCase;
 
 /*

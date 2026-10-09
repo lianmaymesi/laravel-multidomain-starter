@@ -2,7 +2,7 @@
 
 use App\Models\User;
 use App\Modules\Billing\Health\BillingCheck;
-use App\Support\Health\Status;
+use Atrium\Core\Support\Health\Status;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\Fixtures\Billing\Billing;
 

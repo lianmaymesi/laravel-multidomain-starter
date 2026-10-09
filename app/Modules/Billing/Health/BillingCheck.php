@@ -3,8 +3,8 @@
 namespace App\Modules\Billing\Health;
 
 use App\Modules\Billing\Services\Plans;
-use App\Support\Health\Check;
-use App\Support\Health\Result;
+use Atrium\Core\Support\Health\Check;
+use Atrium\Core\Support\Health\Result;
 use Laravel\Cashier\Subscription;
 
 /**

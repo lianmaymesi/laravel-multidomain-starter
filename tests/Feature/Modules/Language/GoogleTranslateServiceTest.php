@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\AppSetting;
 use App\Modules\Language\Services\GoogleTranslateService;
+use Atrium\Core\Models\AppSetting;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Http;
 

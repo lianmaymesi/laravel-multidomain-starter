@@ -1,8 +1,8 @@
 <?php
 
-use App\Models\AccountDeletionRequest;
 use App\Models\User;
-use App\Services\Auth\TwoFactorService;
+use Atrium\Core\Models\AccountDeletionRequest;
+use Atrium\Core\Services\Auth\TwoFactorService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 use PragmaRX\Google2FA\Google2FA;

@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\HealthController;
-use App\Http\Middleware\Demo\EnsureEmailVerificationNotExpired;
-use App\Http\Middleware\Demo\EnsureIsStaff;
-use App\Http\Middleware\Demo\EnsurePhoneIsVerified;
-use App\Http\Middleware\EnsurePortalAccess;
-use App\Http\Middleware\RedirectIfAuthenticated;
+use Atrium\Core\Http\Controllers\HealthController;
+use Atrium\Core\Http\Middleware\Demo\EnsureEmailVerificationNotExpired;
+use Atrium\Core\Http\Middleware\Demo\EnsureIsStaff;
+use Atrium\Core\Http\Middleware\Demo\EnsurePhoneIsVerified;
+use Atrium\Core\Http\Middleware\EnsurePortalAccess;
+use Atrium\Core\Http\Middleware\RedirectIfAuthenticated;
 use Atrium\Core\Support\Modules\Module;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;

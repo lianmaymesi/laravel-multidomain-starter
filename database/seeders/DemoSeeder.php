@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Role;
 use App\Models\User;
 use App\Modules\Currency\Models\Currency;
 use App\Modules\Language\Models\Language;
+use Atrium\Core\Models\Role;
 use Atrium\Core\Support\Modules\Module;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;

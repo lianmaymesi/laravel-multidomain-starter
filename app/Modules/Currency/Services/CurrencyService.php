@@ -2,8 +2,8 @@
 
 namespace App\Modules\Currency\Services;
 
-use App\Contracts\Currencies;
 use App\Modules\Currency\Models\Currency;
+use Atrium\Core\Contracts\Currencies;
 use Illuminate\Support\Collection;
 
 class CurrencyService implements Currencies

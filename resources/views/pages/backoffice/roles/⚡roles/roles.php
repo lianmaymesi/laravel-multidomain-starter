@@ -1,8 +1,8 @@
 <?php
 
-use App\Support\Toast;
-use App\Concerns\SortsTable;
-use App\Models\Role;
+use Atrium\Core\Concerns\SortsTable;
+use Atrium\Core\Models\Role;
+use Atrium\Core\Support\Toast;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;

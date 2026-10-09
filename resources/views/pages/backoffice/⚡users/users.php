@@ -1,9 +1,9 @@
 <?php
 
-use App\Concerns\SortsTable;
-use App\Models\Role;
 use App\Models\User;
-use App\Support\Toast;
+use Atrium\Core\Concerns\SortsTable;
+use Atrium\Core\Models\Role;
+use Atrium\Core\Support\Toast;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;

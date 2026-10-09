@@ -1,8 +1,7 @@
 <?php
 
-use App\Concerns\ThrottlesActions;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use Atrium\Core\Concerns\ThrottlesActions;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\Rules\Password as PasswordRule;
@@ -29,6 +28,7 @@ new #[Layout('layouts.auth')] class extends Component
     public string $phone = '';
 
     public string $password = '';
+
     public string $password_confirmation = '';
 
     public function mount(string $token): void
@@ -36,6 +36,7 @@ new #[Layout('layouts.auth')] class extends Component
         // Bounce if token is missing — mirrors Laravel's built-in pattern
         if (blank($token)) {
             $this->redirect(route('auth.forgot-password'), navigate: true);
+
             return;
         }
 
@@ -44,9 +45,10 @@ new #[Layout('layouts.auth')] class extends Component
 
         // Validate the token against `password_reset_tokens` exactly as
         // Laravel's own PasswordBroker does. Invalid / expired → bounce back.
-        if (!$user || !Password::tokenExists($user, $token)) {
+        if (! $user || ! Password::tokenExists($user, $token)) {
             session()->flash('error', __('This password reset link is invalid or has expired.'));
             $this->redirect(route('auth.forgot-password'), navigate: true);
+
             return;
         }
 
@@ -63,15 +65,17 @@ new #[Layout('layouts.auth')] class extends Component
 
         $user = $this->resolveUser($this->email ?: null, $this->phone ?: null);
 
-        if (!$user) {
+        if (! $user) {
             $this->addError('password', __('Unable to locate the account. Please restart the reset flow.'));
+
             return;
         }
 
         // Double-check the token is still valid (guards against concurrent requests)
-        if (!Password::tokenExists($user, $this->token)) {
+        if (! Password::tokenExists($user, $this->token)) {
             session()->flash('error', __('This reset link has already been used or has expired.'));
             $this->redirect(route('auth.forgot-password'), navigate: true);
+
             return;
         }
 

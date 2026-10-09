@@ -2,8 +2,8 @@
 
 namespace App\Features;
 
-use App\Models\User;
-use App\Support\Features\UserFlag;
+use Atrium\Core\Models\User;
+use Atrium\Core\Support\Features\UserFlag;
 use Illuminate\Support\Lottery;
 
 /**

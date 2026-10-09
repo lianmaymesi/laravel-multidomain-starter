@@ -25,12 +25,12 @@
                     <flux:text class="mt-1 text-zinc-500 dark:text-white/50">{{ $field->description }}</flux:text>
                     @endif
                 </div>
-                @if ($field->type === \App\Support\Settings\SettingField::TYPE_SECRET && $this->isConfigured($field->key))
+                @if ($field->type === \Atrium\Core\Support\Settings\SettingField::TYPE_SECRET && $this->isConfigured($field->key))
                 <flux:badge size="sm" color="emerald">{{ __('Configured') }}</flux:badge>
                 @endif
             </div>
 
-            @if ($field->type === \App\Support\Settings\SettingField::TYPE_RADIO)
+            @if ($field->type === \Atrium\Core\Support\Settings\SettingField::TYPE_RADIO)
             <flux:radio.group wire:model="values.{{ $field->key }}" variant="cards" class="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 @foreach ($field->options ?? [] as $value => $option)
                 <flux:radio value="{{ $value }}" label="{{ $option['label'] }}" description="{{ $option['description'] }}" />
@@ -40,7 +40,7 @@
             @else
             <flux:field class="w-96">
                 @switch($field->type)
-                    @case(\App\Support\Settings\SettingField::TYPE_SELECT)
+                    @case(\Atrium\Core\Support\Settings\SettingField::TYPE_SELECT)
                         <flux:select wire:model="values.{{ $field->key }}">
                             @foreach ($field->options ?? [] as $value => $label)
                             <flux:select.option value="{{ $value }}">{{ $label }}</flux:select.option>
@@ -48,17 +48,17 @@
                         </flux:select>
                         @break
 
-                    @case(\App\Support\Settings\SettingField::TYPE_SECRET)
+                    @case(\Atrium\Core\Support\Settings\SettingField::TYPE_SECRET)
                         <flux:input wire:model="values.{{ $field->key }}" type="password" viewable
                             placeholder="{{ $this->isConfigured($field->key) ? __('Leave blank to keep the current key') : __('Paste your API key') }}" />
                         @break
 
-                    @case(\App\Support\Settings\SettingField::TYPE_TEXTAREA)
-                    @case(\App\Support\Settings\SettingField::TYPE_JSON)
+                    @case(\Atrium\Core\Support\Settings\SettingField::TYPE_TEXTAREA)
+                    @case(\Atrium\Core\Support\Settings\SettingField::TYPE_JSON)
                         <flux:textarea wire:model="values.{{ $field->key }}" rows="auto" resize="none" />
                         @break
 
-                    @case(\App\Support\Settings\SettingField::TYPE_BOOLEAN)
+                    @case(\Atrium\Core\Support\Settings\SettingField::TYPE_BOOLEAN)
                         <flux:switch wire:model="values.{{ $field->key }}" />
                         @break
 
@@ -69,7 +69,7 @@
             </flux:field>
             @endif
 
-            @if ($field->type === \App\Support\Settings\SettingField::TYPE_SECRET)
+            @if ($field->type === \Atrium\Core\Support\Settings\SettingField::TYPE_SECRET)
                 @if ($this->isConfigured($field->key))
                 <flux:button type="button" variant="ghost" size="sm" wire:click="removeSecret('{{ $field->key }}')" wire:confirm="{{ __('Remove this key?') }}">
                     {{ __('Remove key') }}

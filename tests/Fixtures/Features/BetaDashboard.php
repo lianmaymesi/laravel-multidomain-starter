@@ -2,8 +2,8 @@
 
 namespace Tests\Fixtures\Features;
 
-use App\Models\User;
-use App\Support\Features\UserFlag;
+use Atrium\Core\Models\User;
+use Atrium\Core\Support\Features\UserFlag;
 use Illuminate\Support\Lottery;
 
 /** Per-user flag with a percentage rollout, defined by tests only. */

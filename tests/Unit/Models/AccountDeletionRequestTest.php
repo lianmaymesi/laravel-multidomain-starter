@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\AccountDeletionRequest;
 use App\Models\User;
+use Atrium\Core\Models\AccountDeletionRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

@@ -10,7 +10,7 @@
     exist yet, so a stub that hasn't been customized never 500s.
 --}}
 @php
-    $portal = app(\App\Support\PortalResolver::class)->resolve(request());
+    $portal = app(\Atrium\Core\Support\PortalResolver::class)->resolve(request());
     $style = config("multidomain.page_style.{$portal}", 'shared');
 
     $candidates = match ($style) {
@@ -19,4 +19,4 @@
         default => ["errors.{$style}.page", 'errors.shared.page'],
     };
 @endphp
-@includeFirst($candidates, ['code' => $code, 'meta' => \App\Support\ErrorPageMeta::for($code), 'message' => $message ?? null])
+@includeFirst($candidates, ['code' => $code, 'meta' => \Atrium\Core\Support\ErrorPageMeta::for($code), 'message' => $message ?? null])

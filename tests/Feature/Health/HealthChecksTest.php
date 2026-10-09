@@ -1,17 +1,17 @@
 <?php
 
 use App\Modules\Maintenance\Models\PortalSetting;
-use App\Support\Health\Checks\CacheCheck;
-use App\Support\Health\Checks\DatabaseCheck;
-use App\Support\Health\Checks\DiskSpaceCheck;
-use App\Support\Health\Checks\EnvironmentCheck;
-use App\Support\Health\Checks\PortalsCheck;
-use App\Support\Health\Checks\QueueCheck;
-use App\Support\Health\Checks\SchedulerCheck;
-use App\Support\Health\Checks\StorageCheck;
-use App\Support\Health\HealthChecker;
-use App\Support\Health\Result;
-use App\Support\Health\Status;
+use Atrium\Core\Support\Health\Checks\CacheCheck;
+use Atrium\Core\Support\Health\Checks\DatabaseCheck;
+use Atrium\Core\Support\Health\Checks\DiskSpaceCheck;
+use Atrium\Core\Support\Health\Checks\EnvironmentCheck;
+use Atrium\Core\Support\Health\Checks\PortalsCheck;
+use Atrium\Core\Support\Health\Checks\QueueCheck;
+use Atrium\Core\Support\Health\Checks\SchedulerCheck;
+use Atrium\Core\Support\Health\Checks\StorageCheck;
+use Atrium\Core\Support\Health\HealthChecker;
+use Atrium\Core\Support\Health\Result;
+use Atrium\Core\Support\Health\Status;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;

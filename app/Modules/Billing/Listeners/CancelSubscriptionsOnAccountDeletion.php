@@ -2,7 +2,7 @@
 
 namespace App\Modules\Billing\Listeners;
 
-use App\Events\AccountDeleting;
+use Atrium\Core\Events\AccountDeleting;
 use Laravel\Cashier\Subscription;
 
 /**

@@ -3,8 +3,8 @@
 namespace App\Modules\Maintenance\Health;
 
 use App\Modules\Maintenance\Models\PortalSetting;
-use App\Support\Health\Check;
-use App\Support\Health\Result;
+use Atrium\Core\Support\Health\Check;
+use Atrium\Core\Support\Health\Result;
 
 /**
  * Contributed to the health report by the Maintenance module: a portal left

@@ -2,8 +2,8 @@
 
 namespace App\Features;
 
-use App\Support\Features\Portal;
-use App\Support\Features\PortalFlag;
+use Atrium\Core\Support\Features\Portal;
+use Atrium\Core\Support\Features\PortalFlag;
 
 /**
  * Example flag: a "What's new" card on the app dashboard, shipped dark — off

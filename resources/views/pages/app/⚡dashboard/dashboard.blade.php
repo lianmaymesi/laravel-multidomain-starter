@@ -34,7 +34,7 @@
         an A/B variant, not just on/off. "All on" stores plain true → classic. --}}
     @flag(\App\Features\HelloWorldAdvanced::class)
     @php
-        $variant = \App\Support\Features\Flags::value(\App\Features\HelloWorldAdvanced::class);
+        $variant = \Atrium\Core\Support\Features\Flags::value(\App\Features\HelloWorldAdvanced::class);
         $variant = in_array($variant, \App\Features\HelloWorldAdvanced::VARIANTS, true) ? $variant : 'classic';
     @endphp
     <flux:card class="flex items-start gap-4" data-flag="hello-world-advanced" data-variant="{{ $variant }}">

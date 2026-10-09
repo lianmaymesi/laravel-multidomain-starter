@@ -1,7 +1,7 @@
 <?php
 
-use App\Support\Health\HealthChecker;
-use App\Support\Health\Report;
+use Atrium\Core\Support\Health\HealthChecker;
+use Atrium\Core\Support\Health\Report;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Layout;
 use Livewire\Component;

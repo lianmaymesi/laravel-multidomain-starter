@@ -1,10 +1,10 @@
 <?php
 
-use App\Contracts\SmsService;
-use App\Enums\OtpType;
-use App\Models\OtpCode;
 use App\Models\User;
-use App\Notifications\ForgotPassword;
+use Atrium\Core\Contracts\SmsService;
+use Atrium\Core\Enums\OtpType;
+use Atrium\Core\Models\OtpCode;
+use Atrium\Core\Notifications\ForgotPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;

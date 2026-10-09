@@ -2,8 +2,8 @@
 
 namespace Tests\Fixtures\Health;
 
-use App\Support\Health\Check;
-use App\Support\Health\Result;
+use Atrium\Core\Support\Health\Check;
+use Atrium\Core\Support\Health\Result;
 
 /** Meta nested like BackupCheck's (destinations → disk → facts). */
 class NestedMetaCheck implements Check

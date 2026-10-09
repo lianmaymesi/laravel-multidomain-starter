@@ -2,8 +2,8 @@
 
 use App\Features\WhatsNewCard;
 use App\Models\User;
-use App\Support\Features\Flags;
-use App\Support\Features\Portal;
+use Atrium\Core\Support\Features\Flags;
+use Atrium\Core\Support\Features\Portal;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Lottery;

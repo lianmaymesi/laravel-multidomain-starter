@@ -2,9 +2,9 @@
 
 namespace App\Modules\Language\Http\Middleware;
 
-use App\Models\AppSetting;
 use App\Modules\Language\Services\LanguageService;
-use App\Support\PortalResolver;
+use Atrium\Core\Models\AppSetting;
+use Atrium\Core\Support\PortalResolver;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;

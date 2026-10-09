@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Middleware\Demo\EnsureIsStaff;
 use App\Models\User;
+use Atrium\Core\Http\Middleware\Demo\EnsureIsStaff;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;

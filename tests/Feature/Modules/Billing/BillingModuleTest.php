@@ -1,8 +1,8 @@
 <?php
 
-use App\Events\AccountDeleting;
 use App\Models\User;
 use App\Modules\Billing\Health\BillingCheck;
+use Atrium\Core\Events\AccountDeleting;
 use Atrium\Core\Support\Modules\Module;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;

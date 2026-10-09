@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\AccountDataExport;
 use App\Models\User;
+use Atrium\Core\Models\AccountDataExport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Storage;
 

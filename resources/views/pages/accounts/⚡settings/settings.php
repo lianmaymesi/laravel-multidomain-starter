@@ -1,9 +1,9 @@
 <?php
 
-use App\Support\Toast;
-use App\Contracts\Languages;
-use App\Services\TimezoneService;
+use Atrium\Core\Contracts\Languages;
+use Atrium\Core\Services\TimezoneService;
 use Atrium\Core\Support\Modules\Module;
+use Atrium\Core\Support\Toast;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 

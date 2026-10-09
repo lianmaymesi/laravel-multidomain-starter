@@ -1,8 +1,8 @@
 <?php
 
-use App\Contracts\SmsService;
-use App\Models\AccountDeletionRequest;
 use App\Models\User;
+use Atrium\Core\Contracts\SmsService;
+use Atrium\Core\Models\AccountDeletionRequest;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 

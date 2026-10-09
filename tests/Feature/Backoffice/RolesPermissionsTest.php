@@ -1,8 +1,8 @@
 <?php
 
-use App\Models\Permission;
-use App\Models\Role;
 use App\Models\User;
+use Atrium\Core\Models\Permission;
+use Atrium\Core\Models\Role;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Gate;

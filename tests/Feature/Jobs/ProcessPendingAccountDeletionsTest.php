@@ -1,8 +1,8 @@
 <?php
 
-use App\Jobs\DeleteUserAccount;
-use App\Jobs\ProcessPendingAccountDeletions;
 use App\Models\User;
+use Atrium\Core\Jobs\DeleteUserAccount;
+use Atrium\Core\Jobs\ProcessPendingAccountDeletions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 

@@ -1,11 +1,11 @@
 <?php
 
-use App\Concerns\ThrottlesActions;
-use App\Enums\OtpType;
 use App\Models\User;
-use App\Notifications\ForgotPassword;
-use App\Services\Auth\OtpService;
-use App\Contracts\SmsService;
+use Atrium\Core\Concerns\ThrottlesActions;
+use Atrium\Core\Contracts\SmsService;
+use Atrium\Core\Enums\OtpType;
+use Atrium\Core\Notifications\ForgotPassword;
+use Atrium\Core\Services\Auth\OtpService;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -21,6 +21,7 @@ new #[Layout('layouts.auth')] class extends Component
 
     /** Phone fields */
     public string $country_code = '';
+
     public string $phone = '';
 
     /** Email field */
@@ -56,7 +57,7 @@ new #[Layout('layouts.auth')] class extends Component
 
     public function sendOtp(OtpService $otpService, SmsService $smsService): void
     {
-        $otpType   = $this->otpType();
+        $otpType = $this->otpType();
         $recipient = $this->resendRecipient();
 
         if ($this->activeTab === 'phone') {
@@ -76,7 +77,7 @@ new #[Layout('layouts.auth')] class extends Component
             $user = User::where('email', $this->email)->first();
 
             [$local, $domain] = explode('@', $this->email);
-            $this->maskedEmail = substr($local, 0, 1) . '***@' . $domain;
+            $this->maskedEmail = substr($local, 0, 1).'***@'.$domain;
         }
 
         $field = $this->activeTab === 'phone' ? 'phone' : 'email';
@@ -93,10 +94,11 @@ new #[Layout('layouts.auth')] class extends Component
         }
 
         // Always show success to prevent user enumeration
-        if (!$user) {
+        if (! $user) {
             $this->otpSent = true;
             $this->resendCooldown = (int) config('multidomain.otp.resend_cooldown', 60);
             session()->flash('status', __('If that account exists, a code has been sent.'));
+
             return;
         }
 
@@ -165,9 +167,10 @@ new #[Layout('layouts.auth')] class extends Component
 
         $otpService->gateResend($recipient, $otpType);
 
-        if (!$user) {
+        if (! $user) {
             // Silently ignore — don't leak whether the account exists
             $this->resendCooldown = (int) config('multidomain.otp.resend_cooldown', 60);
+
             return;
         }
 
@@ -202,7 +205,7 @@ new #[Layout('layouts.auth')] class extends Component
     private function resendRecipient(): string
     {
         if ($this->activeTab === 'phone') {
-            return $this->country_code . preg_replace('/\D/', '', $this->phone);
+            return $this->country_code.preg_replace('/\D/', '', $this->phone);
         }
 
         return strtolower(trim($this->email));

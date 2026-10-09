@@ -1,10 +1,11 @@
 <?php
 
-use App\Support\Toast;
-use App\Models\AppSetting;
-use App\Services\SettingsRegistry;
+use Atrium\Core\Models\AppSetting;
+use Atrium\Core\Services\SettingsRegistry;
 use Atrium\Core\Support\Modules\Module;
-use App\Support\Settings\SettingField;
+use Atrium\Core\Support\Settings\SettingField;
+use Atrium\Core\Support\Toast;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
@@ -31,7 +32,7 @@ new #[Layout('layouts.backoffice')] class extends Component
     }
 
     /**
-     * @return \Illuminate\Support\Collection<int, SettingField>
+     * @return Collection<int, SettingField>
      */
     public function fields()
     {

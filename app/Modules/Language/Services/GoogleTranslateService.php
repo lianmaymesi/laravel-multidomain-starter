@@ -2,7 +2,7 @@
 
 namespace App\Modules\Language\Services;
 
-use App\Models\AppSetting;
+use Atrium\Core\Models\AppSetting;
 use Illuminate\Support\Facades\Http;
 
 class GoogleTranslateService

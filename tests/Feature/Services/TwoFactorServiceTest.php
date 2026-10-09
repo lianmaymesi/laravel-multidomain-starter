@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\User;
-use App\Services\Auth\TwoFactorService;
+use Atrium\Core\Services\Auth\TwoFactorService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use PragmaRX\Google2FA\Google2FA;
 

@@ -1,10 +1,10 @@
 <?php
 
-use App\Support\Toast;
 use App\Modules\Language\Models\LanguageLine;
 use App\Modules\Language\Services\GoogleTranslateService;
 use App\Modules\Language\Services\LanguageService;
 use App\Modules\Language\Services\TranslationScannerService;
+use Atrium\Core\Support\Toast;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Layout;

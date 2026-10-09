@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\Role;
 use App\Modules\Activity\Models\Activity;
+use Atrium\Core\Models\Role;
 use Atrium\Core\Support\Modules\Module;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;

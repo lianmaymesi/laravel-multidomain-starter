@@ -2,9 +2,9 @@
 
 namespace App\Modules\Language\Services;
 
-use App\Contracts\Languages;
-use App\Models\AppSetting;
 use App\Modules\Language\Models\Language;
+use Atrium\Core\Contracts\Languages;
+use Atrium\Core\Models\AppSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 

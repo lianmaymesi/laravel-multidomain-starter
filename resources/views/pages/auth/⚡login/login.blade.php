@@ -79,7 +79,7 @@
                     </div>
                     <p class="mt-1.5 ps-5 text-xs leading-relaxed text-zinc-500 dark:text-white/45">
                         {!! __('Your account will be permanently deleted in :days days. To cancel, :signin.', [
-                            'days' => '<span class="text-zinc-700 dark:text-white/75">'.\App\Models\AccountDeletionRequest::GRACE_PERIOD_DAYS.'</span>',
+                            'days' => '<span class="text-zinc-700 dark:text-white/75">'.\Atrium\Core\Models\AccountDeletionRequest::GRACE_PERIOD_DAYS.'</span>',
                             'signin' => '<span class="font-medium text-amber-300">'.__('sign back in').'</span>',
                         ]) !!}
                     </p>

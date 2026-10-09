@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Role;
+use Atrium\Core\Models\Role;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;

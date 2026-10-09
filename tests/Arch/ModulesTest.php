@@ -7,7 +7,7 @@
 |
 | The rules in app/Modules/README.md, enforced: core never reaches into a
 | module, and modules never reach into each other. Talk across those lines
-| through contracts (App\Contracts), events, or Module::contribute()
+| through contracts (Atrium\Core\Contracts), events, or Module::contribute()
 | extension points — that's what keeps every module removable.
 |
 */

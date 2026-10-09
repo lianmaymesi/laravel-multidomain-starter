@@ -1,7 +1,7 @@
 <?php
 
-use App\Support\Toast;
 use App\Modules\Maintenance\Models\PortalSetting;
+use Atrium\Core\Support\Toast;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Layout;

@@ -90,7 +90,7 @@ Module::contribute('backoffice.nav', [[
 | `account.nav` | account portal sidebar + mobile bar | `label, route, icon, order, visible` (`visible` gets the user) |
 | `api.abilities` | API token abilities | `ability, description` |
 | `http.json-requests` | exception rendering | closure(Request): bool — render errors as JSON (e.g. the API host) |
-| `health.checks` | `/health`, `health:check`, System health page | class implementing `App\Support\Health\Check` |
+| `health.checks` | `/health`, `health:check`, System health page | class implementing `Atrium\Core\Support\Health\Check` |
 | `settings.fields` | `SettingsRegistry` (generic Settings form) | closure returning a `SettingField` (closure so labels translate per request) |
 | `permissions` | `RolePermissionSeeder` | permission name (use `permissions()` instead) |
 | `permissions.super-admin-only` | `RolePermissionSeeder` | names Admin must never get (use `superAdminOnlyPermissions()`) |
@@ -118,12 +118,12 @@ New modules are picked up automatically.
    contribute through an extension point so no check is needed.
 2. **Cross-module communication goes through events**, not direct calls. A
    disabled module's listener is simply never registered; the emitting module
-   never breaks. Core fires `App\Events\AccountDeleting` just before an account
+   never breaks. Core fires `Atrium\Core\Events\AccountDeleting` just before an account
    is anonymized — listen to it to clean up what your module owns (Billing
    cancels subscriptions there). A listener that throws stops the deletion and
    the queued job retries.
 3. **Where core needs a value from a module, depend on a contract with a
-   null-object fallback.** Example: `App\Contracts\Currencies` is bound to
+   null-object fallback.** Example: `Atrium\Core\Contracts\Currencies` is bound to
    `NullCurrencies` by default and rebound to the real service by the Currency
    module, so `Money::format()` works either way.
 4. **Blade: a module's anonymous component can't be written `<x-module::name />`

@@ -165,8 +165,8 @@
             <flux:icon.information-circle class="size-4 text-zinc-400 dark:text-white/25 mt-0.5 shrink-0" />
             <p class="text-xs text-zinc-400 dark:text-white/35 leading-relaxed">
                 {!! __('Export files are available for :days days after generation, then permanently deleted. Downloads are password-protected and limited to :max per 24 hours.', [
-                    'days' => '<span class="text-zinc-500 dark:text-white/50">'.\App\Models\AccountDataExport::EXPORT_TTL_DAYS.'</span>',
-                    'max' => '<span class="text-zinc-500 dark:text-white/50">'.\App\Models\AccountDataExport::MAX_DOWNLOADS_PER_DAY.'</span>',
+                    'days' => '<span class="text-zinc-500 dark:text-white/50">'.\Atrium\Core\Models\AccountDataExport::EXPORT_TTL_DAYS.'</span>',
+                    'max' => '<span class="text-zinc-500 dark:text-white/50">'.\Atrium\Core\Models\AccountDataExport::MAX_DOWNLOADS_PER_DAY.'</span>',
                 ]) !!}
             </p>
         </div>

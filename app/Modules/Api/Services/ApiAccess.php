@@ -2,9 +2,9 @@
 
 namespace App\Modules\Api\Services;
 
-use App\Models\AppSetting;
 use App\Models\User;
 use App\Modules\Api\Models\PersonalAccessToken;
+use Atrium\Core\Models\AppSetting;
 use Atrium\Core\Support\Modules\Module;
 
 /**

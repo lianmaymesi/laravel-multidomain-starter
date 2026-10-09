@@ -12,24 +12,37 @@
             "dist": {
                 "type": "path",
                 "url": "packages/core",
-                "reference": "dae62448a105373d99ca6296c130613e9585ed1c"
+                "reference": "d7d0f3aea49eed478203a0d42827a849bb2b05e6"
             },
             "require": {
+                "bacon/bacon-qr-code": "^3.0",
                 "laravel/framework": "^13.0",
+                "laravel/pennant": "^1.26",
+                "laravel/scout": "^11.8",
+                "livewire/flux": "^2.15",
+                "livewire/livewire": "^4.3.3",
                 "php": "^8.4",
-                "spatie/laravel-activitylog": "^4.12"
+                "pragmarx/google2fa-laravel": "^3.0",
+                "spatie/laravel-activitylog": "^4.12",
+                "spatie/laravel-backup": "^10.3",
+                "spatie/laravel-permission": "^8.3",
+                "twilio/sdk": "^8.11"
             },
             "type": "library",
             "extra": {
                 "laravel": {
                     "providers": [
+                        "Atrium\\Core\\Providers\\CoreServiceProvider",
+                        "Atrium\\Core\\Providers\\AuthServiceProvider",
+                        "Atrium\\Core\\Providers\\FeatureFlagsServiceProvider",
                         "Atrium\\Core\\Providers\\ModulesServiceProvider"
                     ]
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Atrium\\Core\\": "src/"
+                    "Atrium\\Core\\": "src/",
+                    "Atrium\\Core\\Database\\Factories\\": "database/factories/"
                 }
             },
             "license": [

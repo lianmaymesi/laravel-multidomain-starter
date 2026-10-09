@@ -1,13 +1,13 @@
 <?php
 
-use App\Concerns\ThrottlesActions;
-use App\Enums\OtpType;
-use App\Models\AccountDeletionRequest;
-use App\Notifications\PendingEmailVerification;
-use App\Notifications\VerifyEmail;
-use App\Services\AccountDeletionService;
-use App\Services\Auth\OtpService;
-use App\Contracts\SmsService;
+use Atrium\Core\Concerns\ThrottlesActions;
+use Atrium\Core\Contracts\SmsService;
+use Atrium\Core\Enums\OtpType;
+use Atrium\Core\Models\AccountDeletionRequest;
+use Atrium\Core\Notifications\PendingEmailVerification;
+use Atrium\Core\Notifications\VerifyEmail;
+use Atrium\Core\Services\AccountDeletionService;
+use Atrium\Core\Services\Auth\OtpService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
@@ -20,26 +20,31 @@ new #[Layout('layouts.accounts')] class extends Component
 
     // ── Profile section ───────────────────────────────────────────────
     public bool $editingName = false;
+
     public string $name = '';
 
     // ── Contact section — email ───────────────────────────────────────
     public bool $editingEmail = false;
+
     public string $newEmail = '';
 
     // ── Contact section — phone ───────────────────────────────────────
     public bool $editingPhone = false;
+
     public string $newPhone = '';
 
     // ── Delete account ────────────────────────────────────────────────
     public bool $showDeleteConfirm = false;
+
     public string $deletePassword = '';
+
     public ?AccountDeletionRequest $deletionRequest = null;
 
     // ─────────────────────────────────────────────────────────────────
 
     public function mount(): void
     {
-        $this->name           = Auth::user()->name;
+        $this->name = Auth::user()->name;
         $this->deletionRequest = Auth::user()->activeDeletionRequest();
     }
 
@@ -48,7 +53,7 @@ new #[Layout('layouts.accounts')] class extends Component
     public function editName(): void
     {
         $this->cancelAll();
-        $this->name        = Auth::user()->name;
+        $this->name = Auth::user()->name;
         $this->editingName = true;
         $this->dispatch('focus-name-input');
     }
@@ -56,7 +61,7 @@ new #[Layout('layouts.accounts')] class extends Component
     public function cancelName(): void
     {
         $this->resetValidation();
-        $this->name        = Auth::user()->name;
+        $this->name = Auth::user()->name;
         $this->editingName = false;
     }
 
@@ -74,15 +79,15 @@ new #[Layout('layouts.accounts')] class extends Component
     public function editEmail(): void
     {
         $this->cancelAll();
-        $this->newEmail      = '';
-        $this->editingEmail  = true;
+        $this->newEmail = '';
+        $this->editingEmail = true;
         $this->dispatch('focus-email-input');
     }
 
     public function cancelEmail(): void
     {
         $this->resetValidation();
-        $this->newEmail     = '';
+        $this->newEmail = '';
         $this->editingEmail = false;
     }
 
@@ -94,7 +99,7 @@ new #[Layout('layouts.accounts')] class extends Component
             'newEmail' => [
                 'required',
                 'email',
-                'different:' . $user->email,
+                'different:'.$user->email,
                 Rule::unique('users', 'email')->ignore($user->id),
                 Rule::unique('users', 'pending_email')->ignore($user->id),
             ],
@@ -106,14 +111,14 @@ new #[Layout('layouts.accounts')] class extends Component
         $token = Str::random(64);
 
         $user->forceFill([
-            'pending_email'              => $this->newEmail,
-            'pending_email_token'        => $token,
+            'pending_email' => $this->newEmail,
+            'pending_email_token' => $token,
             'pending_email_requested_at' => now(),
         ])->save();
 
         $user->notify(new PendingEmailVerification($token, $this->newEmail));
 
-        $this->newEmail     = '';
+        $this->newEmail = '';
         $this->editingEmail = false;
     }
 
@@ -134,8 +139,8 @@ new #[Layout('layouts.accounts')] class extends Component
     public function cancelEmailChange(): void
     {
         Auth::user()->forceFill([
-            'pending_email'              => null,
-            'pending_email_token'        => null,
+            'pending_email' => null,
+            'pending_email_token' => null,
             'pending_email_requested_at' => null,
         ])->save();
     }
@@ -153,7 +158,7 @@ new #[Layout('layouts.accounts')] class extends Component
         $token = Str::random(64);
 
         $user->forceFill([
-            'pending_email_token'        => $token,
+            'pending_email_token' => $token,
             'pending_email_requested_at' => now(),
         ])->save();
 
@@ -171,7 +176,7 @@ new #[Layout('layouts.accounts')] class extends Component
         }
 
         $this->cancelAll();
-        $this->newPhone     = '';
+        $this->newPhone = '';
         $this->editingPhone = true;
         $this->dispatch('focus-phone-input');
     }
@@ -179,7 +184,7 @@ new #[Layout('layouts.accounts')] class extends Component
     public function cancelPhone(): void
     {
         $this->resetValidation();
-        $this->newPhone     = '';
+        $this->newPhone = '';
         $this->editingPhone = false;
     }
 
@@ -199,7 +204,7 @@ new #[Layout('layouts.accounts')] class extends Component
         $this->throttle('phone-change', (string) $user->id, 'newPhone');
 
         $user->forceFill([
-            'phone'             => $this->newPhone,
+            'phone' => $this->newPhone,
             'phone_verified_at' => null,
         ])->save();
 
@@ -248,9 +253,9 @@ new #[Layout('layouts.accounts')] class extends Component
 
     private function cancelAll(): void
     {
-        $this->editingName       = false;
-        $this->editingEmail      = false;
-        $this->editingPhone      = false;
+        $this->editingName = false;
+        $this->editingEmail = false;
+        $this->editingPhone = false;
         $this->showDeleteConfirm = false;
         $this->resetValidation();
     }

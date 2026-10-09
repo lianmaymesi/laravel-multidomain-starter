@@ -2,7 +2,7 @@
 
 use App\Features\HelloWorldAdvanced;
 use App\Models\User;
-use App\Support\Features\Flags;
+use Atrium\Core\Support\Features\Flags;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Lottery;
 use Laravel\Pennant\Feature;

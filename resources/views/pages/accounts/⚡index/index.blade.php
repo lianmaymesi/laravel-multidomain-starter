@@ -392,7 +392,7 @@
                             <p class="text-sm font-medium text-zinc-900 dark:text-white/90">{{ __('Request account deletion') }}</p>
                             <p class="text-xs text-zinc-500 dark:text-white/50 space-y-1">
                                 {!! __("You'll be signed out of all sessions immediately. Your account enters a :period before personal data is deleted.", [
-                                    'period' => '<span class="text-zinc-700 dark:text-white/70">'.__(':days-day cooling period', ['days' => \App\Models\AccountDeletionRequest::GRACE_PERIOD_DAYS]).'</span>',
+                                    'period' => '<span class="text-zinc-700 dark:text-white/70">'.__(':days-day cooling period', ['days' => \Atrium\Core\Models\AccountDeletionRequest::GRACE_PERIOD_DAYS]).'</span>',
                                 ]) !!}<br>
                                 {!! __("To cancel, simply :signBackIn during this period — logging in cancels the deletion automatically. After the cooling period your account will be permanently gone and you won't be able to sign in.", [
                                     'signBackIn' => '<span class="text-zinc-700 dark:text-white/70">'.__('sign back in').'</span>',

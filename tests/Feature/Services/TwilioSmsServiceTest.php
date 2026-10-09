@@ -1,6 +1,6 @@
 <?php
 
-use App\Services\Auth\TwilioSmsService;
+use Atrium\Core\Services\Auth\TwilioSmsService;
 use Illuminate\Support\Facades\Log;
 
 it('returns false and logs a warning when twilio credentials are not configured', function () {

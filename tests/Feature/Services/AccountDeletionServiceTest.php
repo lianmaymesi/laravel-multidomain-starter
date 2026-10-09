@@ -1,10 +1,10 @@
 <?php
 
-use App\Models\AccountDeletionRequest;
 use App\Models\User;
-use App\Notifications\AccountDeletionCancelled;
-use App\Notifications\AccountDeletionRequested;
-use App\Services\AccountDeletionService;
+use Atrium\Core\Models\AccountDeletionRequest;
+use Atrium\Core\Notifications\AccountDeletionCancelled;
+use Atrium\Core\Notifications\AccountDeletionRequested;
+use Atrium\Core\Services\AccountDeletionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;

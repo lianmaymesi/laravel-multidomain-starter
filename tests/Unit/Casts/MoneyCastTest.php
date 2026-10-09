@@ -1,8 +1,8 @@
 <?php
 
-use App\Casts\MoneyCast;
 use App\Modules\Currency\Models\Currency;
-use App\Support\Money;
+use Atrium\Core\Casts\MoneyCast;
+use Atrium\Core\Support\Money;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

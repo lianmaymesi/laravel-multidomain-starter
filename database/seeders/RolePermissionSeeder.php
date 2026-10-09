@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\Permission;
-use App\Models\Role;
+use Atrium\Core\Models\Permission;
+use Atrium\Core\Models\Role;
 use Atrium\Core\Support\Modules\Module;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;

@@ -1,9 +1,9 @@
 <?php
 
-use App\Concerns\ThrottlesActions;
 use App\Models\User;
-use App\Services\AccountDeletionService;
-use App\Services\Auth\TwoFactorService;
+use Atrium\Core\Concerns\ThrottlesActions;
+use Atrium\Core\Services\AccountDeletionService;
+use Atrium\Core\Services\Auth\TwoFactorService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
@@ -26,7 +26,7 @@ new #[Layout('layouts.auth')] class extends Component
     public function mount(): void
     {
         // Must have a pending 2FA session (set in Login component)
-        if (!session('2fa_user_id')) {
+        if (! session('2fa_user_id')) {
             $this->redirect(route('auth.login'), navigate: true);
         }
     }
@@ -46,7 +46,7 @@ new #[Layout('layouts.auth')] class extends Component
             ? $twoFactor->verifyRecoveryCode($user, $this->code)
             : $twoFactor->verify($user, $this->code);
 
-        if (!$valid) {
+        if (! $valid) {
             $this->hitThrottle('two-factor', (string) $user->id);
             $this->hitThrottle('two-factor-ip', request()->ip());
 
@@ -69,6 +69,7 @@ new #[Layout('layouts.auth')] class extends Component
             app(AccountDeletionService::class)->cancel($deletion);
             session()->flash('deletion_cancelled', true);
             $this->redirect(route('account.index'), navigate: false);
+
             return;
         }
 
@@ -77,7 +78,7 @@ new #[Layout('layouts.auth')] class extends Component
 
     public function toggleRecovery(): void
     {
-        $this->usingRecovery = !$this->usingRecovery;
+        $this->usingRecovery = ! $this->usingRecovery;
         $this->code = '';
         $this->resetErrorBag();
     }

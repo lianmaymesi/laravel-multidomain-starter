@@ -1,8 +1,8 @@
 <?php
 
-use App\Enums\OtpType;
-use App\Services\Auth\OtpService;
-use App\Contracts\SmsService;
+use Atrium\Core\Contracts\SmsService;
+use Atrium\Core\Enums\OtpType;
+use Atrium\Core\Services\Auth\OtpService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Layout;
@@ -64,7 +64,7 @@ new #[Layout('layouts.auth')] class extends Component
     public function verify(OtpService $otpService): void
     {
         $this->validate([
-            'code' => ['required', 'numeric', 'digits:6']
+            'code' => ['required', 'numeric', 'digits:6'],
         ]);
 
         $user = Auth::user();
@@ -76,6 +76,7 @@ new #[Layout('layouts.auth')] class extends Component
 
         if ($user->hasTwoFactorEnabled()) {
             $this->redirect(route('auth.two-factor-challenge'), navigate: true);
+
             return;
         }
 
@@ -135,14 +136,14 @@ new #[Layout('layouts.auth')] class extends Component
 
         $this->validate([
             'newCountryCode' => $isMultiCountry ? ['required', 'string'] : ['nullable', 'string'],
-            'newPhone'       => ['required', 'string', 'regex:/^\d{10}$/'],
+            'newPhone' => ['required', 'string', 'regex:/^\d{10}$/'],
         ]);
 
         $user = Auth::user();
 
         // Update phone on the user record
         $user->country_code = $isMultiCountry ? $this->newCountryCode : config('multidomain.phone_default_country_code');
-        $user->phone        = $this->newPhone;
+        $user->phone = $this->newPhone;
         $user->save();
 
         // Generate and send a fresh OTP to the new number

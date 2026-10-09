@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\OtpCode;
 use App\Models\User;
+use Atrium\Core\Models\OtpCode;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

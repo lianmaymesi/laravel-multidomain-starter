@@ -1,9 +1,9 @@
 <?php
 
-use App\Contracts\SmsService;
-use App\Models\AccountDeletionRequest;
 use App\Models\User;
-use App\Notifications\PendingEmailVerification;
+use Atrium\Core\Contracts\SmsService;
+use Atrium\Core\Models\AccountDeletionRequest;
+use Atrium\Core\Notifications\PendingEmailVerification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;

@@ -1,10 +1,10 @@
 <?php
 
-use App\Concerns\ThrottlesActions;
-use App\Enums\OtpType;
 use App\Models\User;
-use App\Services\Auth\OtpService;
-use App\Contracts\SmsService;
+use Atrium\Core\Concerns\ThrottlesActions;
+use Atrium\Core\Contracts\SmsService;
+use Atrium\Core\Enums\OtpType;
+use Atrium\Core\Services\Auth\OtpService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;

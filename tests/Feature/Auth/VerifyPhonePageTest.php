@@ -1,9 +1,9 @@
 <?php
 
-use App\Contracts\SmsService;
-use App\Enums\OtpType;
-use App\Models\OtpCode;
 use App\Models\User;
+use Atrium\Core\Contracts\SmsService;
+use Atrium\Core\Enums\OtpType;
+use Atrium\Core\Models\OtpCode;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 

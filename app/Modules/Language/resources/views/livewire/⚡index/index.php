@@ -1,7 +1,7 @@
 <?php
 
-use App\Support\Toast;
 use App\Modules\Language\Models\Language;
+use Atrium\Core\Support\Toast;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;

@@ -1,8 +1,9 @@
 <?php
 
-use App\Models\Permission;
-use App\Models\Role;
 use App\Models\User;
+use Atrium\Core\Models\Permission;
+use Atrium\Core\Models\Role;
+use Illuminate\Support\Collection;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -16,7 +17,7 @@ new #[Layout('layouts.backoffice')] class extends Component
 
     public int $totalPermissions = 0;
 
-    /** @var \Illuminate\Support\Collection<int, User> */
+    /** @var Collection<int, User> */
     public $recentUsers;
 
     public function mount(): void

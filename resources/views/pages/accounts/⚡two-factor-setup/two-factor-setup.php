@@ -1,7 +1,7 @@
 <?php
 
-use App\Concerns\ThrottlesActions;
-use App\Services\Auth\TwoFactorService;
+use Atrium\Core\Concerns\ThrottlesActions;
+use Atrium\Core\Services\Auth\TwoFactorService;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
@@ -39,6 +39,7 @@ new #[Layout('layouts.accounts')] class extends Component
 
         if ($user->hasTwoFactorEnabled()) {
             $this->confirmed = true;
+
             return;
         }
 
@@ -60,33 +61,34 @@ new #[Layout('layouts.accounts')] class extends Component
         if (! $twoFactor->confirm($user, $this->code)) {
             $this->hitThrottle('two-factor-setup', (string) $user->id);
             $this->addError('code', __('Invalid code. Please scan the QR again and try.'));
+
             return;
         }
 
         $this->clearThrottle('two-factor-setup', (string) $user->id);
 
-        $this->confirmed      = true;
-        $this->justConfirmed  = true;
+        $this->confirmed = true;
+        $this->justConfirmed = true;
         $this->showRecoveryCodes = true;
-        $this->recoveryCodes  = $user->fresh()->twoFactorRecoveryCodes();
+        $this->recoveryCodes = $user->fresh()->twoFactorRecoveryCodes();
     }
 
     public function viewRecoveryCodes(): void
     {
-        $this->recoveryCodes     = Auth::user()->twoFactorRecoveryCodes();
+        $this->recoveryCodes = Auth::user()->twoFactorRecoveryCodes();
         $this->showRecoveryCodes = true;
     }
 
     public function hideRecoveryCodes(): void
     {
         $this->showRecoveryCodes = false;
-        $this->recoveryCodes     = [];
+        $this->recoveryCodes = [];
     }
 
     public function regenerateRecoveryCodes(TwoFactorService $twoFactor): void
     {
         $twoFactor->regenerateRecoveryCodes(Auth::user());
-        $this->recoveryCodes     = Auth::user()->fresh()->twoFactorRecoveryCodes();
+        $this->recoveryCodes = Auth::user()->fresh()->twoFactorRecoveryCodes();
         $this->showRecoveryCodes = true;
     }
 
@@ -95,11 +97,11 @@ new #[Layout('layouts.accounts')] class extends Component
         $twoFactor->disable(Auth::user());
         $twoFactor->generateSecret(Auth::user());
 
-        $this->confirmed         = false;
-        $this->justConfirmed     = false;
+        $this->confirmed = false;
+        $this->justConfirmed = false;
         $this->showRecoveryCodes = false;
-        $this->recoveryCodes     = [];
-        $this->qrCodeSvg         = $twoFactor->qrCodeSvg(Auth::user()->fresh());
+        $this->recoveryCodes = [];
+        $this->qrCodeSvg = $twoFactor->qrCodeSvg(Auth::user()->fresh());
     }
 
     public function reconfigure(TwoFactorService $twoFactor): void
@@ -107,11 +109,11 @@ new #[Layout('layouts.accounts')] class extends Component
         $twoFactor->disable(Auth::user());
         $twoFactor->generateSecret(Auth::user());
 
-        $this->confirmed         = false;
-        $this->justConfirmed     = false;
+        $this->confirmed = false;
+        $this->justConfirmed = false;
         $this->showRecoveryCodes = false;
-        $this->recoveryCodes     = [];
-        $this->qrCodeSvg         = $twoFactor->qrCodeSvg(Auth::user()->fresh());
+        $this->recoveryCodes = [];
+        $this->qrCodeSvg = $twoFactor->qrCodeSvg(Auth::user()->fresh());
     }
 
     public function skip(): void

@@ -1,6 +1,6 @@
 <?php
 
-use App\Jobs\RunBackup;
+use Atrium\Core\Jobs\RunBackup;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Testing\RefreshDatabase;

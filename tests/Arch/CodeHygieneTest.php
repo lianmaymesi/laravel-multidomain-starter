@@ -26,11 +26,11 @@ arch('env() is only read in config files')
     ->ignoring('Database\Seeders\AdminUserSeeder');
 
 arch('contracts are interfaces')
-    ->expect('App\Contracts')
+    ->expect('Atrium\Core\Contracts')
     ->toBeInterfaces();
 
 arch('concerns are traits')
-    ->expect('App\Concerns')
+    ->expect('Atrium\Core\Concerns')
     ->toBeTraits();
 
 arch('core models are Eloquent models')
@@ -47,7 +47,7 @@ arch('seeders are seeders')
     ->toExtend(Seeder::class);
 
 arch('enums are enums')
-    ->expect('App\Enums')
+    ->expect('Atrium\Core\Enums')
     ->toBeEnums();
 
 arch('atrium core never reads env()')

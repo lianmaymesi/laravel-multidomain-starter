@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\Role;
 use App\Models\User;
 use App\Modules\Api\Services\ApiAccess;
 use App\Modules\Api\Services\TokenIssuer;
+use Atrium\Core\Models\Role;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\PersonalAccessToken;

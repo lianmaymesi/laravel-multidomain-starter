@@ -1,6 +1,6 @@
 <?php
 
-use App\Support\Features\Portal;
+use Atrium\Core\Support\Features\Portal;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Pennant\Feature;

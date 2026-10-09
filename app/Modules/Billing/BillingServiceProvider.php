@@ -2,11 +2,11 @@
 
 namespace App\Modules\Billing;
 
-use App\Events\AccountDeleting;
 use App\Modules\Billing\Health\BillingCheck;
 use App\Modules\Billing\Listeners\CancelSubscriptionsOnAccountDeletion;
 use App\Modules\Billing\Listeners\LogSubscriptionWebhook;
 use App\Modules\Billing\Services\Plans;
+use Atrium\Core\Events\AccountDeleting;
 use Atrium\Core\Support\Modules\Module;
 use Atrium\Core\Support\Modules\ModuleProvider;
 use Illuminate\Support\Facades\Event;

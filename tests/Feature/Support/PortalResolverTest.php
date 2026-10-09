@@ -1,9 +1,9 @@
 <?php
 
-use App\Contracts\Languages;
-use App\Models\AppSetting;
-use App\Support\NullLanguages;
-use App\Support\PortalResolver;
+use Atrium\Core\Contracts\Languages;
+use Atrium\Core\Models\AppSetting;
+use Atrium\Core\Support\NullLanguages;
+use Atrium\Core\Support\PortalResolver;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\Request;
 

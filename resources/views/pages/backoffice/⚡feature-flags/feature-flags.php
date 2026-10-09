@@ -1,10 +1,10 @@
 <?php
 
 use App\Models\User;
-use App\Support\Features\FeatureFlag;
-use App\Support\Features\Flags;
-use App\Support\Features\Portal;
-use App\Support\Features\PortalFlag;
+use Atrium\Core\Support\Features\FeatureFlag;
+use Atrium\Core\Support\Features\Flags;
+use Atrium\Core\Support\Features\Portal;
+use Atrium\Core\Support\Features\PortalFlag;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;

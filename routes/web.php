@@ -1,8 +1,8 @@
 <?php
 
-use App\Contracts\Languages;
-use App\Http\Controllers\Accounts\DataExportController;
-use App\Models\AppSetting;
+use Atrium\Core\Contracts\Languages;
+use Atrium\Core\Http\Controllers\Accounts\DataExportController;
+use Atrium\Core\Models\AppSetting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;

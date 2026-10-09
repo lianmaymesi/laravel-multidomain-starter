@@ -1,8 +1,8 @@
 <?php
 
-use App\Jobs\DeleteUserAccount;
 use App\Models\User;
-use App\Services\AccountDeletionService;
+use Atrium\Core\Jobs\DeleteUserAccount;
+use Atrium\Core\Services\AccountDeletionService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

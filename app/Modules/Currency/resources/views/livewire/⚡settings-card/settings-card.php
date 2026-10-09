@@ -1,8 +1,9 @@
 <?php
 
-use App\Support\Toast;
 use App\Modules\Currency\Models\Currency;
 use App\Modules\Currency\Services\ExchangeRateService;
+use Atrium\Core\Support\Toast;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Component;
 
@@ -38,7 +39,7 @@ new class extends Component
     }
 
     /**
-     * @return \Illuminate\Support\Collection<int, Currency>
+     * @return Collection<int, Currency>
      */
     public function activeCurrencies()
     {
@@ -46,7 +47,7 @@ new class extends Component
     }
 
     /**
-     * @return \Illuminate\Support\Collection<int, Currency>
+     * @return Collection<int, Currency>
      */
     public function availableCurrenciesToAdd()
     {

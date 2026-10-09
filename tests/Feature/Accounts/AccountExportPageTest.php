@@ -1,8 +1,8 @@
 <?php
 
-use App\Jobs\ExportUserData;
-use App\Models\AccountDataExport;
 use App\Models\User;
+use Atrium\Core\Jobs\ExportUserData;
+use Atrium\Core\Models\AccountDataExport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Queue;

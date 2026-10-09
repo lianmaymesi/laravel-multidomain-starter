@@ -11,7 +11,7 @@ return [
     |
     | Livewire actions (login, 2FA, register, ...) are posted to
     | /livewire/update, so route `throttle` middleware never sees them — they
-    | are checked inside the component with App\Concerns\ThrottlesActions.
+    | are checked inside the component with Atrium\Core\Concerns\ThrottlesActions.
     | Plain HTTP routes (downloads, emailed links) use the named limiters
     | registered in AppServiceProvider from the same values.
     |

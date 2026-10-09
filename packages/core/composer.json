@@ -16,17 +16,30 @@
     "type": "library",
     "require": {
         "php": "^8.4",
+        "bacon/bacon-qr-code": "^3.0",
         "laravel/framework": "^13.0",
-        "spatie/laravel-activitylog": "^4.12"
+        "laravel/pennant": "^1.26",
+        "laravel/scout": "^11.8",
+        "livewire/flux": "^2.15",
+        "livewire/livewire": "^4.3.3",
+        "pragmarx/google2fa-laravel": "^3.0",
+        "spatie/laravel-activitylog": "^4.12",
+        "spatie/laravel-backup": "^10.3",
+        "spatie/laravel-permission": "^8.3",
+        "twilio/sdk": "^8.11"
     },
     "autoload": {
         "psr-4": {
-            "Atrium\\Core\\": "src/"
+            "Atrium\\Core\\": "src/",
+            "Atrium\\Core\\Database\\Factories\\": "database/factories/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
+                "Atrium\\Core\\Providers\\CoreServiceProvider",
+                "Atrium\\Core\\Providers\\AuthServiceProvider",
+                "Atrium\\Core\\Providers\\FeatureFlagsServiceProvider",
                 "Atrium\\Core\\Providers\\ModulesServiceProvider"
             ]
         }

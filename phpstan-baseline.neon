@@ -1,16 +1,16 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Trait App\\Concerns\\SortsTable is used zero times and is not analysed\.$#'
+			message: '#^Trait Atrium\\Core\\Concerns\\SortsTable is used zero times and is not analysed\.$#'
 			identifier: trait.unused
 			count: 1
-			path: app/Concerns/SortsTable.php
+			path: packages/core/src/Concerns/SortsTable.php
 
 		-
-			message: '#^Trait App\\Concerns\\ThrottlesActions is used zero times and is not analysed\.$#'
+			message: '#^Trait Atrium\\Core\\Concerns\\ThrottlesActions is used zero times and is not analysed\.$#'
 			identifier: trait.unused
 			count: 1
-			path: app/Concerns/ThrottlesActions.php
+			path: packages/core/src/Concerns/ThrottlesActions.php
 
 		-
 			message: '#^Using nullsafe method call on non\-nullable type Illuminate\\Support\\Carbon\. Use \-\> instead\.$#'
@@ -55,7 +55,7 @@ parameters:
 			path: app/Modules/Language/Seeders/LanguageSeeder.php
 
 		-
-			message: '#^Return type \(Illuminate\\Support\\Collection\<int, App\\Modules\\Language\\Models\\Language\>\) of method App\\Modules\\Language\\Services\\LanguageService\:\:active\(\) should be compatible with return type \(Illuminate\\Support\\Collection\<int, object\>\) of method App\\Contracts\\Languages\:\:active\(\)$#'
+			message: '#^Return type \(Illuminate\\Support\\Collection\<int, App\\Modules\\Language\\Models\\Language\>\) of method App\\Modules\\Language\\Services\\LanguageService\:\:active\(\) should be compatible with return type \(Illuminate\\Support\\Collection\<int, object\>\) of method Atrium\\Core\\Contracts\\Languages\:\:active\(\)$#'
 			identifier: method.childReturnType
 			count: 1
 			path: app/Modules/Language/Services/LanguageService.php

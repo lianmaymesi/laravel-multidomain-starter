@@ -1,9 +1,9 @@
 <?php
 
-use App\Enums\OtpType;
-use App\Models\OtpCode;
 use App\Models\User;
-use App\Notifications\VerifyEmail;
+use Atrium\Core\Enums\OtpType;
+use Atrium\Core\Models\OtpCode;
+use Atrium\Core\Notifications\VerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Livewire\Livewire;

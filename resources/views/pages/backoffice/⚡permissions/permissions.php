@@ -1,8 +1,8 @@
 <?php
 
-use App\Support\Toast;
-use App\Concerns\SortsTable;
-use App\Models\Permission;
+use Atrium\Core\Concerns\SortsTable;
+use Atrium\Core\Models\Permission;
+use Atrium\Core\Support\Toast;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;

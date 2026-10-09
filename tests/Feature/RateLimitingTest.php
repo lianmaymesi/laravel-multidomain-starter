@@ -1,7 +1,7 @@
 <?php
 
-use App\Contracts\SmsService;
 use App\Models\User;
+use Atrium\Core\Contracts\SmsService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;

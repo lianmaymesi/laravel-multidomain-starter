@@ -1,9 +1,9 @@
 <?php
 
-use App\Console\Commands\HealthCheckCommand;
-use App\Notifications\HealthStatusChanged;
-use App\Support\Health\HealthChecker;
-use App\Support\Health\Status;
+use Atrium\Core\Console\Commands\HealthCheckCommand;
+use Atrium\Core\Notifications\HealthStatusChanged;
+use Atrium\Core\Support\Health\HealthChecker;
+use Atrium\Core\Support\Health\Status;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Notifications\AnonymousNotifiable;
 use Illuminate\Support\Facades\Artisan;
