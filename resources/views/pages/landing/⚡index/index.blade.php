@@ -5,14 +5,14 @@
     {{-- Hero --}}
     <div class="mx-auto max-w-2xl text-center">
         <div class="mx-auto flex w-fit items-center gap-2">
-            <a href="https://github.com/lianmaymesi/laravel-multidomain-starter" target="_blank" rel="noopener"
+            <a href="https://github.com/atrium/atrium" target="_blank" rel="noopener"
                 class="flex items-center gap-1.5 border border-zinc-200 dark:border-white/10 bg-zinc-100 dark:bg-white/5 px-3 py-1 text-xs text-zinc-600 dark:text-white/60 transition-colors hover:border-zinc-300 dark:hover:border-white/20 hover:bg-zinc-200 dark:hover:bg-white/10 hover:text-zinc-900 dark:hover:text-white">
                 <svg class="size-3.5" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                     <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z" />
                 </svg>
                 {{ __('View on GitHub') }}
             </a>
-            <a href="https://github.com/lianmaymesi/laravel-multidomain-starter#readme" target="_blank" rel="noopener"
+            <a href="https://github.com/atrium/atrium#readme" target="_blank" rel="noopener"
                 class="flex items-center gap-1.5 border border-zinc-200 dark:border-white/10 bg-zinc-100 dark:bg-white/5 px-3 py-1 text-xs text-zinc-600 dark:text-white/60 transition-colors hover:border-zinc-300 dark:hover:border-white/20 hover:bg-zinc-200 dark:hover:bg-white/10 hover:text-zinc-900 dark:hover:text-white">
                 <flux:icon.book-open class="size-3.5" />
                 {{ __('Documentation') }}
@@ -25,7 +25,7 @@
         </h1>
 
         <flux:text class="mx-auto mt-4 max-w-xl text-zinc-500 dark:text-white/50">
-            {{ __('Laravel Multidomain Starter splits your application across dedicated subdomains — app, backoffice, account and auth — each with its own layout, assets and middleware, wired together from one codebase.') }}
+            {{ __('Atrium splits your application across dedicated subdomains — app, backoffice, account and auth — each with its own layout, assets and middleware, wired together from one codebase.') }}
         </flux:text>
 
         <div class="mt-8 flex items-center justify-center gap-3">
@@ -41,7 +41,7 @@
     {{-- Feature grid --}}
     <div class="mx-auto mt-16 grid w-full max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2">
 
-        <flux:card as="a" href="https://github.com/lianmaymesi/laravel-multidomain-starter/blob/main/config/multidomain.php"
+        <flux:card as="a" href="https://github.com/atrium/atrium/blob/main/config/multidomain.php"
             target="_blank" rel="noopener" class="space-y-2">
             <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-500/15">
                 <flux:icon.globe-alt class="size-4.5 text-blue-600 dark:text-blue-400" />
@@ -51,7 +51,7 @@
             <flux:text class="text-sm text-blue-600 dark:text-blue-400">{{ __('View config →') }}</flux:text>
         </flux:card>
 
-        <flux:card as="a" href="https://github.com/lianmaymesi/laravel-multidomain-starter/blob/main/app/Console/Commands/MakeSubdomainCommand.php"
+        <flux:card as="a" href="https://github.com/atrium/atrium/blob/main/app/Console/Commands/MakeSubdomainCommand.php"
             target="_blank" rel="noopener" class="space-y-2">
             <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-500/15">
                 <flux:icon.command-line class="size-4.5 text-blue-600 dark:text-blue-400" />

@@ -24,6 +24,7 @@ Homestead.yaml
 Thumbs.db
 /tall-auth-kit
 /laravel-multidomain-starter-docs
+/atrium-docs
 
 # AI agent tooling (local only)
 /.agents

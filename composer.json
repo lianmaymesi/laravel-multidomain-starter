@@ -1,14 +1,22 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "lianmaymesi/laravel-multidomain-starter",
+    "name": "atrium/atrium",
     "type": "project",
-    "description": "A Laravel starter kit for multi-subdomain apps: dedicated auth, account, app, and backoffice portals with an optional single-domain mode.",
+    "description": "Atrium: a free, modular, upgradable Laravel platform for multi-portal apps. Build modules, sell them, keep upgrading.",
     "keywords": [
         "laravel",
-        "starter-kit",
+        "atrium",
+        "platform",
+        "modular",
         "multidomain",
         "subdomain"
     ],
+    "homepage": "https://github.com/atrium/atrium",
+    "support": {
+        "issues": "https://github.com/atrium/atrium/issues",
+        "source": "https://github.com/atrium/atrium",
+        "docs": "https://atrium.github.io/atrium-docs/"
+    },
     "license": "MIT",
     "require": {
         "php": "^8.4",

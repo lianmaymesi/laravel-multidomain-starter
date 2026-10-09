@@ -1,13 +1,16 @@
-# Laravel Multidomain Starter
+# Atrium
 
-[![CI](https://github.com/lianmaymesi/laravel-multidomain-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/lianmaymesi/laravel-multidomain-starter/actions/workflows/ci.yml)
-[![Latest Version](https://img.shields.io/github/v/release/lianmaymesi/laravel-multidomain-starter?include_prereleases)](https://github.com/lianmaymesi/laravel-multidomain-starter/releases)
-[![Installs](https://img.shields.io/github/downloads/lianmaymesi/laravel-multidomain-starter/total)](https://github.com/lianmaymesi/laravel-multidomain-starter/releases)
-[![License](https://img.shields.io/github/license/lianmaymesi/laravel-multidomain-starter)](LICENSE)
+[![CI](https://github.com/atrium/atrium/actions/workflows/ci.yml/badge.svg)](https://github.com/atrium/atrium/actions/workflows/ci.yml)
+[![Latest Version](https://img.shields.io/github/v/release/atrium/atrium?include_prereleases)](https://github.com/atrium/atrium/releases)
+[![License](https://img.shields.io/github/license/atrium/atrium)](LICENSE)
 
-A Laravel 13 + Livewire 4 starter kit for apps split across multiple subdomains — dedicated `auth`, `account`, `app`, `backoffice`, and `landing` portals — with an optional single-domain mode for apps that don't need the split.
+_A free, modular, upgradable Laravel platform for multi-portal apps. Build modules, sell them, keep upgrading._
 
-Full docs (setup, single-vs-multi domain, SSO, the `make:subdomain` command): **[docs site](https://lianmaymesi.github.io/laravel-multidomain-starter-docs/)**
+Laravel 13 + Livewire 4, split across dedicated `auth`, `account`, `app`, `backoffice`, and `landing` portals, with an optional single-domain mode for apps that don't need the split. Atrium is MIT-licensed, and so is every first-party module.
+
+> **Formerly `lianmaymesi/laravel-multidomain-starter`.** Atrium is moving from a starter kit to installed, upgradable packages (`atrium/core`, `atrium/billing`, …) plus a thin `atrium/skeleton`. Until the first tagged release, install from this repository.
+
+Full docs (setup, single-vs-multi domain, SSO, the `make:subdomain` command): **[docs site](https://atrium.github.io/atrium-docs/)**
 
 ## Requirements
 
@@ -23,7 +26,7 @@ Full docs (setup, single-vs-multi domain, SSO, the `make:subdomain` command): **
 ## Quick start
 
 ```bash
-laravel new my-app --using=lianmaymesi/laravel-multidomain-starter
+git clone https://github.com/atrium/atrium.git my-app && cd my-app && composer setup
 ```
 
 Set `APP_MAIN_DOMAIN` in `.env` to your local dev domain (e.g. `yourapp.test` via [Laravel Herd](https://herd.laravel.com)), then visit `auth.yourapp.test`, `app.yourapp.test`, `account.yourapp.test`, `backoffice.yourapp.test`, or the main domain for the landing page.

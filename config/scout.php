@@ -14,7 +14,7 @@ return [
     | Supported: "algolia", "meilisearch", "typesense", "turbopuffer",
     |            "database", "collection", "null"
     |
-    | The starter kit defaults to "database": it searches the model's own
+    | Atrium defaults to "database": it searches the model's own
     | table (LIKE, or full-text on columns marked #[SearchUsingFullText]),
     | so there is no index to build or extra service to run. Switch to
     | Meilisearch once tables outgrow that — see README "Search".

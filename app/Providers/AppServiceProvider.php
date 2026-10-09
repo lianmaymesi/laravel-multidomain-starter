@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        // Twilio is the starter kit's default SmsService — swap the bound
+        // Twilio is Atrium's default SmsService — swap the bound
         // concrete class here to use a different provider.
         $this->app->bind(SmsService::class, TwilioSmsService::class);
 

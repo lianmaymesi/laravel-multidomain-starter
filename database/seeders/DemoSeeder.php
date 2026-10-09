@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
- * Demo data for trying the starter kit — never for production (app:setup
+ * Demo data for trying Atrium — never for production (app:setup
  * refuses it there). One account per kind of user, so every portal has
  * someone to sign in as, plus a little data for enabled modules.
  *

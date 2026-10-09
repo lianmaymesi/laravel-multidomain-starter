@@ -25,7 +25,7 @@
 
             {{-- Tagline --}}
             <div>
-                <p class="mb-3 text-[10px] tracking-[0.35em] uppercase text-blue-300/50">Laravel Multidomain Starter</p>
+                <p class="mb-3 text-[10px] tracking-[0.35em] uppercase text-blue-300/50">Atrium</p>
                 <h2 class="text-5xl font-extrabold leading-[1.05] tracking-tighter text-white">
                     {{ __('Ship apps') }}<br>
                     <span class="text-blue-300">{{ __('across') }}</span><br>
