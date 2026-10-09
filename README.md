@@ -8,7 +8,7 @@ _A free, modular, upgradable Laravel platform for multi-portal apps. Build modul
 
 Laravel 13 + Livewire 4, split across dedicated `auth`, `account`, `app`, `backoffice`, and `landing` portals, with an optional single-domain mode for apps that don't need the split. Atrium is MIT-licensed, and so is every first-party module.
 
-> **Formerly `lianmaymesi/laravel-multidomain-starter`.** Atrium is moving from a starter kit to installed, upgradable packages (`atrium/core`, `atrium/billing`, …) plus a thin `atrium/skeleton`. Until the first tagged release, install from this repository.
+> **Formerly `lianmaymesi/laravel-multidomain-starter`.** Atrium is moving from a starter kit to installed, upgradable packages (`atrium-php/core`, `atrium-php/billing`, …) plus a thin `atrium-php/skeleton`. Until the first tagged release, install from this repository.
 
 Full docs (setup, single-vs-multi domain, SSO, the `make:subdomain` command): **[docs site](https://atrium-php.github.io/atrium-docs/)**
 

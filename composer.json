@@ -1,6 +1,6 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "atrium/atrium",
+    "name": "atrium-php/atrium",
     "type": "project",
     "description": "Atrium: a free, modular, upgradable Laravel platform for multi-portal apps. Build modules, sell them, keep upgrading.",
     "keywords": [
