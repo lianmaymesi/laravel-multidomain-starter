@@ -1,8 +1,8 @@
 # Atrium
 
-[![CI](https://github.com/atrium/atrium/actions/workflows/ci.yml/badge.svg)](https://github.com/atrium/atrium/actions/workflows/ci.yml)
-[![Latest Version](https://img.shields.io/github/v/release/atrium/atrium?include_prereleases)](https://github.com/atrium/atrium/releases)
-[![License](https://img.shields.io/github/license/atrium/atrium)](LICENSE)
+[![CI](https://github.com/atrium-php/atrium/actions/workflows/ci.yml/badge.svg)](https://github.com/atrium-php/atrium/actions/workflows/ci.yml)
+[![Latest Version](https://img.shields.io/github/v/release/atrium-php/atrium?include_prereleases)](https://github.com/atrium-php/atrium/releases)
+[![License](https://img.shields.io/github/license/atrium-php/atrium)](LICENSE)
 
 _A free, modular, upgradable Laravel platform for multi-portal apps. Build modules, sell them, keep upgrading._
 
@@ -10,7 +10,7 @@ Laravel 13 + Livewire 4, split across dedicated `auth`, `account`, `app`, `backo
 
 > **Formerly `lianmaymesi/laravel-multidomain-starter`.** Atrium is moving from a starter kit to installed, upgradable packages (`atrium/core`, `atrium/billing`, …) plus a thin `atrium/skeleton`. Until the first tagged release, install from this repository.
 
-Full docs (setup, single-vs-multi domain, SSO, the `make:subdomain` command): **[docs site](https://atrium.github.io/atrium-docs/)**
+Full docs (setup, single-vs-multi domain, SSO, the `make:subdomain` command): **[docs site](https://atrium-php.github.io/atrium-docs/)**
 
 ## Requirements
 
@@ -26,7 +26,7 @@ Full docs (setup, single-vs-multi domain, SSO, the `make:subdomain` command): **
 ## Quick start
 
 ```bash
-git clone https://github.com/atrium/atrium.git my-app && cd my-app && composer setup
+git clone https://github.com/atrium-php/atrium.git my-app && cd my-app && composer setup
 ```
 
 Set `APP_MAIN_DOMAIN` in `.env` to your local dev domain (e.g. `yourapp.test` via [Laravel Herd](https://herd.laravel.com)), then visit `auth.yourapp.test`, `app.yourapp.test`, `account.yourapp.test`, `backoffice.yourapp.test`, or the main domain for the landing page.

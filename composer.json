@@ -11,11 +11,11 @@
         "multidomain",
         "subdomain"
     ],
-    "homepage": "https://github.com/atrium/atrium",
+    "homepage": "https://github.com/atrium-php/atrium",
     "support": {
-        "issues": "https://github.com/atrium/atrium/issues",
-        "source": "https://github.com/atrium/atrium",
-        "docs": "https://atrium.github.io/atrium-docs/"
+        "issues": "https://github.com/atrium-php/atrium/issues",
+        "source": "https://github.com/atrium-php/atrium",
+        "docs": "https://atrium-php.github.io/atrium-docs/"
     },
     "license": "MIT",
     "require": {
