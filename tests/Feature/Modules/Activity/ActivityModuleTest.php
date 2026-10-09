@@ -2,7 +2,7 @@
 
 use App\Models\Role;
 use App\Modules\Activity\Models\Activity;
-use App\Support\Modules\Module;
+use Atrium\Core\Support\Modules\Module;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Route;

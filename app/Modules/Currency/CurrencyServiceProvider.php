@@ -6,8 +6,8 @@ use App\Contracts\Currencies;
 use App\Modules\Currency\Jobs\RefreshExchangeRates;
 use App\Modules\Currency\Seeders\CurrencySeeder;
 use App\Modules\Currency\Services\CurrencyService;
-use App\Support\Modules\Module;
-use App\Support\Modules\ModuleProvider;
+use Atrium\Core\Support\Modules\Module;
+use Atrium\Core\Support\Modules\ModuleProvider;
 use Illuminate\Console\Scheduling\Schedule;
 use Livewire\Livewire;
 

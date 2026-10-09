@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Support\Modules;
+namespace Atrium\Core\Support\Modules;
 
 use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Contracts\Http\Kernel as HttpKernel;
 use Illuminate\Support\ServiceProvider;
 use ReflectionClass;
 
@@ -27,6 +28,8 @@ abstract class ModuleProvider extends ServiceProvider
             'description' => $this->description(),
             'icon' => $this->icon(),
         ]);
+
+        Module::locate($this->module(), $this->modulePath());
 
         if (! $this->enabled()) {
             $this->registerDisabled();
@@ -126,14 +129,33 @@ abstract class ModuleProvider extends ServiceProvider
         return [];
     }
 
+    /**
+     * Add middleware to a group (e.g. 'web') from bootModule(). Goes through
+     * the HTTP kernel, not the router: the kernel re-copies its groups onto
+     * the router whenever its middleware changes (Sanctum's provider does
+     * that while booting), wiping anything pushed onto the router directly.
+     */
+    protected function appendMiddlewareToGroup(string $group, string $middleware): void
+    {
+        $this->app->make(HttpKernel::class)->appendMiddlewareToGroup($group, $middleware);
+    }
+
     protected function enabled(): bool
     {
         return Module::enabled($this->module());
     }
 
+    /**
+     * The module's root folder: where the provider lives (app/Modules/X), or
+     * the package root when the provider sits in a package's src/.
+     */
     protected function modulePath(string $path = ''): string
     {
         $base = dirname((new ReflectionClass($this))->getFileName());
+
+        if (basename($base) === 'src') {
+            $base = dirname($base);
+        }
 
         return $path === '' ? $base : $base.DIRECTORY_SEPARATOR.$path;
     }

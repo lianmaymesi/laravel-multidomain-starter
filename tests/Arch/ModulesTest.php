@@ -12,7 +12,7 @@
 |
 */
 
-use App\Support\Modules\ModuleProvider;
+use Atrium\Core\Support\Modules\ModuleProvider;
 
 /** @return array<int, string> e.g. ['Activity', 'Currency', ...] */
 function moduleNames(): array
@@ -56,3 +56,16 @@ foreach (moduleNames() as $module) {
         ->expect("App\\Modules\\{$module}\\{$module}ServiceProvider")
         ->toExtend(ModuleProvider::class);
 }
+
+// atrium-php/core is a package: it can't know the project it's installed in,
+// so it never reaches into App\ (models included — the user model comes from
+// config('auth.providers.users.model')).
+arch('atrium core never imports project code')
+    ->expect('Atrium\Core')
+    ->not->toUse('App');
+
+// No vendor is special-cased: first-party modules are found the same way as
+// anyone's, through the "atrium-module" package type.
+arch('atrium core never names a first-party module package')
+    ->expect('Atrium\Core')
+    ->not->toUse(['Atrium\Activity', 'Atrium\Api', 'Atrium\Billing', 'Atrium\Currency', 'Atrium\Language', 'Atrium\Maintenance', 'Atrium\Media']);

@@ -6,7 +6,7 @@ use App\Http\Middleware\Demo\EnsureIsStaff;
 use App\Http\Middleware\Demo\EnsurePhoneIsVerified;
 use App\Http\Middleware\EnsurePortalAccess;
 use App\Http\Middleware\RedirectIfAuthenticated;
-use App\Support\Modules\Module;
+use Atrium\Core\Support\Modules\Module;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;

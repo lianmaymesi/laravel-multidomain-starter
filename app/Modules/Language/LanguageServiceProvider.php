@@ -7,9 +7,9 @@ use App\Models\AppSetting;
 use App\Modules\Language\Http\Middleware\SetLocale;
 use App\Modules\Language\Seeders\LanguageSeeder;
 use App\Modules\Language\Services\LanguageService;
-use App\Support\Modules\Module;
-use App\Support\Modules\ModuleProvider;
 use App\Support\Settings\SettingField;
+use Atrium\Core\Support\Modules\Module;
+use Atrium\Core\Support\Modules\ModuleProvider;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;
@@ -91,7 +91,7 @@ class LanguageServiceProvider extends ModuleProvider
 
         // Runs before other modules' web middleware (providers boot in folder
         // order) so the locale is already set when e.g. the maintenance page renders.
-        Route::pushMiddlewareToGroup('web', SetLocale::class);
+        $this->appendMiddlewareToGroup('web', SetLocale::class);
 
         Livewire::addNamespace('language', viewPath: $this->modulePath('resources/views/livewire'));
         Blade::anonymousComponentPath($this->modulePath('resources/views/components'), 'language');

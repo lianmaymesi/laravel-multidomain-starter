@@ -3,7 +3,7 @@
 use App\Support\Toast;
 use App\Models\AppSetting;
 use App\Services\SettingsRegistry;
-use App\Support\Modules\Module;
+use Atrium\Core\Support\Modules\Module;
 use App\Support\Settings\SettingField;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Layout;

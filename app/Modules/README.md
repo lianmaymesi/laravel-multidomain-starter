@@ -33,7 +33,8 @@ That creates the folder below, adds the toggle to `config/modules.php` and
 `.env.example`, registers its migrations folder for static analysis
 (`phpstan.neon`), and writes a test that proves the module works on *and* that
 disabling it breaks nothing. Providers are auto-discovered — there is nothing to
-register by hand.
+register by hand. Modules shipped as Composer packages (`"type": "atrium-module"`)
+are discovered the same way — see `packages/core/README.md`.
 
 ```
 app/Modules/Invoices/
@@ -133,8 +134,10 @@ New modules are picked up automatically.
 6. **Every module ships a "disabling breaks nothing" test** — `make:module`
    generates one; extend it for whatever else your module touches.
 
-Middleware a module pushes onto the `web` group runs in provider boot order,
-which is alphabetical by module folder — e.g. `Language` (sets the locale) runs
+Add middleware to a group with `$this->appendMiddlewareToGroup('web', X::class)` in
+`bootModule()` (not `Route::pushMiddlewareToGroup()`, which the HTTP kernel can
+wipe while other providers boot). It runs in provider boot order: package modules
+first, then `app/Modules` alphabetically by folder — e.g. `Language` (sets the locale) runs
 before `Maintenance` (renders a page in that locale). Keep that in mind when
 naming a module whose middleware must run early or late.
 

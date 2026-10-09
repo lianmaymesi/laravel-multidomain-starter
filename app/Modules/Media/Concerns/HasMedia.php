@@ -5,7 +5,7 @@ namespace App\Modules\Media\Concerns;
 use App\Models\User;
 use App\Modules\Media\Models\Media;
 use App\Modules\Media\Services\MediaLibrary;
-use App\Support\Modules\Module;
+use Atrium\Core\Support\Modules\Module;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Validation\ValidationException;

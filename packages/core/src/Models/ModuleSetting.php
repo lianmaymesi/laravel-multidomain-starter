@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace Atrium\Core\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -12,7 +12,7 @@ use Throwable;
 /**
  * A runtime override of one feature toggle from config/modules.php, edited on
  * the backoffice Modules page. Only differences from the config default are
- * stored — see App\Support\Modules\ModuleManager::applyOverrides().
+ * stored — see Atrium\Core\Support\Modules\ModuleManager::applyOverrides().
  */
 class ModuleSetting extends Model
 {
@@ -41,7 +41,7 @@ class ModuleSetting extends Model
 
     public function updatedBy(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'updated_by');
+        return $this->belongsTo(config('auth.providers.users.model'), 'updated_by');
     }
 
     /**

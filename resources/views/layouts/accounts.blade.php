@@ -51,7 +51,7 @@
                 ];
 
                 // Items contributed by feature modules (Module::contribute 'account.nav').
-                foreach (\App\Support\Modules\Module::contributions('account.nav') as $item) {
+                foreach (\Atrium\Core\Support\Modules\Module::contributions('account.nav') as $item) {
                     if (Route::has($item['route']) && (! isset($item['visible']) || $item['visible'](auth()->user()))) {
                         $mobileItems[] = ['label' => __($item['label']), 'route' => $item['route']];
                     }
@@ -149,7 +149,7 @@
                     @endif
 
                     {{-- Links contributed by feature modules (Module::contribute 'account.nav'). --}}
-                    @foreach (collect(\App\Support\Modules\Module::contributions('account.nav'))->filter(fn ($item) => Route::has($item['route']) && (! isset($item['visible']) || $item['visible'](auth()->user())))->sortBy(fn ($item) => $item['order'] ?? 100) as $item)
+                    @foreach (collect(\Atrium\Core\Support\Modules\Module::contributions('account.nav'))->filter(fn ($item) => Route::has($item['route']) && (! isset($item['visible']) || $item['visible'](auth()->user())))->sortBy(fn ($item) => $item['order'] ?? 100) as $item)
                     @php $itemActive = request()->routeIs($item['route']); @endphp
                     <a href="{{ route($item['route']) }}" wire:navigate
                         class="group flex items-center gap-3 border-s-2 px-4 py-2.5 text-sm transition-colors

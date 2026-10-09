@@ -3,7 +3,7 @@
 use App\Events\AccountDeleting;
 use App\Models\User;
 use App\Modules\Billing\Health\BillingCheck;
-use App\Support\Modules\Module;
+use Atrium\Core\Support\Modules\Module;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;

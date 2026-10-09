@@ -3,8 +3,8 @@
 namespace App\Modules\Activity;
 
 use App\Modules\Activity\Livewire\ActivityTimeline;
-use App\Support\Modules\Module;
-use App\Support\Modules\ModuleProvider;
+use Atrium\Core\Support\Modules\Module;
+use Atrium\Core\Support\Modules\ModuleProvider;
 use Illuminate\Support\Facades\Blade;
 use Livewire\Livewire;
 

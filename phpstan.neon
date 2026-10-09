@@ -9,6 +9,7 @@ parameters:
 
     paths:
         - app
+        - packages/core/src
         - bootstrap/app.php
         - config
         - database

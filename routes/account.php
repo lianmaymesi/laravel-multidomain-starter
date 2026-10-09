@@ -1,6 +1,6 @@
 <?php
 
-use App\Support\Modules\Module;
+use Atrium\Core\Support\Modules\Module;
 use Illuminate\Support\Facades\Route;
 
 Route::livewire('/', 'pages::accounts.index')->name('index');

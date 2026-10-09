@@ -29,12 +29,13 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(SmsService::class, TwilioSmsService::class);
 
         // Core money formatting works without the Currency module; when it is
-        // enabled its provider rebinds this to the database-backed service.
-        $this->app->bind(Currencies::class, NullCurrencies::class);
+        // enabled its provider binds the database-backed service. Modules
+        // register first (package discovery), so only fill the gap.
+        $this->app->bindIf(Currencies::class, NullCurrencies::class);
 
         // Same idea for languages: one locale, no prefix, LTR until the Language
-        // module is enabled and rebinds this.
-        $this->app->bind(Languages::class, NullLanguages::class);
+        // module is enabled and binds its own.
+        $this->app->bindIf(Languages::class, NullLanguages::class);
     }
 
     /**

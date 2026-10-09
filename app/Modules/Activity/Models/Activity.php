@@ -2,7 +2,7 @@
 
 namespace App\Modules\Activity\Models;
 
-use App\Support\Modules\Module;
+use Atrium\Core\Support\Modules\Module;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Laravel\Scout\Searchable;
 use Spatie\Activitylog\Models\Activity as SpatieActivity;

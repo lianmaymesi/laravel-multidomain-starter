@@ -49,3 +49,16 @@ arch('seeders are seeders')
 arch('enums are enums')
     ->expect('App\Enums')
     ->toBeEnums();
+
+arch('atrium core never reads env()')
+    ->expect('env')
+    ->not->toBeUsedIn('Atrium\Core');
+
+arch('atrium core providers are service providers')
+    ->expect('Atrium\Core\Providers')
+    ->toExtend(ServiceProvider::class);
+
+arch('atrium core models are Eloquent models')
+    ->expect('Atrium\Core\Models')
+    ->classes()
+    ->toExtend(Model::class);

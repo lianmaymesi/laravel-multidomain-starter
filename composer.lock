@@ -4,8 +4,54 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "de5a900e52592acc1027c5209d54cc32",
+    "content-hash": "ec41fefdb78504e2380b1e6a4afb8ec0",
     "packages": [
+        {
+            "name": "atrium-php/core",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "packages/core",
+                "reference": "dae62448a105373d99ca6296c130613e9585ed1c"
+            },
+            "require": {
+                "laravel/framework": "^13.0",
+                "php": "^8.4",
+                "spatie/laravel-activitylog": "^4.12"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Atrium\\Core\\Providers\\ModulesServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Atrium\\Core\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Atrium core: multidomain portals, auth, settings and the module system.",
+            "homepage": "https://github.com/atrium-php/atrium",
+            "keywords": [
+                "atrium",
+                "laravel",
+                "modular",
+                "multidomain"
+            ],
+            "support": {
+                "issues": "https://github.com/atrium-php/atrium/issues",
+                "source": "https://github.com/atrium-php/atrium"
+            },
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
         {
             "name": "bacon/bacon-qr-code",
             "version": "v3.1.1",
@@ -11945,7 +11991,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "atrium-php/core": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

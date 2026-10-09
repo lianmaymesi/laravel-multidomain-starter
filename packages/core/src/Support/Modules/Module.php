@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Support\Modules;
+namespace Atrium\Core\Support\Modules;
 
 use Illuminate\Support\Facades\Facade;
 
@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static bool enabled(string $module)
  * @method static array<int, string> names()
  * @method static array<int, string> enabledNames()
+ * @method static void locate(string $module, string $basePath)
  * @method static string path(string $module, string $path = '')
  * @method static void routes(string $portal)
  * @method static void applyOverrides(array $overrides)

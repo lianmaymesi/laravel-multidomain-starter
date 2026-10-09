@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Support\Modules\Module;
+use Atrium\Core\Support\Modules\Module;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 

@@ -2,7 +2,7 @@
 
 namespace App\Support\Health;
 
-use App\Support\Modules\Module;
+use Atrium\Core\Support\Modules\Module;
 use Illuminate\Contracts\Cache\Repository as Cache;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\Carbon;

@@ -4,9 +4,8 @@ namespace App\Modules\Maintenance;
 
 use App\Modules\Maintenance\Health\MaintenanceCheck;
 use App\Modules\Maintenance\Http\Middleware\CheckMaintenance;
-use App\Support\Modules\Module;
-use App\Support\Modules\ModuleProvider;
-use Illuminate\Support\Facades\Route;
+use Atrium\Core\Support\Modules\Module;
+use Atrium\Core\Support\Modules\ModuleProvider;
 use Livewire\Livewire;
 
 class MaintenanceServiceProvider extends ModuleProvider
@@ -43,7 +42,7 @@ class MaintenanceServiceProvider extends ModuleProvider
 
         // Appended after the app's own web-group middleware (SetLocale), the
         // same position it held when registered in bootstrap/app.php.
-        Route::pushMiddlewareToGroup('web', CheckMaintenance::class);
+        $this->appendMiddlewareToGroup('web', CheckMaintenance::class);
 
         Livewire::addNamespace('maintenance', viewPath: $this->modulePath('resources/views/livewire'));
 

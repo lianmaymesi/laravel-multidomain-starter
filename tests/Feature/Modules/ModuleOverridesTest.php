@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\ModuleSetting;
-use App\Support\Modules\Module;
+use Atrium\Core\Models\ModuleSetting;
+use Atrium\Core\Support\Modules\Module;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Support\Facades\Route;
 use Livewire\Livewire;

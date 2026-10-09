@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Backoffice\BackupDownloadController;
-use App\Support\Modules\Module;
+use Atrium\Core\Support\Modules\Module;
 use Illuminate\Support\Facades\Route;
 
 Route::livewire('/', 'pages::backoffice.dashboard')->name('dashboard');

@@ -60,7 +60,7 @@
                 ];
 
                 // Module nav items opt in to the mobile bar with 'mobile' => true.
-                foreach (\App\Support\Modules\Module::contributions('backoffice.nav') as $item) {
+                foreach (\Atrium\Core\Support\Modules\Module::contributions('backoffice.nav') as $item) {
                     if (($item['mobile'] ?? false) && (! isset($item['visible']) || $item['visible']()) && (! isset($item['permission']) || Gate::any((array) $item['permission']))) {
                         $mobileItems[] = ['label' => __($item['label']), 'route' => $item['route']];
                     }
@@ -144,7 +144,7 @@
                         'backoffice.nav'). A disabled module contributes nothing, so
                         there's no per-module check to keep in sync here. --}}
                     @php
-                    $moduleNav = collect(\App\Support\Modules\Module::contributions('backoffice.nav'))
+                    $moduleNav = collect(\Atrium\Core\Support\Modules\Module::contributions('backoffice.nav'))
                         ->filter(fn ($item) => Route::has($item['route'])
                             && (! isset($item['visible']) || $item['visible']())
                             && (! isset($item['permission']) || Gate::any((array) $item['permission'])))

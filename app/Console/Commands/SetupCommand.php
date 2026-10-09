@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Support\Modules\Module;
+use Atrium\Core\Support\Modules\Module;
 use Database\Seeders\AdminUserSeeder;
 use Database\Seeders\DatabaseSeeder;
 use Database\Seeders\DemoSeeder;

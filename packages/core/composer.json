@@ -1,0 +1,36 @@
+{
+    "name": "atrium-php/core",
+    "description": "Atrium core: multidomain portals, auth, settings and the module system.",
+    "keywords": [
+        "laravel",
+        "atrium",
+        "modular",
+        "multidomain"
+    ],
+    "homepage": "https://github.com/atrium-php/atrium",
+    "support": {
+        "issues": "https://github.com/atrium-php/atrium/issues",
+        "source": "https://github.com/atrium-php/atrium"
+    },
+    "license": "MIT",
+    "type": "library",
+    "require": {
+        "php": "^8.4",
+        "laravel/framework": "^13.0",
+        "spatie/laravel-activitylog": "^4.12"
+    },
+    "autoload": {
+        "psr-4": {
+            "Atrium\\Core\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Atrium\\Core\\Providers\\ModulesServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

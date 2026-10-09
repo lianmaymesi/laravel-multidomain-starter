@@ -2,7 +2,7 @@
 
 use App\Modules\Maintenance\Http\Middleware\CheckMaintenance;
 use App\Modules\Maintenance\Models\PortalSetting;
-use App\Support\Modules\Module;
+use Atrium\Core\Support\Modules\Module;
 use Database\Seeders\RolePermissionSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Route;

@@ -3,8 +3,8 @@
 namespace App\Services;
 
 use App\Models\AppSetting;
-use App\Support\Modules\Module;
 use App\Support\Settings\SettingField;
+use Atrium\Core\Support\Modules\Module;
 use Closure;
 use Illuminate\Support\Collection;
 

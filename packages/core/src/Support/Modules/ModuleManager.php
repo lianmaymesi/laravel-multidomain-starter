@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Support\Modules;
+namespace Atrium\Core\Support\Modules;
 
 use Illuminate\Contracts\Config\Repository;
 
@@ -17,6 +17,9 @@ class ModuleManager
 
     /** @var array<string, bool> */
     private array $overrides = [];
+
+    /** @var array<string, string> module => base path */
+    private array $paths = [];
 
     public function __construct(private Repository $config) {}
 
@@ -96,9 +99,19 @@ class ModuleManager
         ];
     }
 
+    /**
+     * Where a module's files live. Every ModuleProvider reports its own
+     * folder when it registers (a package under vendor/, or app/Modules/X);
+     * unregistered names fall back to the app/Modules convention.
+     */
+    public function locate(string $module, string $basePath): void
+    {
+        $this->paths[$module] = $basePath;
+    }
+
     public function path(string $module, string $path = ''): string
     {
-        $base = app_path('Modules/'.str($module)->studly());
+        $base = $this->paths[$module] ?? app_path('Modules/'.str($module)->studly());
 
         return $path === '' ? $base : $base.DIRECTORY_SEPARATOR.ltrim($path, '/\\');
     }
